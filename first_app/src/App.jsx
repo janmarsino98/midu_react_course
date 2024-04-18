@@ -1,19 +1,20 @@
-import { useState } from 'react'
-import './App.css'
-import Usercard from './components/Usercard'
+import { useState } from "react";
+import "./App.css";
+import Usercard from "./components/Usercard";
+import TweetFeed from "./components/TweetFeed";
 
 function App() {
-
   return (
     <>
-    <div className='tw-followCard'>
-      <h1>A quién seguir</h1>
-      <Usercard name='kikobeats' userName='kikobeats' userNumber={35271041} />
-      <Usercard name='midudev' userName='midudev' userNumber={35271042}/>
-      <Usercard name='react' userName='react' userNumber={52205}/>
-    </div>
+      <TweetFeed
+        userNumber={35271042}
+        name="Name1"
+        userName="username"
+        tweetText="
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Autem natus, deserunt deleniti eaque eos quam est velit itaque nulla consequuntur aut fuga cumque, facilis quo possimus provident modi. Odio maiores, culpa at quisquam deleniti pariatur. Nesciunt, magnam. Natus, quisquam esse."
+      ></TweetFeed>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

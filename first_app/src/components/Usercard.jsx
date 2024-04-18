@@ -5,7 +5,6 @@ const Usercard = ({ name, userName, userNumber }) => {
 
   const handleOnClick = () => {
     setIsFollowing(!following);
-    console.log(following);
   };
   return (
     <div className="tw-followCard-userCard">
