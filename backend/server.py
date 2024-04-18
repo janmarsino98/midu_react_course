@@ -69,12 +69,24 @@ def get_last_tweets():
         recent_tweets.append({
             '_id': str(ObjectId(doc['_id'])),
             'name': doc['name'],
+            'username': doc['username'],
             'likes': doc['likes'],
             'retweets': doc['retweets'],
             'message': doc['message'],
         })
         
     return jsonify(recent_tweets)
+
+@app.route("/user/<username>", methods=['GET'])
+
+def get_user(username):
+    user = users_db.find_one({'username': username})
+    return jsonify({
+        '_id': str(ObjectId(user['_id'])),
+        'name': user['name'],
+        'username': user['username'],
+        'avatar': user['avatar'],
+    })
 
 if __name__ == '__main__':
     app.run(debug=True)
