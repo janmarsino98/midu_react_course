@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const CreateTweet = () => {
   const [tweet, setTweet] = useState("");
@@ -6,6 +6,8 @@ const CreateTweet = () => {
   const handleChange = (e) => {
     setTweet(e.target.value);
   };
+
+  const handleClick = () => {};
 
   return (
     <>

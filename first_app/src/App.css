@@ -5,20 +5,27 @@
   box-sizing: border-box;
 }
 
+body, html {
+  height: 100%;
+  overflow: auto;
+  /* Allows scrolling */
+}
+
 body {
   background-color: black;
   justify-content: center;
   align-items: center;
   height: 100vh;
   display: flex;
+  flex-wrap: wrap;
   margin: 0;
 }
 
 .tw-followCard {
   border-radius: 10px;
   background-color: rgb(22, 24, 28);
-
   display: flex;
+  flex-wrap: wrap;
   flex-direction: column;
   width: 300px;
   padding: 10px;
@@ -38,6 +45,7 @@ h1 {
 .tw-followCard-userCard {
   height: 43px;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   gap: 10px;
   align-items: center;
@@ -46,12 +54,14 @@ h1 {
 
 .tw-FollowCawrd-userCard-main {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   width: 100%;
 }
 
 .tw-followCard-userCard-info {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: column;
   align-items: stretch;
 }
@@ -77,6 +87,7 @@ span {
 
 article {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   border: 0.01px solid rgb(255, 255, 255, 0.1);
   padding: 10px;
@@ -84,17 +95,20 @@ article {
 
 .tf-Tweet-imgContainer {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: column;
   padding: 0 10px;
 }
 
 .tw-FollowCard-userCard-main {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
 }
 
 .tw-followCard-userCard-info {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: column;
 }
 
@@ -112,6 +126,7 @@ article {
 
 .tf-Tweet-bodyContainer-header {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
 }
 
@@ -122,6 +137,7 @@ article {
 .tf-Tweet-bodyContainer-options {
   padding: 10px;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -135,8 +151,25 @@ button {
 
 .tf-Tweet-bodyContainer-options-container {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   color: white;
+  cursor: pointer;
+  align-items: center;
+  gap: 5px;
+}
+
+.tf-Tweet-bodyContainer-options-btn {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  height: 100%;
+}
+
+.retweets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .tf-NewTweet-container {
@@ -148,6 +181,7 @@ button {
 
 .tf-body-container {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: column;
   width: 100%;
 }
@@ -155,6 +189,7 @@ button {
 .tf-body-container {
   padding: 5px 0;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .tf-avatar-container {
@@ -182,6 +217,7 @@ button {
 
 .tf-body-others {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
   padding: 5px;
@@ -191,4 +227,61 @@ button {
 .tf-body-container button[aria-disabled="true"] {
   background-color: rgb(29, 155, 240, 0.5);
   color: rgb(255, 255, 255, 0.5)
+}
+
+.pnav {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-right: 20px;
+}
+
+.pnav-item {
+  color: white;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  padding: 5px;
+}
+
+.pnav-iconContainer {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: 8px;
+  height: 100%;
+  width: 20px;
+  align-items: center;
+  color: rgb(255, 255, 255, 0.5)
+}
+
+.pnav-itemName {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  height: 100%;
+  color: rgb(255, 255, 255, 0.5)
+}
+
+.pnav-itemName {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  height: 100%;
+  color: rgb(255, 255, 255, 0.5)
+}
+
+.pnav-item {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.selected div, .selected span {
+  color: white
+}
+
+#root {
+  display: flex;
+  flex-direction: row;
 }
