@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import TweetFeed from "./TweetFeed";
+import UserContext from "./CurrentUserContext";
 
 const LastTweets = () => {
   const [lastTweets, setLastTweets] = useState([]);
-  const currentUser = "wiskys98";
+  const currentUser = useContext(UserContext);
+
   useEffect(() => {
     const fetchData = async () => {
       try {

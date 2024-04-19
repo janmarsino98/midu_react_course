@@ -1,21 +1,33 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import axios from "axios";
+import UserContext from "./CurrentUserContext";
 
 const CreateTweet = () => {
   const [tweet, setTweet] = useState("");
+  const [userAvatar, setUserAvatar] = useState(null);
+  const currentUser = useContext(UserContext);
+
+  useEffect(() => {
+    const fetchAvatar = async () => {
+      const response = await fetch(`http://localhost:5000/user/${currentUser}`);
+      const data = await response.json();
+      console.log(data);
+      setUserAvatar(data["avatar"]);
+    };
+
+    fetchAvatar();
+  }, [currentUser]);
 
   const handleChange = (e) => {
     setTweet(e.target.value);
   };
-
-  const currentUsername = "wiskys98";
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
       .post("http://localhost:5000/tweet", {
         message: tweet,
-        username: currentUsername,
+        username: currentUser,
       })
       .then(() => {
         setTweet("");
@@ -29,10 +41,7 @@ const CreateTweet = () => {
     <>
       <div className="tf-NewTweet-container">
         <div className="tf-avatar-container">
-          <img
-            src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
-            alt="avatar"
-          />
+          <img src={userAvatar} alt="avatar" />
         </div>
         <div className="tf-body-container">
           <div className="tf-body-message">

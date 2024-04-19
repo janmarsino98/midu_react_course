@@ -285,3 +285,8 @@ button {
   display: flex;
   flex-direction: row;
 }
+
+.tf-currentUser-section {
+  color: white;
+  margin-bottom: 8px;
+}

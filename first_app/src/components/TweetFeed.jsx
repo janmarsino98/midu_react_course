@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { FiMessageCircle } from "react-icons/fi";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { FaRegHeart } from "react-icons/fa";
+import UserContext from "./CurrentUserContext";
 
 const TweetFeed = ({
   tweetId,
@@ -18,7 +19,7 @@ const TweetFeed = ({
   const [isLiked, setisLiked] = useState(likedByCurrentUser);
   const [likes, setLikes] = useState(starting_likes);
   const [retweets, setRetweets] = useState(starting_retweets);
-  const [currentUser, setCurrentUser] = useState("wiskys98");
+  const currentUser = useContext(UserContext);
 
   const handleLike = async (tweetId) => {
     setisLiked(!isLiked);
