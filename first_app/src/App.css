@@ -297,3 +297,7 @@ button {
 .tf-currentUser-img {
   margin-right: 15px;
 }
+
+.loading {
+  color: white;
+}

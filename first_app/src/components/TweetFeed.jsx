@@ -1,133 +1,57 @@
-import { useState, useContext, useEffect } from "react";
-import { FiMessageCircle } from "react-icons/fi";
-import { AiOutlineRetweet } from "react-icons/ai";
-import { FaRegHeart } from "react-icons/fa";
+import { useState, useEffect, useContext } from "react";
+import Tweet from "./Tweet";
 import UserContext from "./CurrentUserContext";
+import LoadingTweetFeed from "./loading/LoadingTweetFeed";
 
-const TweetFeed = ({
-  tweetId,
-  userAvatar,
-  name,
-  userName,
-  tweetText,
-  starting_likes,
-  starting_retweets,
-  starting_comments,
-  likedByCurrentUser,
-}) => {
-  const [reposted, setReposted] = useState(false);
-  const [isLiked, setIsLiked] = useState(likedByCurrentUser);
-  const [likes, setLikes] = useState(starting_likes);
-  const [retweets, setRetweets] = useState(starting_retweets);
+const LastTweets = ({ tweets }) => {
+  const [lastTweets, setLastTweets] = useState(tweets);
+  const [isLoading, setIsLoading] = useState(true);
   const currentUser = useContext(UserContext);
-
   useEffect(() => {
-    const fetchLikeStatus = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5000/${currentUser.username}/tweet_like_status/${tweetId}`
-        );
-        const data = await response.json();
-        setIsLiked(data.liked_by_user);
-      } catch (error) {
-        console.error("There was an error while fetching: ", error);
-      }
-    };
-    fetchLikeStatus();
-  }, [currentUser, tweetId]);
+    fetchData();
+  }, [currentUser]);
 
-  const handleLike = async (tweetId) => {
-    setIsLiked(!isLiked);
-    if (isLiked) {
-      console.log(
-        `http://localhost:5000/${currentUser.username}/tweet_unlike/${tweetId}`
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch("http://localhost:5000/last_tweets");
+      const lastTweets = await response.json();
+      const lastTweetsWithAvatars = await Promise.all(
+        lastTweets.map(async (tweet) => {
+          const avatar_response = await fetch(
+            `http://localhost:5000/user/${tweet.username}`
+          );
+          const user = await avatar_response.json();
+          return { ...tweet, avatar: user.avatar };
+        })
       );
-      setLikes(likes - 1);
-      try {
-        const response = await fetch(
-          `http://localhost:5000/${currentUser.username}/tweet_unlike/${tweetId}`,
-          {
-            method: "PUT",
-          }
-        );
-        console.log(response);
-      } catch (error) {
-        console.error("Error: ", error);
-      }
-    } else {
-      setLikes(likes + 1);
-
-      try {
-        const response = await fetch(
-          `http://localhost:5000/${currentUser.username}/tweet_like/${tweetId}`,
-          {
-            method: "PUT",
-          }
-        );
-        console.log(response);
-      } catch (error) {
-        console.error("Error: ", error);
-      }
+      setLastTweets(lastTweetsWithAvatars);
+    } catch (error) {
+      console.error("Error: ", error);
     }
+    setIsLoading(false);
   };
-
-  const handleRetweet = () => {
-    if (reposted) {
-      setRetweets(retweets - 1);
-    } else {
-      setRetweets(retweets + 1);
-    }
-    setReposted(!reposted);
-  };
-
-  return (
-    <article>
-      <div className="tf-Tweet-imgContainer">
-        <img src={userAvatar} alt={`${name} profile pic`} />
-      </div>
-      <div className="tf-Tweet-bodyContainer">
-        <div className="tf-Tweet-bodyContainer-header">
-          <h2>{name}</h2>
-          <span>@{userName}</span>
-        </div>
-        <div className="tf-Tweet-bodyContainer-text">
-          <p>{tweetText}</p>
-        </div>
-        <div className="tf-Tweet-bodyContainer-options">
-          <div className="tf-Tweet-bodyContainer-options-container">
-            <div className="tf-Tweet-bodyContainer-options-btn">
-              <FiMessageCircle color="white" />
-            </div>
-            <div className="comments">
-              <span>{starting_comments}</span>
-            </div>
-          </div>
-          <div
-            className="tf-Tweet-bodyContainer-options-container"
-            onClick={handleRetweet}
-          >
-            <div className="tf-Tweet-bodyContainer-options-btn">
-              <AiOutlineRetweet color={reposted ? "green" : "white"} />
-            </div>
-            <div className="retweets">
-              <span>{retweets}</span>
-            </div>
-          </div>
-          <div
-            className="tf-Tweet-bodyContainer-options-container"
-            onClick={() => handleLike(tweetId)}
-          >
-            <div className="tf-Tweet-bodyContainer-options-btn">
-              <FaRegHeart color={isLiked ? "red" : "white"} />
-            </div>
-            <div className="likes">
-              <span>{likes}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </article>
-  );
+  if (isLoading === false) {
+    return lastTweets.map((tweet, index) => {
+      const likedByCurrentUser = tweet.liked_by.includes(currentUser.username);
+      return (
+        <Tweet
+          key={tweet._id + index}
+          tweetId={tweet._id}
+          name={tweet.name}
+          userName={tweet.username}
+          tweetText={tweet.message}
+          starting_likes={tweet.likes ? tweet.likes : 0}
+          starting_retweets={tweet.retweets ? tweet.retweets : 0}
+          starting_comments={0}
+          userAvatar={tweet.avatar}
+          likedByCurrentUser={likedByCurrentUser}
+        />
+      );
+    });
+  } else {
+    return <LoadingTweetFeed></LoadingTweetFeed>;
+  }
 };
 
-export default TweetFeed;
+export default LastTweets;

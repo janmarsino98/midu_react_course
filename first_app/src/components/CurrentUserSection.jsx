@@ -3,7 +3,6 @@ import UserContext from "./CurrentUserContext";
 
 const CurrentUserSection = () => {
   const currentUserInfo = useContext(UserContext);
-  console.log("Current user: ", currentUserInfo);
   if (!currentUserInfo) {
     return null;
   }
