@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 
 const CreateTweet = () => {
   const [tweet, setTweet] = useState("");
@@ -7,7 +8,22 @@ const CreateTweet = () => {
     setTweet(e.target.value);
   };
 
-  const handleClick = () => {};
+  const currentUsername = "user2";
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post("http://localhost:5000/tweet", {
+        message: tweet,
+        username: currentUsername,
+      })
+      .then(() => {
+        setTweet("");
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
+  };
 
   return (
     <>
@@ -20,7 +36,7 @@ const CreateTweet = () => {
         </div>
         <div className="tf-body-container">
           <div className="tf-body-message">
-            <form>
+            <form id="tweetForm" method="Post" onSubmit={handleSubmit}>
               <textarea
                 onChange={handleChange}
                 placeholder="Start tweeting..."
@@ -30,7 +46,9 @@ const CreateTweet = () => {
           <div className="tf-body-others">
             <div className="tf-body-others-icons"></div>
             <div className="tf-body-others-button">
-              <button aria-disabled={tweet === ""}>Submit</button>
+              <button type="submit" form="tweetForm" disabled={tweet === ""}>
+                Submit
+              </button>
             </div>
           </div>
         </div>

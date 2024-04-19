@@ -224,7 +224,7 @@ button {
 }
 
 
-.tf-body-container button[aria-disabled="true"] {
+.tf-body-container button[disabled] {
   background-color: rgb(29, 155, 240, 0.5);
   color: rgb(255, 255, 255, 0.5)
 }

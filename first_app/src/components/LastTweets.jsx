@@ -29,7 +29,8 @@ const LastTweets = () => {
   return lastTweets.map((tweet, index) => {
     return (
       <TweetFeed
-        key={index}
+        key={tweet._id + index}
+        tweetId={tweet._id}
         name={tweet.name}
         userName={tweet.username}
         tweetText={tweet.message}

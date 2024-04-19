@@ -14,7 +14,6 @@ const PrincipalNav = () => {
 
   const handleClick = (choice) => {
     setClickedChoice(choice);
-    console.log(clickedChoice);
   };
 
   return (

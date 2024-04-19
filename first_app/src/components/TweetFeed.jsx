@@ -1,9 +1,10 @@
-import { React, useState } from "react";
+import { useState } from "react";
 import { FiMessageCircle } from "react-icons/fi";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { FaRegHeart } from "react-icons/fa";
 
 const TweetFeed = ({
+  tweetId,
   userAvatar,
   name,
   userName,
@@ -17,13 +18,23 @@ const TweetFeed = ({
   const [likes, setLikes] = useState(starting_likes);
   const [retweets, setRetweets] = useState(starting_retweets);
 
-  const handleLike = () => {
+  const handleLike = async (tweetId) => {
     if (liked) {
       setLikes(likes - 1);
     } else {
       setLikes(likes + 1);
+      try {
+        const response = await fetch(
+          `http://localhost:5000/tweet_like/${tweetId}`,
+          {
+            method: "PUT",
+          }
+        );
+        setLiked(!liked);
+      } catch (error) {
+        console.error("Error: ", error);
+      }
     }
-    setLiked(!liked);
   };
 
   const handleRetweet = () => {
@@ -43,7 +54,7 @@ const TweetFeed = ({
       <div className="tf-Tweet-bodyContainer">
         <div className="tf-Tweet-bodyContainer-header">
           <h2>{name}</h2>
-          <span>@{userName}</span>
+          <span>@{tweetId}</span>
         </div>
         <div className="tf-Tweet-bodyContainer-text">
           <p>{tweetText}</p>
@@ -70,7 +81,7 @@ const TweetFeed = ({
           </div>
           <div
             className="tf-Tweet-bodyContainer-options-container"
-            onClick={handleLike}
+            onClick={() => handleLike(tweetId)}
           >
             <div className="tf-Tweet-bodyContainer-options-btn">
               <FaRegHeart color={liked ? "red" : "white"} />

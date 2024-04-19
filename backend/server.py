@@ -87,6 +87,11 @@ def get_user(username):
         'username': user['username'],
         'avatar': user['avatar'],
     })
+    
+@app.route("/tweet_like/<tweet_id>", methods=['PUT'])
+def like_tweet(tweet_id):
+    tweets_db.update_one({'_id' : ObjectId(tweet_id)}, {'$inc': {'likes': 1} })
+    return jsonify({'message': 'Tweet liked'})
 
 if __name__ == '__main__':
     app.run(debug=True)
