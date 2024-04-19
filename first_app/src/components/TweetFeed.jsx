@@ -12,25 +12,43 @@ const TweetFeed = ({
   starting_likes,
   starting_retweets,
   starting_comments,
+  likedByCurrentUser,
 }) => {
   const [reposted, setReposted] = useState(false);
-  const [liked, setLiked] = useState(false);
+  const [isLiked, setisLiked] = useState(likedByCurrentUser);
   const [likes, setLikes] = useState(starting_likes);
   const [retweets, setRetweets] = useState(starting_retweets);
+  const [currentUser, setCurrentUser] = useState("wiskys98");
 
   const handleLike = async (tweetId) => {
-    if (liked) {
+    setisLiked(!isLiked);
+    if (isLiked) {
+      console.log(
+        `http://localhost:5000/${currentUser}/tweet_unlike/${tweetId}`
+      );
       setLikes(likes - 1);
-    } else {
-      setLikes(likes + 1);
       try {
         const response = await fetch(
-          `http://localhost:5000/tweet_like/${tweetId}`,
+          `http://localhost:5000/${currentUser}/tweet_unlike/${tweetId}`,
           {
             method: "PUT",
           }
         );
-        setLiked(!liked);
+        console.log(response);
+      } catch (error) {
+        console.error("Error: ", error);
+      }
+    } else {
+      setLikes(likes + 1);
+
+      try {
+        const response = await fetch(
+          `http://localhost:5000/${currentUser}/tweet_like/${tweetId}`,
+          {
+            method: "PUT",
+          }
+        );
+        console.log(response);
       } catch (error) {
         console.error("Error: ", error);
       }
@@ -54,7 +72,7 @@ const TweetFeed = ({
       <div className="tf-Tweet-bodyContainer">
         <div className="tf-Tweet-bodyContainer-header">
           <h2>{name}</h2>
-          <span>@{tweetId}</span>
+          <span>@{userName}</span>
         </div>
         <div className="tf-Tweet-bodyContainer-text">
           <p>{tweetText}</p>
@@ -84,7 +102,7 @@ const TweetFeed = ({
             onClick={() => handleLike(tweetId)}
           >
             <div className="tf-Tweet-bodyContainer-options-btn">
-              <FaRegHeart color={liked ? "red" : "white"} />
+              <FaRegHeart color={isLiked ? "red" : "white"} />
             </div>
             <div className="likes">
               <span>{likes}</span>

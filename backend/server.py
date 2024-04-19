@@ -38,6 +38,7 @@ def get_tweet(tweet_id):
         'message': tweet['message'],
         'retweets': tweet['retweets'],
         'username': tweet['username'],
+        'liked_by': tweet['liked_by'],
     })
     
 @app.route("/tweet", methods=['POST'])
@@ -56,6 +57,7 @@ def tweet():
                 'created_at': datetime.utcnow(),
                 'likes': 0,
                 'retweets': 0,
+                'liked_by': [],
             })
             return jsonify({'message':'Tweet created successfully'}), 201 
         else:
@@ -73,6 +75,7 @@ def get_last_tweets():
             'likes': doc['likes'],
             'retweets': doc['retweets'],
             'message': doc['message'],
+            'liked_by': doc['liked_by'],    
         })
         
     return jsonify(recent_tweets)
@@ -88,10 +91,24 @@ def get_user(username):
         'avatar': user['avatar'],
     })
     
-@app.route("/tweet_like/<tweet_id>", methods=['PUT'])
-def like_tweet(tweet_id):
-    tweets_db.update_one({'_id' : ObjectId(tweet_id)}, {'$inc': {'likes': 1} })
-    return jsonify({'message': 'Tweet liked'})
+@app.route("/<current_username>/tweet_like/<tweet_id>", methods=['PUT'])
+def like_tweet(tweet_id, current_username):
+    document = tweets_db.find_one({'_id': ObjectId(tweet_id)})
+    if current_username not in document['liked_by']:
+        tweets_db.update_one({'_id' : ObjectId(tweet_id)}, {'$inc': {'likes': 1} , '$push': {'liked_by': current_username}})
+        return jsonify({'message': 'Tweet liked'})
+    
+    else:
+        return jsonify({'message': 'The user is trying to like a tweet that is already liked by him!'})
+
+@app.route("/<current_username>/tweet_unlike/<tweet_id>", methods=['PUT'])
+def unlike_tweet(current_username, tweet_id):
+    document = tweets_db.find_one({'_id': ObjectId(tweet_id)})
+    if current_username in document['liked_by']:
+        tweets_db.update_one({'_id': ObjectId(tweet_id)}, {'$inc': {'likes': -1} , '$pull' : {'liked_by': current_username}})
+        return jsonify({'message': 'Tweet unliked'}), 200
+    else:
+        return jsonify({'message': 'Trying to unlike a tweet that the user has not liked'}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)

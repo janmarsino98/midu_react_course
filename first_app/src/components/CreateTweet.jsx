@@ -8,7 +8,7 @@ const CreateTweet = () => {
     setTweet(e.target.value);
   };
 
-  const currentUsername = "user2";
+  const currentUsername = "wiskys98";
 
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import TweetFeed from "./TweetFeed";
 
 const LastTweets = () => {
-  const [lastTweets, setLastTweets] = useState([[]]);
+  const [lastTweets, setLastTweets] = useState([]);
+  const currentUser = "wiskys98";
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -27,6 +28,8 @@ const LastTweets = () => {
   }, []);
 
   return lastTweets.map((tweet, index) => {
+    console.log(tweet.liked_by.includes(currentUser));
+    const likedByCurrentUser = tweet.liked_by.includes(currentUser);
     return (
       <TweetFeed
         key={tweet._id + index}
@@ -38,6 +41,7 @@ const LastTweets = () => {
         starting_retweets={tweet.retweets ? tweet.retweets : 0}
         starting_comments={0}
         userAvatar={tweet.avatar}
+        likedByCurrentUser={likedByCurrentUser}
       />
     );
   });
