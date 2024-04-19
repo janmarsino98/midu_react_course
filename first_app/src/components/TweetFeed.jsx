@@ -25,12 +25,12 @@ const TweetFeed = ({
     setisLiked(!isLiked);
     if (isLiked) {
       console.log(
-        `http://localhost:5000/${currentUser}/tweet_unlike/${tweetId}`
+        `http://localhost:5000/${currentUser.username}/tweet_unlike/${tweetId}`
       );
       setLikes(likes - 1);
       try {
         const response = await fetch(
-          `http://localhost:5000/${currentUser}/tweet_unlike/${tweetId}`,
+          `http://localhost:5000/${currentUser.username}/tweet_unlike/${tweetId}`,
           {
             method: "PUT",
           }
@@ -44,7 +44,7 @@ const TweetFeed = ({
 
       try {
         const response = await fetch(
-          `http://localhost:5000/${currentUser}/tweet_like/${tweetId}`,
+          `http://localhost:5000/${currentUser.username}/tweet_like/${tweetId}`,
           {
             method: "PUT",
           }

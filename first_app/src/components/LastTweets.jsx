@@ -30,8 +30,8 @@ const LastTweets = () => {
   }, []);
 
   return lastTweets.map((tweet, index) => {
-    console.log(tweet.liked_by.includes(currentUser));
-    const likedByCurrentUser = tweet.liked_by.includes(currentUser);
+    console.log(tweet.liked_by.includes(currentUser.username));
+    const likedByCurrentUser = tweet.liked_by.includes(currentUser.username);
     return (
       <TweetFeed
         key={tweet._id + index}

@@ -289,4 +289,11 @@ button {
 .tf-currentUser-section {
   color: white;
   margin-bottom: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.tf-currentUser-img {
+  margin-right: 15px;
 }

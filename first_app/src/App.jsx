@@ -4,11 +4,18 @@ import PrincipalNav from "./components/PrincipalNav";
 import LastTweets from "./components/LastTweets";
 import UserContext from "./components/CurrentUserContext";
 import CurrentUserSection from "./components/CurrentUserSection";
+import useCurrentUser from "./hooks/useCurrentUser";
+import { useEffect } from "react";
 
 function App() {
+  const currentUserUsername = "rasbt";
+  const currentUserInfo = useCurrentUser(currentUserUsername);
+  useEffect(() => {
+    console.log(currentUserInfo);
+  }, [currentUserInfo]);
   return (
     <>
-      <UserContext.Provider value="user2">
+      <UserContext.Provider value={currentUserInfo}>
         <header>
           <PrincipalNav></PrincipalNav>
         </header>

@@ -9,7 +9,9 @@ const CreateTweet = () => {
 
   useEffect(() => {
     const fetchAvatar = async () => {
-      const response = await fetch(`http://localhost:5000/user/${currentUser}`);
+      const response = await fetch(
+        `http://localhost:5000/user/${currentUser.username}`
+      );
       const data = await response.json();
       console.log(data);
       setUserAvatar(data["avatar"]);
@@ -27,7 +29,7 @@ const CreateTweet = () => {
     axios
       .post("http://localhost:5000/tweet", {
         message: tweet,
-        username: currentUser,
+        username: currentUser.username,
       })
       .then(() => {
         setTweet("");
