@@ -8,7 +8,7 @@ import useCurrentUser from "./hooks/useCurrentUser";
 import { useEffect } from "react";
 
 function App() {
-  const currentUserUsername = "rasbt";
+  const currentUserUsername = "user2";
   const currentUserInfo = useCurrentUser(currentUserUsername);
   useEffect(() => {
     console.log(currentUserInfo);

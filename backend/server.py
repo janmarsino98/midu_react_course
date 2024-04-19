@@ -109,6 +109,12 @@ def unlike_tweet(current_username, tweet_id):
         return jsonify({'message': 'Tweet unliked'}), 200
     else:
         return jsonify({'message': 'Trying to unlike a tweet that the user has not liked'}), 400
+    
+@app.route("/<current_username>/tweet_like_status/<tweet_id>", methods={'GET'})
+def like_status(current_username, tweet_id):
+    tweet = tweets_db.find_one({'_id': ObjectId(tweet_id)})
+    liked = current_username in tweet['liked_by']
+    return jsonify({'liked_by_user': liked})
 
 if __name__ == '__main__':
     app.run(debug=True)

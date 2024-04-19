@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { FiMessageCircle } from "react-icons/fi";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { FaRegHeart } from "react-icons/fa";
@@ -16,13 +16,28 @@ const TweetFeed = ({
   likedByCurrentUser,
 }) => {
   const [reposted, setReposted] = useState(false);
-  const [isLiked, setisLiked] = useState(likedByCurrentUser);
+  const [isLiked, setIsLiked] = useState(likedByCurrentUser);
   const [likes, setLikes] = useState(starting_likes);
   const [retweets, setRetweets] = useState(starting_retweets);
   const currentUser = useContext(UserContext);
 
+  useEffect(() => {
+    const fetchLikeStatus = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/${currentUser.username}/tweet_like_status/${tweetId}`
+        );
+        const data = await response.json();
+        setIsLiked(data.liked_by_user);
+      } catch (error) {
+        console.error("There was an error while fetching: ", error);
+      }
+    };
+    fetchLikeStatus();
+  }, [currentUser, tweetId]);
+
   const handleLike = async (tweetId) => {
-    setisLiked(!isLiked);
+    setIsLiked(!isLiked);
     if (isLiked) {
       console.log(
         `http://localhost:5000/${currentUser.username}/tweet_unlike/${tweetId}`

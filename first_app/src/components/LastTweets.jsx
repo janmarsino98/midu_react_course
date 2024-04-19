@@ -27,7 +27,7 @@ const LastTweets = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [currentUser]);
 
   return lastTweets.map((tweet, index) => {
     console.log(tweet.liked_by.includes(currentUser.username));
