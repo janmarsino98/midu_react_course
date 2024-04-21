@@ -18,7 +18,7 @@ function App() {
   const currentUserInfo = useCurrentUser(currentUserUsername);
   useEffect(() => {}, [currentUserInfo]);
   return (
-    <>
+    <div className="app-container">
       <UserContext.Provider value={currentUserInfo}>
         <header>
           <PrincipalNav></PrincipalNav>
@@ -26,22 +26,12 @@ function App() {
         <main>
           <CreateTweet></CreateTweet>
           <TweetFeed></TweetFeed>
-          <WhoToFollow></WhoToFollow>
         </main>
+        <div className="right-container">
+          <WhoToFollow usernames={["wiskys98", "user2"]}></WhoToFollow>
+        </div>
       </UserContext.Provider>
-      {/* <TweetFeed></TweetFeed> */}
-      {/* <UserContext.Provider value={currentUserInfo}>
-        <header>
-          <PrincipalNav></PrincipalNav>
-        </header>
-        <main>
-          <CurrentUserSection></CurrentUserSection>
-          <MainFeedElement></MainFeedElement>
-          <CreateTweet></CreateTweet>
-          <LastTweets></LastTweets>
-        </main>
-      </UserContext.Provider> */}
-    </>
+    </div>
   );
 }
 

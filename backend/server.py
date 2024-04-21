@@ -148,5 +148,19 @@ def unretweet_tweet(tweet_id, current_username):
     else:
         return jsonify({'message' : 'Trying to unretweet a tweet that is not retweeted by the user'}), 400
 
+@app.route("/users")
+
+def get_users():
+    #This will parse the url optional parameters and it will store it in a variable
+    #f.i: url = /user?ids=1,2  ==> it will store 1,2 in user_ids
+    usernames_param = request.args.get('usernames')
+    if usernames_param:
+        usernames = [username.strip() for username in usernames_param.split(",")]
+        results = users_db.find({'username':{'$in': usernames}})    
+    else:
+        results = users_db.find()
+    users_list = [{"_id": str(user['_id']), "username":user['username'], "avatar":user["avatar"], "name":user["name"]} for user in results]
+    return jsonify(users_list), 200
+
 if __name__ == '__main__':
     app.run(debug=True)
