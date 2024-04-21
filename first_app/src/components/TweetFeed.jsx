@@ -3,7 +3,7 @@ import Tweet from "./Tweet";
 import UserContext from "./CurrentUserContext";
 import LoadingTweetFeed from "./loading/LoadingTweetFeed";
 
-const LastTweets = ({ tweets }) => {
+const TweetFeed = ({ tweets }) => {
   const [lastTweets, setLastTweets] = useState(tweets);
   const [isLoading, setIsLoading] = useState(true);
   const currentUser = useContext(UserContext);
@@ -22,7 +22,12 @@ const LastTweets = ({ tweets }) => {
             `http://localhost:5000/user/${tweet.username}`
           );
           const user = await avatar_response.json();
-          return { ...tweet, avatar: user.avatar };
+          return {
+            ...tweet,
+            name: user.name,
+            avatar: user.avatar,
+            is_verified: user.is_verified,
+          };
         })
       );
       setLastTweets(lastTweetsWithAvatars);
@@ -36,7 +41,7 @@ const LastTweets = ({ tweets }) => {
       const likedByCurrentUser = tweet.liked_by.includes(currentUser.username);
       return (
         <Tweet
-          key={tweet._id + index}
+          key={tweet._id}
           tweetId={tweet._id}
           name={tweet.name}
           userName={tweet.username}
@@ -46,6 +51,7 @@ const LastTweets = ({ tweets }) => {
           starting_comments={0}
           userAvatar={tweet.avatar}
           likedByCurrentUser={likedByCurrentUser}
+          is_verified={tweet.is_verified}
         />
       );
     });
@@ -54,4 +60,4 @@ const LastTweets = ({ tweets }) => {
   }
 };
 
-export default LastTweets;
+export default TweetFeed;

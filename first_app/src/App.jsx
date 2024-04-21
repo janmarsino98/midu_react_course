@@ -12,9 +12,10 @@ import LoadingTweet from "./components/loading/LoadingTweet";
 import LoadingCreateTweet from "./components/loading/LoadingCreateTweet";
 import FollowCard from "./components/FollowCard";
 import WhoToFollow from "./components/WhoToFollow";
+import SearchBar from "./components/SearchBar";
 
 function App() {
-  const currentUserUsername = "rasbt";
+  const currentUserUsername = "wiskys98";
   const currentUserInfo = useCurrentUser(currentUserUsername);
   useEffect(() => {}, [currentUserInfo]);
   return (
@@ -28,6 +29,7 @@ function App() {
           <TweetFeed></TweetFeed>
         </main>
         <div className="right-container">
+          <SearchBar></SearchBar>
           <WhoToFollow usernames={["wiskys98", "user2"]}></WhoToFollow>
         </div>
       </UserContext.Provider>

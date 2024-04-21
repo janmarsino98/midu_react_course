@@ -72,7 +72,6 @@ def get_last_tweets():
     for doc in tweets_db.find().sort('created_at', -1).limit(2):
         recent_tweets.append({
             '_id': str(ObjectId(doc['_id'])),
-            'name': doc['name'],
             'username': doc['username'],
             'likes': doc['likes'],
             'retweets': doc['retweets'],
@@ -92,6 +91,7 @@ def get_user(username):
         'name': user['name'],
         'username': user['username'],
         'avatar': user['avatar'],
+        'is_verified' : user['is_verified']
     })
     
 @app.route("/<current_username>/tweet_like/<tweet_id>", methods=['PUT'])
@@ -159,7 +159,7 @@ def get_users():
         results = users_db.find({'username':{'$in': usernames}})    
     else:
         results = users_db.find()
-    users_list = [{"_id": str(user['_id']), "username":user['username'], "avatar":user["avatar"], "name":user["name"]} for user in results]
+    users_list = [{"_id": str(user['_id']), "username":user['username'], "avatar":user["avatar"], "name":user["name"], "is_verified": user["is_verified"]} for user in results]
     return jsonify(users_list), 200
 
 if __name__ == '__main__':

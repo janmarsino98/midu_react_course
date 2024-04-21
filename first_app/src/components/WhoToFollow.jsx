@@ -26,11 +26,13 @@ const WhoToFollow = ({ usernames }) => {
             <FollowCard
               key={index}
               username={userdata.username}
-              name={userdata.username}
+              name={userdata.name}
               avatar={userdata.avatar}
+              is_verified={userdata.is_verified}
             ></FollowCard>
           );
         })}
+      <button className="FollowCard-showMoreBtn">Mostrar más</button>
     </div>
   );
 };

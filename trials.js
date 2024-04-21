@@ -1,3 +1,7 @@
-const users = ["a", "b"]
+users = [{ "name": "jan", "occupation": "audit" }, { "name": "roger", "occupation": "tech" }]
 
-console.log(users.join(","))
+let newUsers = users.filter((user) => {
+    return user.name === "jan"
+})
+
+console.log(newUsers)

@@ -3,8 +3,9 @@ import { FiMessageCircle } from "react-icons/fi";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { FaRegHeart } from "react-icons/fa";
 import UserContext from "./CurrentUserContext";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
 
-const TweetFeed = ({
+const Tweet = ({
   tweetId,
   userAvatar,
   name,
@@ -14,6 +15,7 @@ const TweetFeed = ({
   starting_retweets,
   starting_comments,
   likedByCurrentUser,
+  is_verified,
 }) => {
   const [isRetweeted, setisRetweeted] = useState(false);
   const [isLiked, setIsLiked] = useState(likedByCurrentUser);
@@ -139,7 +141,12 @@ const TweetFeed = ({
       </div>
       <div className="tf-Tweet-bodyContainer">
         <div className="tf-Tweet-bodyContainer-header">
-          <h2>{name}</h2>
+          <h2>
+            {name}{" "}
+            {is_verified && (
+              <RiVerifiedBadgeFill color="rgb(29, 155, 240)"></RiVerifiedBadgeFill>
+            )}
+          </h2>
           <span>@{userName}</span>
         </div>
         <div className="tf-Tweet-bodyContainer-text">
@@ -182,4 +189,4 @@ const TweetFeed = ({
   );
 };
 
-export default TweetFeed;
+export default Tweet;
