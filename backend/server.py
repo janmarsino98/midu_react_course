@@ -39,6 +39,7 @@ def get_tweet(tweet_id):
         'retweets': tweet['retweets'],
         'username': tweet['username'],
         'liked_by': tweet['liked_by'],
+        'retweeted_by': tweet['retweeted_by'],
     })
     
 @app.route("/tweet", methods=['POST'])
@@ -58,6 +59,7 @@ def tweet():
                 'likes': 0,
                 'retweets': 0,
                 'liked_by': [],
+                'retweeted_by': [],
             })
             return jsonify({'message':'Tweet created successfully'}), 201 
         else:
@@ -75,7 +77,8 @@ def get_last_tweets():
             'likes': doc['likes'],
             'retweets': doc['retweets'],
             'message': doc['message'],
-            'liked_by': doc['liked_by'],    
+            'liked_by': doc['liked_by'],     
+            'retweeted_by': doc['retweeted_by'],     
         })
         
     return jsonify(recent_tweets)
@@ -115,6 +118,35 @@ def like_status(current_username, tweet_id):
     tweet = tweets_db.find_one({'_id': ObjectId(tweet_id)})
     liked = current_username in tweet['liked_by']
     return jsonify({'liked_by_user': liked})
+
+
+@app.route("/<current_username>/tweet_retweet_status/<tweet_id>", methods={'GET'})
+def retweet_status(current_username, tweet_id):
+    tweet = tweets_db.find_one({'_id': ObjectId(tweet_id)})
+    retweeted = current_username in tweet['retweeted_by']
+    return jsonify({'retweeted_by_user': retweeted})
+# API route to increase the retweet of a tweet and add the user to the list of retweeters
+
+@app.route("/<current_username>/tweet_retweet/<tweet_id>", methods=['PUT'])
+def retweet_tweet(tweet_id, current_username):
+    document = tweets_db.find_one({'_id' : ObjectId(tweet_id)})
+    if current_username not in document['retweeted_by']:
+        tweets_db.update_one({'_id':ObjectId(tweet_id)}, {'$inc' : {'retweets': 1}, '$push': {'retweeted_by': current_username}})
+        return jsonify({'message': 'tweet rewteeted successfully'}), 200
+    
+    else:
+        return jsonify({'message' : 'Trying to retweet a tweet that is already retweeted by the user'}), 400
+
+
+@app.route("/<current_username>/tweet_unretweet/<tweet_id>", methods=['PUT'])
+def unretweet_tweet(tweet_id, current_username):
+    document = tweets_db.find_one({'_id' : ObjectId(tweet_id)})
+    if current_username in document['retweeted_by']:
+        tweets_db.update_one({'_id':ObjectId(tweet_id)}, {'$inc' : {'retweets': -1}, '$pull': {'retweeted_by': current_username}})
+        return jsonify({'message': 'tweet unrewteeted successfully'}), 200
+    
+    else:
+        return jsonify({'message' : 'Trying to unretweet a tweet that is not retweeted by the user'}), 400
 
 if __name__ == '__main__':
     app.run(debug=True)

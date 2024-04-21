@@ -15,11 +15,29 @@ const TweetFeed = ({
   starting_comments,
   likedByCurrentUser,
 }) => {
-  const [reposted, setReposted] = useState(false);
+  const [isRetweeted, setisRetweeted] = useState(false);
   const [isLiked, setIsLiked] = useState(likedByCurrentUser);
   const [likes, setLikes] = useState(starting_likes);
   const [retweets, setRetweets] = useState(starting_retweets);
   const currentUser = useContext(UserContext);
+
+  useEffect(() => {
+    const fetchRetweetStatus = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/${currentUser.username}/tweet_retweet_status/${tweetId}`
+        );
+        const data = await response.json();
+        setisRetweeted(data.retweeted_by_user);
+      } catch (error) {
+        console.error(
+          "Erorr while trying to get retweet status from a tweet :",
+          error
+        );
+      }
+    };
+    fetchRetweetStatus();
+  }, [currentUser, tweetId]);
 
   useEffect(() => {
     const fetchLikeStatus = async () => {
@@ -34,6 +52,24 @@ const TweetFeed = ({
       }
     };
     fetchLikeStatus();
+  }, [currentUser, tweetId]);
+
+  useEffect(() => {
+    const fetchRetweetStatus = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/${currentUser.username}/tweet_retweet_status/${tweetId}`
+        );
+        const data = await response.json();
+        setisRetweeted(data.retweeted_by_user);
+      } catch (error) {
+        console.error(
+          "Erorr while trying to get retweet status from a tweet :",
+          error
+        );
+      }
+    };
+    fetchRetweetStatus();
   }, [currentUser, tweetId]);
 
   const handleLike = async (tweetId) => {
@@ -66,13 +102,34 @@ const TweetFeed = ({
     }
   };
 
-  const handleRetweet = () => {
-    if (reposted) {
+  const handleRetweet = async () => {
+    setisRetweeted(!isRetweeted);
+    if (isRetweeted) {
       setRetweets(retweets - 1);
+      try {
+        const response = await fetch(
+          `http://localhost:5000/${currentUser.username}/tweet_unretweet/${tweetId}`,
+          {
+            method: "PUT",
+          }
+        );
+      } catch (error) {
+        console.error("There was an error while unretweeting a tweet: ", error);
+      }
     } else {
       setRetweets(retweets + 1);
+
+      try {
+        const response = await fetch(
+          `http://localhost:5000/${currentUser.username}/tweet_retweet/${tweetId}`,
+          {
+            method: "PUT",
+          }
+        );
+      } catch (error) {
+        console.error("Error while trying to retweet a tweet: ", error);
+      }
     }
-    setReposted(!reposted);
   };
 
   return (
@@ -102,7 +159,7 @@ const TweetFeed = ({
             onClick={handleRetweet}
           >
             <div className="tf-Tweet-bodyContainer-options-btn">
-              <AiOutlineRetweet color={reposted ? "green" : "white"} />
+              <AiOutlineRetweet color={isRetweeted ? "green" : "white"} />
             </div>
             <div className="retweets">
               <span>{retweets}</span>
