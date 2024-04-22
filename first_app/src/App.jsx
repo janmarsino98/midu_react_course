@@ -15,7 +15,7 @@ import WhoToFollow from "./components/WhoToFollow";
 import SearchBar from "./components/SearchBar";
 
 function App() {
-  const currentUserUsername = "wiskys98";
+  const currentUserUsername = "rasbt";
   const currentUserInfo = useCurrentUser(currentUserUsername);
   useEffect(() => {}, [currentUserInfo]);
   return (

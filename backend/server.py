@@ -162,5 +162,24 @@ def get_users():
     users_list = [{"_id": str(user['_id']), "username":user['username'], "avatar":user["avatar"], "name":user["name"], "is_verified": user["is_verified"]} for user in results]
     return jsonify(users_list), 200
 
+
+@app.route("/users_by_text")
+def search_text():
+    text_to_search = request.args.get('text')
+    if text_to_search:
+        results = users_db.find({'$or': [
+            { "name" : {"$regex": text_to_search, "$options":"i"} },
+            { "username" : {"$regex": text_to_search, "$options":"i"} },
+        ]
+            })
+        users_list = [{"_id": str(user['_id']), "username":user['username'], "avatar":user["avatar"], "name":user["name"], "is_verified": user["is_verified"]} for user in results]
+    else:
+        users_list = None
+        
+    return jsonify(users_list), 200
+    
+    
+    
+
 if __name__ == '__main__':
     app.run(debug=True)

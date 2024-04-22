@@ -1,6 +1,6 @@
 import React from "react";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
-const FollowCard = ({ name, username, avatar, is_verified }) => {
+const FollowCard = ({ name, username, avatar, is_verified, children }) => {
   return (
     <div className="whoToFollowCard">
       <div className="whoToFollowCard-imgContainer">
@@ -17,9 +17,7 @@ const FollowCard = ({ name, username, avatar, is_verified }) => {
           {`@${username}`}
         </span>
       </div>
-      <div className="whoToFollowCard-followBtnContainer">
-        <button>Seguir</button>
-      </div>
+      {children}
     </div>
   );
 };

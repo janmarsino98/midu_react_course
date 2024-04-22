@@ -29,7 +29,11 @@ const WhoToFollow = ({ usernames }) => {
               name={userdata.name}
               avatar={userdata.avatar}
               is_verified={userdata.is_verified}
-            ></FollowCard>
+            >
+              <div className="whoToFollowCard-followBtnContainer">
+                <button>Seguir</button>
+              </div>
+            </FollowCard>
           );
         })}
       <button className="FollowCard-showMoreBtn">Mostrar más</button>

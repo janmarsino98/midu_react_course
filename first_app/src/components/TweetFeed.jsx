@@ -16,28 +16,36 @@ const TweetFeed = ({ tweets }) => {
     try {
       const response = await fetch("http://localhost:5000/last_tweets");
       const lastTweets = await response.json();
-      const lastTweetsWithAvatars = await Promise.all(
-        lastTweets.map(async (tweet) => {
-          const avatar_response = await fetch(
-            `http://localhost:5000/user/${tweet.username}`
-          );
-          const user = await avatar_response.json();
-          return {
-            ...tweet,
-            name: user.name,
-            avatar: user.avatar,
-            is_verified: user.is_verified,
-          };
-        })
+      //lastTweets is a list of objects (tweets).
+      const usernames = [];
+      for (let i = 0; i < lastTweets.length; i++) {
+        usernames.push(lastTweets[i].username);
+      }
+
+      const usersResponse = await fetch(
+        `http://localhost:5000/users?usernames=${usernames.join(",")}`
       );
-      setLastTweets(lastTweetsWithAvatars);
+
+      const usersData = await usersResponse.json();
+
+      const newLastTweets = lastTweets.map((tweet) => {
+        const user = usersData.find((user) => user.username === tweet.username);
+        return {
+          ...tweet,
+          name: user.name,
+          avatar: user.avatar,
+          is_verified: user.is_verified,
+        };
+      });
+
+      setLastTweets(newLastTweets);
     } catch (error) {
       console.error("Error: ", error);
     }
     setIsLoading(false);
   };
   if (isLoading === false) {
-    return lastTweets.map((tweet, index) => {
+    return lastTweets.map((tweet) => {
       const likedByCurrentUser = tweet.liked_by.includes(currentUser.username);
       return (
         <Tweet
