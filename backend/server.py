@@ -178,6 +178,10 @@ def search_text():
         
     return jsonify(users_list), 200
     
+@app.route("/verify_user/<username>", methods=['PUT'])
+def verify_user(username):
+    user = users_db.find_one({'username': username})
+    users_db.update_one({'username': (user['username'])}, {'$set': {'is_verified': not user['is_verified']}})
     
     
 

@@ -31,7 +31,7 @@ function App() {
         </main>
         <div className="right-container">
           <SearchBar></SearchBar>
-          {!(currentUserInfo.is_verified) && <CTAPremium></CTAPremium>}
+          {(!currentUserInfo.is_verified) && <CTAPremium></CTAPremium>}
           <WhoToFollow usernames={["wiskys98", "user2"]}></WhoToFollow>
         </div>
       </UserContext.Provider>
