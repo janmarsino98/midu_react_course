@@ -181,9 +181,11 @@ def search_text():
 @app.route("/verify_user/<username>", methods=['PUT'])
 def verify_user(username):
     user = users_db.find_one({'username': username})
-    users_db.update_one({'username': (user['username'])}, {'$set': {'is_verified': not user['is_verified']}})
+    if user:
+        users_db.update_one({'username': username}, {'$set': {'is_verified': True}})
+        return {"message": "User verified"},200
     
     
-
+    
 if __name__ == '__main__':
     app.run(debug=True)
