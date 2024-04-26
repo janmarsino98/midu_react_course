@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import UserContext from "./CurrentUserContext";
+import { UserContext } from "./CurrentUserContext";
 import defaultAvatar from "../assets/default_user.jpg";
 import LoadingCreateTweet from "./loading/LoadingCreateTweet";
 
@@ -9,7 +9,10 @@ const CreateTweet = ({ onTweetSubmit }) => {
   const [userAvatar, setUserAvatar] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const currentUser = useContext(UserContext);
+  // At this component we just deconstruct the first variable of the context object because we won't need to update it according to the component.
+
+  const { currentUser } = useContext(UserContext);
+
   useEffect(() => {
     if (currentUser) {
       const fetchAvatar = async () => {

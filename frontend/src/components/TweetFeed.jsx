@@ -1,12 +1,12 @@
 import { useState, useEffect, useContext } from "react";
 import Tweet from "./Tweet";
-import UserContext from "./CurrentUserContext";
+import { UserContext } from "./CurrentUserContext";
 import LoadingTweetFeed from "./loading/LoadingTweetFeed";
 
 const TweetFeed = ({ tweets }) => {
   const [lastTweets, setLastTweets] = useState(tweets);
   const [isLoading, setIsLoading] = useState(true);
-  const currentUser = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
   useEffect(() => {
     fetchData();
   }, [currentUser]);

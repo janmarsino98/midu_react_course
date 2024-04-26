@@ -471,3 +471,7 @@ h4 {
   display: flex;
   flex-direction: row;
 }
+
+.trialDiv {
+  color: white
+}

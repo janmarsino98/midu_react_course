@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { FiMessageCircle } from "react-icons/fi";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { FaRegHeart } from "react-icons/fa";
-import UserContext from "./CurrentUserContext";
+import { UserContext } from "./CurrentUserContext";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 
 const Tweet = ({
@@ -21,7 +21,7 @@ const Tweet = ({
   const [isLiked, setIsLiked] = useState(likedByCurrentUser);
   const [likes, setLikes] = useState(starting_likes);
   const [retweets, setRetweets] = useState(starting_retweets);
-  const currentUser = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
 
   useEffect(() => {
     const fetchRetweetStatus = async () => {
