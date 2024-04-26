@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 from flask_cors import CORS
 from datetime import datetime
+import random
 
 load_dotenv()
 
@@ -186,6 +187,21 @@ def verify_user(username):
         return {"message": "User verified"},200
     
     
+@app.route("/random_users", methods=["GET"])
+def random_users():
+    currentUserUsername = request.args.get('currentUserUsername')
+    count = request.args.get('count')
+    if currentUserUsername and count:
+        count = int(count)
+        filtered_users = users_db.find({'username': {'$ne': currentUserUsername}})
+        filtered_users =  [{"_id": str(user['_id']), "username":user['username'], "avatar":user["avatar"], "name":user["name"], "is_verified": user["is_verified"]} for user in filtered_users]
+        random.shuffle(filtered_users)
+        random_users = filtered_users[:count]
+        return jsonify(random_users), 200
     
+    else:
+        return jsonify({'error': 'There are one or more parameters missing in your call.'}), 400
+        
+        
 if __name__ == '__main__':
     app.run(debug=True)
