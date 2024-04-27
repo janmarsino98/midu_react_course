@@ -92,7 +92,9 @@ def get_user(username):
         'name': user['name'],
         'username': user['username'],
         'avatar': user['avatar'],
-        'is_verified' : user['is_verified']
+        'is_verified' : user['is_verified'],
+        'following' : user['following'],
+        'followed_by': user['followed_by'],
     })
     
 @app.route("/<current_username>/tweet_like/<tweet_id>", methods=['PUT'])
@@ -194,13 +196,39 @@ def random_users():
     if currentUserUsername and count:
         count = int(count)
         filtered_users = users_db.find({'username': {'$ne': currentUserUsername}})
-        filtered_users =  [{"_id": str(user['_id']), "username":user['username'], "avatar":user["avatar"], "name":user["name"], "is_verified": user["is_verified"]} for user in filtered_users]
+        filtered_users =  [{"_id": str(user['_id']), "username":user['username'], "avatar":user["avatar"], "name":user["name"], "is_verified": user["is_verified"], "following": user["following"], "followed_by": user["followed_by"] } for user in filtered_users]
         random.shuffle(filtered_users)
         random_users = filtered_users[:count]
         return jsonify(random_users), 200
     
     else:
         return jsonify({'error': 'There are one or more parameters missing in your call.'}), 400
+    
+@app.route("/<username>/follow/<follow_username>", methods=["PUT"])
+def follow_user(username, follow_username):
+    user = users_db.find_one({'username': username})
+    if follow_username not in user['following']:
+        users_db.update_one({'username': username}, {'$push': {'following': follow_username} })
+        users_db.update_one({'username': follow_username}, {'$push': {'followed_by': username}})
+        return jsonify({'message': 'followed a user correctly'}), 200
+    
+    else:
+        return jsonify({'message': 'The user is already following the follow user'})
+    
+@app.route("/<username>/unfollow/<unfollow_username>", methods=["PUT"])
+def unfollow_user(username, unfollow_username):
+    user = users_db.find_one({'username': username})
+    if unfollow_username in user['following']:
+        users_db.update_one({'username': username}, {'$pull': {'following': unfollow_username} })
+        users_db.update_one({'username': unfollow_username}, {'$pull': {'followed_by': username}})
+        return jsonify({'message': 'unfollowed a user correctly'}), 200
+    else:
+        return jsonify({'message': 'The user is trying to unfollow a user which is not followed'})
+    
+@app.route("/add_field", methods=["POST"])
+def add_field():
+    users_db.update_many({}, {'$set':{'following':[], 'followed_by':[]}})
+    return jsonify({'message': 'fields added successfully'})
         
         
 if __name__ == '__main__':

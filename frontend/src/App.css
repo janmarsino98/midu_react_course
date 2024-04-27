@@ -336,13 +336,33 @@ button {
   display: flex;
 }
 
-.whoToFollowCard-followBtnContainer button {
+.followBtn {
+  background-color: white;
+  padding: 5px 0px;
+  border-radius: 25px;
+  font-weight: bold;
+  width: 125px;
+}
+
+.followBtn.following {
+  border: 0.01px solid rgb(255, 255, 255, 0.2);
+  background-color: black;
+  color: white
+}
+
+.followBtn.following:hover {
+  border: 0.05px solid rgba(255, 0, 0, 0.339);
+  color: red;
+}
+
+/* .whoToFollowCard-followBtnContainer button {
   background-color: white;
   padding: 5px 10px;
   border-radius: 25px;
   font-weight: bold;
 
-}
+} */
+
 
 .whoToFollowCard-userInfoContainer-user {
   font-weight: bold;

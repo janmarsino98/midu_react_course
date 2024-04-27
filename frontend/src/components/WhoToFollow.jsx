@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import FollowCard from "./FollowCard";
 import { UserContext } from "./CurrentUserContext";
+import FollowBtn from "./FollowBtn";
+import UnfollowBtn from "./UnfollowBtn";
 
 const WhoToFollow = () => {
   const [userData, setUserData] = useState([]);
@@ -34,6 +36,11 @@ const WhoToFollow = () => {
         userData
           .slice(0, showMore ? userData.length : 2)
           .map((userdata, index) => {
+            console.log(currentUser.following);
+            const isFollowing =
+              currentUser &&
+              currentUser.following &&
+              currentUser.following.includes(userdata.username);
             return (
               <FollowCard
                 key={index}
@@ -43,7 +50,13 @@ const WhoToFollow = () => {
                 is_verified={userdata.is_verified}
               >
                 <div className="whoToFollowCard-followBtnContainer">
-                  <button>Seguir</button>
+                  {isFollowing ? (
+                    <UnfollowBtn
+                      usernameToUnfollow={userdata.username}
+                    ></UnfollowBtn>
+                  ) : (
+                    <FollowBtn usernameToFollow={userdata.username}></FollowBtn>
+                  )}
                 </div>
               </FollowCard>
             );
