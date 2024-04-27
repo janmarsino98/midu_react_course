@@ -195,7 +195,7 @@ def random_users():
     count = request.args.get('count')
     if currentUserUsername and count:
         count = int(count)
-        filtered_users = users_db.find({'username': {'$ne': currentUserUsername}})
+        filtered_users = users_db.find({'username': {'$ne': currentUserUsername}, 'followed_by': {'$nin':[currentUserUsername]}})
         filtered_users =  [{"_id": str(user['_id']), "username":user['username'], "avatar":user["avatar"], "name":user["name"], "is_verified": user["is_verified"], "following": user["following"], "followed_by": user["followed_by"] } for user in filtered_users]
         random.shuffle(filtered_users)
         random_users = filtered_users[:count]
@@ -225,10 +225,10 @@ def unfollow_user(username, unfollow_username):
     else:
         return jsonify({'message': 'The user is trying to unfollow a user which is not followed'})
     
-@app.route("/add_field", methods=["POST"])
-def add_field():
-    users_db.update_many({}, {'$set':{'following':[], 'followed_by':[]}})
-    return jsonify({'message': 'fields added successfully'})
+# @app.route("/add_field", methods=["POST"])
+# def add_field():
+#     users_db.update_many({}, {'$set':{'following':[], 'followed_by':[]}})
+#     return jsonify({'message': 'fields added successfully'})
         
         
 if __name__ == '__main__':

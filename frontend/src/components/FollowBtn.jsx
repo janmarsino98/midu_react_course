@@ -1,21 +1,39 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from "./CurrentUserContext";
 
 const FollowBtn = ({ children, usernameToFollow }) => {
   const { currentUser } = useContext(UserContext);
+  const [following, setFollowing] = useState(
+    currentUser.following.includes(usernameToFollow)
+  );
+  const [hover, setHover] = useState(null);
+  const [isLoading, setIsLoading] = useState(null);
+
   const handleClick = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch(
-        `http://localhost:5000/${currentUser.username}/follow/${usernameToFollow}`,
+        `http://localhost:5000/${currentUser.username}/${
+          following ? "un" : ""
+        }follow/${usernameToFollow}`,
         { method: "PUT" }
       );
+      setFollowing(!following);
     } catch (error) {
       console.error("Error: ", error);
     }
+    setIsLoading(false);
   };
+
   return (
-    <button className="followBtn" onClick={() => handleClick()}>
-      Seguir
+    <button
+      className={"followBtn" + (following ? " following" : "")}
+      onClick={() => handleClick()}
+      onPointerEnter={() => setHover(true)}
+      onPointerLeave={() => setHover(false)}
+      disabled={isLoading}
+    >
+      {following ? (hover ? "Dejar de seguir" : "Siguiendo") : "Seguir"}
     </button>
   );
 };

@@ -2,12 +2,23 @@ import { useContext, useEffect, useState } from "react";
 import FollowCard from "./FollowCard";
 import { UserContext } from "./CurrentUserContext";
 import FollowBtn from "./FollowBtn";
-import UnfollowBtn from "./UnfollowBtn";
 
 const WhoToFollow = () => {
   const [userData, setUserData] = useState([]);
   const [showMore, setShowMore] = useState(false);
   const { currentUser } = useContext(UserContext);
+  const [following, setFollowing] = useState([]);
+  const handleFollow = (username) => {
+    setFollowing([...following, username]);
+  };
+
+  const handleUnfollow = (username) => {
+    setFollowing(
+      [...following].filter((follower) => {
+        follower !== username;
+      })
+    );
+  };
 
   const handleClick = () => {
     setShowMore(!showMore);
@@ -50,13 +61,10 @@ const WhoToFollow = () => {
                 is_verified={userdata.is_verified}
               >
                 <div className="whoToFollowCard-followBtnContainer">
-                  {isFollowing ? (
-                    <UnfollowBtn
-                      usernameToUnfollow={userdata.username}
-                    ></UnfollowBtn>
-                  ) : (
-                    <FollowBtn usernameToFollow={userdata.username}></FollowBtn>
-                  )}
+                  <FollowBtn
+                    usernameToFollow={userdata.username}
+                    onClick={() => handleFollow(userdata.username)}
+                  ></FollowBtn>
                 </div>
               </FollowCard>
             );
