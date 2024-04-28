@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 
 export const UserContext = createContext();
-const activeUser = "rasbt";
+const activeUser = "wiskys98";
 export const UserProvider = ({ children }) => {
   //We will pass a currentUser and a method to update it to the children of the provider
   const [currentUser, setCurrentUser] = useState(null);
@@ -18,7 +18,6 @@ export const UserProvider = ({ children }) => {
       }
     };
     fetchUser(activeUser);
-    console.log(activeUser);
   }, []);
   return (
     <UserContext.Provider value={{ currentUser, setCurrentUser }}>

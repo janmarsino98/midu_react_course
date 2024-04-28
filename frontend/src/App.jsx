@@ -7,6 +7,9 @@ import useCurrentUser from "./hooks/useCurrentUser";
 import WhoToFollow from "./components/WhoToFollow";
 import SearchBar from "./components/SearchBar";
 import CTAPremium from "./components/CTAPremium";
+import { LastTweetsContext } from "./components/LastTweetsContext";
+import TweetFeedCopy from "./components/TweetFeedCopy";
+import { LastTweetsProvider } from "./components/LastTweetsContext";
 
 function App() {
   return (
@@ -17,7 +20,9 @@ function App() {
         </header>
         <main>
           <CreateTweet></CreateTweet>
-          <TweetFeed></TweetFeed>
+          <LastTweetsProvider>
+            <TweetFeedCopy></TweetFeedCopy>
+          </LastTweetsProvider>
         </main>
         <div className="right-container">
           <SearchBar></SearchBar>

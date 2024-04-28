@@ -16,7 +16,6 @@ const CreateTweet = ({ onTweetSubmit }) => {
   useEffect(() => {
     if (currentUser) {
       const fetchAvatar = async () => {
-        console.log("Fetching Avatar...");
         setIsLoading(true);
 
         try {

@@ -47,7 +47,6 @@ const WhoToFollow = () => {
         userData
           .slice(0, showMore ? userData.length : 2)
           .map((userdata, index) => {
-            console.log(currentUser.following);
             const isFollowing =
               currentUser &&
               currentUser.following &&
