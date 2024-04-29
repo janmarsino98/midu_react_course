@@ -1,11 +1,14 @@
 import React, { useContext, useState, useEffect } from "react";
 import { LastTweetsContext } from "./LastTweetsContext";
-import { GiSteamBlast } from "react-icons/gi";
+import Tweet from "./Tweet";
+import { UserContext } from "./CurrentUserContext";
 
 const TweetFeedCopy = () => {
   const { lastTweets, setLastTweets } = useContext(LastTweetsContext);
   const [isLoading, setIsLoading] = useState(false);
   const [usernames, setUsernames] = useState([]);
+  const [usernamesLoaded, setUsernamesLoaded] = useState(false);
+  const { currentUser } = useContext(UserContext);
 
   useEffect(() => {
     const getUsers = () => {
@@ -13,11 +16,21 @@ const TweetFeedCopy = () => {
       setUsernames(newUsernames);
     };
     getUsers();
-    console.log(`${usernames.length} users loaded...`);
   }, [lastTweets]);
 
   useEffect(() => {
+    if (usernames.length > 0) {
+      setUsernamesLoaded(true);
+    }
+  }, [usernames]);
+
+  useEffect(() => {
+    if (!usernamesLoaded) {
+      console.log("Still not loaded....")
+      return;
+    }
     const getTweets = async () => {
+      console.log("Getting tweets...")
       setIsLoading(true);
       try {
         const response = await fetch(
@@ -40,20 +53,30 @@ const TweetFeedCopy = () => {
         setIsLoading(false);
       }
     };
-    if (usernames.length > 0) {
+    if (usernames && usernames.length > 0) {
       getTweets();
     }
-  }, []);
+  }, [usernamesLoaded]);
 
   if (isLoading) {
     return <div className="trialDiv">LOADING...</div>;
   } else {
-    return usernames.map((username, index) => {
-      console.log("username: ", username);
+    return lastTweets.map((tweet, index) => {
+      const likedByCurrentUser = tweet.liked_by.includes(currentUser.username);
       return (
-        <div className="sampleDiv" key={index}>
-          {username}
-        </div>
+        <Tweet
+          key={tweet._id}
+          tweetId={tweet._id}
+          name={tweet.name}
+          userName={tweet.username}
+          tweetText={tweet.message}
+          starting_likes={tweet.likes ? tweet.likes : 0}
+          starting_retweets={tweet.retweets ? tweet.retweets : 0}
+          starting_comments={0}
+          userAvatar={tweet.avatar}
+          likedByCurrentUser={likedByCurrentUser}
+          is_verified={tweet.is_verified}
+        />
       );
     });
   }
