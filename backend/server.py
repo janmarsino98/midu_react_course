@@ -225,6 +225,26 @@ def unfollow_user(username, unfollow_username):
     else:
         return jsonify({'message': 'The user is trying to unfollow a user which is not followed'})
     
+@app.route("/<username>/following_last_tweets", methods=["GET"])
+def following_last_tweets(username):
+    following = users_db.find_one({"username":username})["following"]
+    following_tweets = tweets_db.find({"username": {'$in': following}})
+    response = []
+    
+    for following_tweet in following_tweets:
+        tweeter = users_db.find_one({'username': following_tweet['username']})
+        response.append({
+            '_id': str(following_tweet['_id']),
+            'username': following_tweet['username'],
+            'name': tweeter['name'],
+            'avatar': tweeter['avatar'],
+            'message': following_tweet['message'],
+            'likes': following_tweet['likes'],
+            'retweets': following_tweet['retweets'],
+            'is_verified': tweeter['is_verified']
+        })
+    return jsonify(response[0:2])
+    
 # @app.route("/add_field", methods=["POST"])
 # def add_field():
 #     users_db.update_many({}, {'$set':{'following':[], 'followed_by':[]}})

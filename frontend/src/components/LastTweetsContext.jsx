@@ -5,6 +5,7 @@ export const LastTweetsContext = createContext();
 export const LastTweetsProvider = ({ children }) => {
   const [lastTweets, setLastTweets] = useState([]);
 
+  // The use effect will get called only once when the app is rendered.
   useEffect(() => {
     const fetchLastTweets = async () => {
       try {

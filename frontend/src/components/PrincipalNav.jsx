@@ -24,7 +24,7 @@ const PrincipalNav = () => {
         /* href="/home" */
       >
         <div className="pnav-iconContainer">
-          <IoMdHome size={"19px"} style={{ verticalAlign: "baseline" }} />
+          <IoMdHome size={"29px"} style={{ verticalAlign: "baseline" }} />
         </div>
         <div className="pnav-itemName">
           <span>Home</span>
@@ -36,7 +36,7 @@ const PrincipalNav = () => {
         /* href="/explore" */
       >
         <div className="pnav-iconContainer">
-          <FaSearch />
+          <FaSearch size={"25px"} />
         </div>
         <div className="pnav-itemName">
           <span>Explore</span>
@@ -50,7 +50,7 @@ const PrincipalNav = () => {
         /* href="/notifications" */
       >
         <div className="pnav-iconContainer">
-          <FaBell />
+          <FaBell size={"25px"} />
         </div>
         <div className="pnav-itemName">
           <span>Notifications</span>
@@ -64,7 +64,7 @@ const PrincipalNav = () => {
         /* href="/messages" */
       >
         <div className="pnav-iconContainer">
-          <CiMail />
+          <CiMail size={"25px"} />
         </div>
         <div className="pnav-itemName">
           <span>Messages</span>
@@ -76,7 +76,7 @@ const PrincipalNav = () => {
         /* href="/lists" */
       >
         <div className="pnav-iconContainer">
-          <RiFileListFill />
+          <RiFileListFill size={"25px"} />
         </div>
         <div className="pnav-itemName">
           <span>Lists</span>
@@ -90,7 +90,7 @@ const PrincipalNav = () => {
         /* href="/communities" */
       >
         <div className="pnav-iconContainer">
-          <FaUserFriends />
+          <FaUserFriends size={"25px"} />
         </div>
         <div className="pnav-itemName">
           <span>Communities</span>
@@ -102,7 +102,7 @@ const PrincipalNav = () => {
         /* href="/premium" */
       >
         <div className="pnav-iconContainer">
-          <FaXTwitter />
+          <FaXTwitter size={"25px"} />
         </div>
         <div className="pnav-itemName">
           <span>Premium</span>
@@ -114,7 +114,7 @@ const PrincipalNav = () => {
         /* href="/profile" */
       >
         <div className="pnav-iconContainer">
-          <FaRegUser />
+          <FaRegUser size={"25px"} />
         </div>
         <div className="pnav-itemName">
           <span>Profile</span>
@@ -128,7 +128,7 @@ const PrincipalNav = () => {
         /* href="/more_options" */
       >
         <div className="pnav-iconContainer">
-          <CiCircleMore />
+          <CiCircleMore size={"25px"} />
         </div>
         <div className="pnav-itemName">
           <span>More options</span>

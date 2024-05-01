@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { LastTweetsContext } from "./LastTweetsContext";
 import Tweet from "./Tweet";
 import { UserContext } from "./CurrentUserContext";
+import LoadingTweetFeed from "./loading/LoadingTweetFeed";
 
 const TweetFeedCopy = () => {
   const { lastTweets, setLastTweets } = useContext(LastTweetsContext);
@@ -12,8 +13,10 @@ const TweetFeedCopy = () => {
 
   useEffect(() => {
     const getUsers = () => {
-      const newUsernames = lastTweets.map((tweet) => tweet.username);
-      setUsernames(newUsernames);
+      if (lastTweets) {
+        const newUsernames = lastTweets.map((tweet) => tweet.username);
+        setUsernames(newUsernames);
+      }
     };
     getUsers();
   }, [lastTweets]);
@@ -26,11 +29,12 @@ const TweetFeedCopy = () => {
 
   useEffect(() => {
     if (!usernamesLoaded) {
-      console.log("Still not loaded....")
+      setIsLoading(true);
+      console.log("Still not loaded....");
       return;
     }
     const getTweets = async () => {
-      console.log("Getting tweets...")
+      console.log("Getting tweets...");
       setIsLoading(true);
       try {
         const response = await fetch(
@@ -58,8 +62,8 @@ const TweetFeedCopy = () => {
     }
   }, [usernamesLoaded]);
 
-  if (isLoading) {
-    return <div className="trialDiv">LOADING...</div>;
+  if (isLoading || !lastTweets) {
+    return <LoadingTweetFeed></LoadingTweetFeed>;
   } else {
     return lastTweets.map((tweet, index) => {
       const likedByCurrentUser = tweet.liked_by.includes(currentUser.username);

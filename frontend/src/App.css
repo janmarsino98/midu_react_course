@@ -8,7 +8,13 @@
 body, html {
   height: 100%;
   overflow: auto;
+  -webkit-text-size-adjust: 100%;
   /* Allows scrolling */
+}
+
+#root {
+  height: 100%;
+  align-items: stretch;
 }
 
 body {
@@ -71,10 +77,6 @@ h2 {
   font-size: 15px;
 }
 
-span {
-  color: rgb(113, 118, 123);
-  font-size: 15px;
-}
 
 .tw-folllow-Card-userCard-btn {
   border: solid white 1px;
@@ -90,6 +92,7 @@ article {
   flex-wrap: wrap;
   flex-direction: row;
   border: 0.01px solid rgb(255, 255, 255, 0.2);
+  border-top: none;
   padding: 10px;
 }
 
@@ -177,6 +180,7 @@ button {
   flex-direction: row;
   padding: 10px;
   border: 0.01px solid rgb(255, 255, 255, 0.2);
+  border-top: none;
 }
 
 .tf-body-container {
@@ -243,17 +247,22 @@ button {
   flex-wrap: wrap;
   flex-direction: row;
   align-items: center;
-  padding: 5px;
+  padding: 12px;
+  border-radius: 25px;
+  width: max-content;
+}
+
+.pnav-item:hover {
+  background-color: rgba(88, 88, 88, 0.595)
 }
 
 .pnav-iconContainer {
   display: flex;
   flex-wrap: wrap;
-  margin-right: 8px;
   height: 100%;
-  width: 20px;
+  width: 30px;
   align-items: center;
-  color: rgb(255, 255, 255, 0.5)
+  color: rgb(231, 233, 234)
 }
 
 .pnav-itemName {
@@ -261,15 +270,10 @@ button {
   flex-wrap: wrap;
   align-items: center;
   height: 100%;
-  color: rgb(255, 255, 255, 0.5)
-}
-
-.pnav-itemName {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  height: 100%;
-  color: rgb(255, 255, 255, 0.5)
+  color: rgb(231, 233, 234);
+  margin-left: 20px;
+  margin-right: 16px;
+  font-size: 20px;
 }
 
 .pnav-item {
@@ -277,8 +281,8 @@ button {
   cursor: pointer;
 }
 
-.selected div, .selected span {
-  color: white
+.pnav-item.selected div, .pnav-item.selected span {
+  font-weight: bold;
 }
 
 #root {
@@ -411,11 +415,13 @@ h4 {
   background-color: rgba(87, 85, 85, 0.39);
   color: white;
   border-radius: 25px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  margin-top: 5px;
   border: 1px solid transparent;
   display: flex;
   flex-direction: row;
   align-items: center;
+
 }
 
 .searchBar-input {
@@ -498,4 +504,37 @@ h4 {
 
 .sampleDiv {
   color: white
+}
+
+.kindContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  border: 0.01px solid rgb(255, 255, 255, 0.2);
+  border-top: none;
+}
+
+.kindSection {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  padding: 20px 0;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.kindSection:hover {
+  background-color: rgba(65, 65, 65, 0.706);
+}
+
+.kindSection.selected .kindSection-selectMark {
+  background-color: rgb(29, 155, 240);
+  width: 50px;
+  height: 5px;
+  position: absolute;
+  bottom: 0px;
+  border-radius: 25px;
 }

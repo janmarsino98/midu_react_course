@@ -10,8 +10,16 @@ import CTAPremium from "./components/CTAPremium";
 import { LastTweetsContext } from "./components/LastTweetsContext";
 import TweetFeedCopy from "./components/TweetFeedCopy";
 import { LastTweetsProvider } from "./components/LastTweetsContext";
+import TweetKind from "./components/TweetKind";
+import { useState } from "react";
 
 function App() {
+  const [showFollowingFeed, setShowFollowingFeed] = useState(false);
+
+  const handleTweetKindChange = (isFollowingFeed) => {
+    setShowFollowingFeed(isFollowingFeed);
+  };
+
   return (
     <UserProvider>
       <div className="app-container">
@@ -19,15 +27,18 @@ function App() {
           <PrincipalNav></PrincipalNav>
         </header>
         <main>
-          <CreateTweet></CreateTweet>
           <LastTweetsProvider>
+            <TweetKind onTweetKindChange={handleTweetKindChange}></TweetKind>
+            <CreateTweet
+              onTweetSubmit={() => console.log("Submited...")}
+            ></CreateTweet>
             <TweetFeedCopy></TweetFeedCopy>
           </LastTweetsProvider>
         </main>
         <div className="right-container">
           <SearchBar></SearchBar>
           <CTAPremium></CTAPremium>
-          <WhoToFollow usernames={["wiskys98", "user2"]}></WhoToFollow>
+          <WhoToFollow></WhoToFollow>
         </div>
       </div>
     </UserProvider>

@@ -3,6 +3,7 @@ import axios from "axios";
 import { UserContext } from "./CurrentUserContext";
 import defaultAvatar from "../assets/default_user.jpg";
 import LoadingCreateTweet from "./loading/LoadingCreateTweet";
+import { LastTweetsContext } from "./LastTweetsContext";
 
 const CreateTweet = ({ onTweetSubmit }) => {
   const [tweet, setTweet] = useState("");
@@ -12,6 +13,7 @@ const CreateTweet = ({ onTweetSubmit }) => {
   // At this component we just deconstruct the first variable of the context object because we won't need to update it according to the component.
 
   const { currentUser } = useContext(UserContext);
+  const { lastTweets, setLastTweets } = useContext(LastTweetsContext);
 
   useEffect(() => {
     if (currentUser) {
@@ -50,13 +52,23 @@ const CreateTweet = ({ onTweetSubmit }) => {
       .then((response) => {
         setTweet(""); // Clear the input after posting
         if (response.data) {
-          // Assuming response.data contains the new tweet as it should be added to the state
+          fetchLastTweets();
           onTweetSubmit(response.data);
         }
       })
       .catch((error) => {
         console.error("Error posting tweet: ", error);
       });
+  };
+
+  const fetchLastTweets = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/last_tweets");
+      const data = await response.json();
+      setLastTweets(data);
+    } catch (error) {
+      console.error("Error: ", error);
+    }
   };
 
   if (isLoading === false) {
