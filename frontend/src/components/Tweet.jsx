@@ -136,11 +136,15 @@ const Tweet = ({
 
   return (
     <article>
-      <div className="tf-Tweet-imgContainer">
-        <img src={userAvatar} alt={`${name} profile pic`} />
+      <div className="flex flex-wrap flex-col py-2">
+        <img
+          className="rounded-full w-16"
+          src={userAvatar}
+          alt={`${name} profile pic`}
+        />
       </div>
-      <div className="tf-Tweet-bodyContainer">
-        <div className="tf-Tweet-bodyContainer-header">
+      <div className="text-white w-full">
+        <div className="flex flex-wrap flex-row">
           <h2>
             {name}{" "}
             {is_verified && (
@@ -149,12 +153,12 @@ const Tweet = ({
           </h2>
           <span>@{userName}</span>
         </div>
-        <div className="tf-Tweet-bodyContainer-text">
+        <div className="text-white">
           <p>{tweetText}</p>
         </div>
-        <div className="tf-Tweet-bodyContainer-options">
-          <div className="tf-Tweet-bodyContainer-options-container">
-            <div className="tf-Tweet-bodyContainer-options-btn">
+        <div className="p-2 flex flex-wrap flex-row justify-between items-center">
+          <div className="flex flex-wrap flex-row text-white cursor-pointer items-center gap-1">
+            <div className="flex flex-wrap items-center h-full">
               <FiMessageCircle color="white" />
             </div>
             <div className="comments">
@@ -162,7 +166,7 @@ const Tweet = ({
             </div>
           </div>
           <div
-            className="tf-Tweet-bodyContainer-options-container"
+            className="flex flex-wrap flex-row text-white cursor-pointer items-center gap-1"
             onClick={handleRetweet}
           >
             <div className="tf-Tweet-bodyContainer-options-btn">

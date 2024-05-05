@@ -63,25 +63,39 @@ const CreateTweet = ({ onTweetSubmit }) => {
   if (isLoading === false) {
     return (
       <>
-        <div className="tf-NewTweet-container">
-          <div className="tf-avatar-container">
-            <img src={isLoading ? defaultAvatar : userAvatar} alt="avatar" />
+        <div className="flex flex-row p-2 border border-gray-main-borders">
+          <div className="flex flex-wrap flex-col py-2 w-max mr-1">
+            <img
+              className="rounded-full w-16 flex flex-wrap"
+              src={isLoading ? defaultAvatar : userAvatar}
+              alt="avatar"
+            />
           </div>
-          <div className="tf-body-container">
-            <div className="tf-body-message">
+          <div className="flex flex-wrap flex-col w-full">
+            <div className="h-max">
               <form id="tweetForm" method="Post" onSubmit={handleSubmit}>
                 <textarea
+                  className=" bg-black resize-none text-white w-full border-none outline-none text-tweet-message h-max"
                   value={tweet}
                   onChange={handleChange}
                   placeholder="Start tweeting..."
                 ></textarea>
               </form>
             </div>
-            <div className="tf-body-others">
+            <div className="flex flex-wrap flex-row justify-between p-1">
               <div className="tf-body-others-icons"></div>
               <div className="tf-body-others-button">
-                <button type="submit" form="tweetForm" disabled={tweet === ""}>
-                  Submit
+                <button
+                  className={`rounded-full px-3 py-2 font-bold ${
+                    tweet == ""
+                      ? "bg-bg-disabled-button text-disabled-button"
+                      : "bg-blue-main text-white "
+                  }`}
+                  type="submit"
+                  form="tweetForm"
+                  disabled={tweet === ""}
+                >
+                  <div className="h-max">Submit</div>
                 </button>
               </div>
             </div>

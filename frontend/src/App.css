@@ -21,28 +21,28 @@ body {
   margin: 0;
 }
 
-.tw-followCard {
+/* .tw-followCard {
   border-radius: 10px;
   background-color: rgb(22, 24, 28);
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
   width: 300px;
-  padding: 10px;
+  padding: 10px;s
   gap: 20px
-}
+} */
 
-img {
+/* img {
   border-radius: 999px;
   height: 50px;
-}
+} */
 
 h1 {
   color: white;
   font-size: 20px;
 }
 
-.tw-followCard-userCard {
+/* .tw-followCard-userCard {
   height: 43px;
   display: flex;
   flex-wrap: wrap;
@@ -50,40 +50,40 @@ h1 {
   gap: 10px;
   align-items: center;
   height: max-content;
-}
+} */
 
-.tw-FollowCawrd-userCard-main {
+/* .tw-FollowCawrd-userCard-main {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   width: 100%;
-}
+} */
 
-.tw-followCard-userCard-info {
+/* .tw-followCard-userCard-info {
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
   align-items: stretch;
-}
+} */
 
 h2 {
   color: white;
   font-size: 15px;
 }
 
-span {
+/* span {
   color: rgb(113, 118, 123);
   font-size: 15px;
-}
+} */
 
-.tw-folllow-Card-userCard-btn {
+/* .tw-folllow-Card-userCard-btn {
   border: solid white 1px;
   border-radius: 25px;
   font-size: 14px;
   padding: 5px 16px;
   font-weight: bold;
   cursor: pointer;
-}
+} */
 
 article {
   display: flex;
@@ -93,12 +93,12 @@ article {
   padding: 10px;
 }
 
-.tf-Tweet-imgContainer {
+/* .tf-Tweet-imgContainer {
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
   padding: 0 10px;
-}
+} */
 
 .tw-FollowCard-userCard-main {
   display: flex;
@@ -124,11 +124,12 @@ article {
   text-wrap: wrap;
 }
 
+/* 
 .tf-Tweet-bodyContainer-header {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-}
+} */
 
 .tf-Tweet-bodyContainer-header span {
   padding-left: 5px;
@@ -179,12 +180,12 @@ button {
   border: 0.01px solid rgb(255, 255, 255, 0.2);
 }
 
-.tf-body-container {
+/* .tf-body-container {
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
   width: 100%;
-}
+} */
 
 .tf-body-container {
   padding: 5px 0;
@@ -196,7 +197,7 @@ button {
   margin-right: 8px;
 }
 
-.tf-body-container textarea {
+/* .tf-body-container textarea {
   background-color: black;
   resize: none;
   color: white;
@@ -205,23 +206,23 @@ button {
   outline: none;
   font-size: 15px;
 
-}
+} */
 
-.tf-body-container button {
+/* .tf-body-container button {
   background-color: rgb(29, 155, 240);
   border-radius: 50px;
   padding: 5px 10px;
   color: white;
   font-weight: bold;
-}
+} */
 
-.tf-body-others {
+/* .tf-body-others {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
   padding: 5px;
-}
+} */
 
 
 .tf-body-container button[disabled] {
@@ -302,7 +303,7 @@ button {
   color: white;
 }
 
-.whoToFollowCard {
+/* .whoToFollowCard {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -310,31 +311,31 @@ button {
   justify-content: center;
   align-items: center;
   background-color: black;
-}
+} */
 
-.whoToFollowCard-imgContainer {
+/* .whoToFollowCard-imgContainer {
   display: flex;
   flex-direction: column;
   max-width: 50px;
   border-radius: 100%;
   margin-right: 10px;
-}
-
+} */
+/* 
 .whoToFollowCard-userInfoContainer {
   display: flex;
   flex-direction: column;
   margin-right: 10px;
   width: 100%
-}
+} */
 
-.whoToFollowCard-followBtnContainer {
+/* .whoToFollowCard-followBtnContainer {
   height: 100%;
   justify-content: right;
   color: white;
   align-items: right;
   width: max-content;
   display: flex;
-}
+} */
 
 .followBtn {
   background-color: white;
@@ -364,10 +365,10 @@ button {
 } */
 
 
-.whoToFollowCard-userInfoContainer-user {
+/* .whoToFollowCard-userInfoContainer-user {
   font-weight: bold;
   color: #fff;
-}
+} */
 
 .FollowCard {
   border: 0.01px solid rgb(255, 255, 255, 0.2);
@@ -391,7 +392,7 @@ h4 {
   gap: 10px;
 }
 
-.FollowCard-showMoreBtn {
+/* .FollowCard-showMoreBtn {
   display: flex;
   color: rgb(29, 155, 240);
   font-size: 15px;
@@ -401,7 +402,7 @@ h4 {
   justify-content: left;
   padding: 16px;
   border-radius: 0 0 15px 15px;
-}
+} */
 
 .FollowCard-showMoreBtn:hover {
   background-color: rgba(255, 255, 255, 0.034);

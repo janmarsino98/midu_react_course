@@ -24,9 +24,13 @@ const PrincipalNav = () => {
         /* href="/home" */
       >
         <div className="pnav-iconContainer">
-          <IoMdHome size={"19px"} style={{ verticalAlign: "baseline" }} />
+          <IoMdHome
+            className="text-icon-size"
+            size={"50"}
+            style={{ verticalAlign: "baseline" }}
+          />
         </div>
-        <div className="pnav-itemName">
+        <div className="flex flex-wrap items-center h-full text-tweet-message">
           <span>Home</span>
         </div>
       </a>
@@ -38,7 +42,7 @@ const PrincipalNav = () => {
         <div className="pnav-iconContainer">
           <FaSearch />
         </div>
-        <div className="pnav-itemName">
+        <div className="flex flex-wrap items-center h-full text-tweet-message">
           <span>Explore</span>
         </div>
       </a>
@@ -52,7 +56,7 @@ const PrincipalNav = () => {
         <div className="pnav-iconContainer">
           <FaBell />
         </div>
-        <div className="pnav-itemName">
+        <div className="flex flex-wrap items-center h-full text-tweet-message">
           <span>Notifications</span>
         </div>
       </a>
@@ -66,7 +70,7 @@ const PrincipalNav = () => {
         <div className="pnav-iconContainer">
           <CiMail />
         </div>
-        <div className="pnav-itemName">
+        <div className="flex flex-wrap items-center h-full text-tweet-message">
           <span>Messages</span>
         </div>
       </a>
@@ -78,7 +82,7 @@ const PrincipalNav = () => {
         <div className="pnav-iconContainer">
           <RiFileListFill />
         </div>
-        <div className="pnav-itemName">
+        <div className="flex flex-wrap items-center h-full text-tweet-message">
           <span>Lists</span>
         </div>
       </a>
@@ -92,7 +96,7 @@ const PrincipalNav = () => {
         <div className="pnav-iconContainer">
           <FaUserFriends />
         </div>
-        <div className="pnav-itemName">
+        <div className="flex flex-wrap items-center h-full text-tweet-message">
           <span>Communities</span>
         </div>
       </a>
@@ -104,7 +108,7 @@ const PrincipalNav = () => {
         <div className="pnav-iconContainer">
           <FaXTwitter />
         </div>
-        <div className="pnav-itemName">
+        <div className="flex flex-wrap items-center h-full text-tweet-message">
           <span>Premium</span>
         </div>
       </a>
@@ -116,7 +120,7 @@ const PrincipalNav = () => {
         <div className="pnav-iconContainer">
           <FaRegUser />
         </div>
-        <div className="pnav-itemName">
+        <div className="flex flex-wrap items-center h-full text-tweet-message">
           <span>Profile</span>
         </div>
       </a>
@@ -130,7 +134,7 @@ const PrincipalNav = () => {
         <div className="pnav-iconContainer">
           <CiCircleMore />
         </div>
-        <div className="pnav-itemName">
+        <div className="flex flex-wrap items-center h-full text-tweet-message">
           <span>More options</span>
         </div>
       </a>

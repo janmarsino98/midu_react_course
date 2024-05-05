@@ -7,19 +7,20 @@ import useCurrentUser from "./hooks/useCurrentUser";
 import WhoToFollow from "./components/WhoToFollow";
 import SearchBar from "./components/SearchBar";
 import CTAPremium from "./components/CTAPremium";
+import "./index.css";
 
 function App() {
   return (
     <UserProvider>
-      <div className="app-container">
-        <header>
+      <div className="app-container w-full">
+        <header className="hidden lg:flex flex-col items-end ml-60 w-full">
           <PrincipalNav></PrincipalNav>
         </header>
-        <main>
+        <main className="w-full">
           <CreateTweet></CreateTweet>
           <TweetFeed></TweetFeed>
         </main>
-        <div className="right-container">
+        <div className="hidden lg:flex flex-col right-container w-full">
           <SearchBar></SearchBar>
           <CTAPremium></CTAPremium>
           <WhoToFollow usernames={["wiskys98", "user2"]}></WhoToFollow>

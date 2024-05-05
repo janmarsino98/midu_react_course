@@ -7,18 +7,18 @@ const Usercard = ({ name, userName, userNumber }) => {
     setIsFollowing(!following);
   };
   return (
-    <div className="tw-followCard-userCard">
+    <div className="flex flex-wrap flex-row gap-2 items-center h-max">
       <img
         src={`https://avatars.githubusercontent.com/u/${userNumber}?v=4`}
         alt={`${name} profile picture`}
       />
-      <div className="tw-FollowCawrd-userCard-main">
-        <div className="tw-followCard-userCard-info">
+      <div className="flex flex-wrap justify-between w-full">
+        <div className="flex flex-wrap flex-col items-stretch">
           <h2>{name}</h2>
           <span>@{userName}</span>
         </div>
         <button
-          className="tw-folllow-Card-userCard-btn"
+          className="border border-white rounded-lg text-2xl px-1 py-4 font-bold cursor-pointer"
           onClick={handleOnClick}
         >
           {following ? "Siguiendo" : "Seguir"}

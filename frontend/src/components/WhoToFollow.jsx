@@ -41,7 +41,7 @@ const WhoToFollow = () => {
     fetchUserInfo();
   }, [currentUser]);
   return (
-    <div className="FollowCard">
+    <div className="rounded-xl bg-custom-black flex flex-col flex-wrap w-full p-2 gap-2">
       <h4>A quién seguir</h4>
       {userData &&
         userData
@@ -60,7 +60,7 @@ const WhoToFollow = () => {
                 avatar={userdata.avatar}
                 is_verified={userdata.is_verified}
               >
-                <div className="whoToFollowCard-followBtnContainer">
+                <div className="flex h-full justify-end text-white items-end w-max">
                   <FollowBtn
                     usernameToFollow={userdata.username}
                     onClick={() => handleFollow(userdata.username)}
@@ -69,7 +69,10 @@ const WhoToFollow = () => {
               </FollowCard>
             );
           })}
-      <button className="FollowCard-showMoreBtn" onClick={() => handleClick()}>
+      <button
+        className="flex text-blue-main text-4 w-full h-full items-start justify-start p-4 rounded-bl-lg rounded-br-lg"
+        onClick={() => handleClick()}
+      >
         {showMore ? "Mostrar menos" : "Mostrar más"}
       </button>
     </div>
