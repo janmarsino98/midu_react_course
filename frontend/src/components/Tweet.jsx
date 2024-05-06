@@ -135,56 +135,63 @@ const Tweet = ({
   };
 
   return (
-    <article>
-      <div className="flex flex-wrap flex-col py-2">
-        <img
-          className="rounded-full w-16"
-          src={userAvatar}
-          alt={`${name} profile pic`}
-        />
-      </div>
-      <div className="text-white w-full">
-        <div className="flex flex-wrap flex-row">
-          <h2>
-            {name}{" "}
-            {is_verified && (
-              <RiVerifiedBadgeFill color="rgb(29, 155, 240)"></RiVerifiedBadgeFill>
-            )}
-          </h2>
-          <span>@{userName}</span>
+    <article className="border border-gray-main-borders px-4">
+      <div className="text-white w-full flex flex-row ">
+        <div className="flex flex-wrap flex-col py-2 mr-2">
+          <img
+            className="rounded-full w-16"
+            src={userAvatar}
+            alt={`${name} profile pic`}
+          />
         </div>
-        <div className="text-white">
-          <p>{tweetText}</p>
-        </div>
-        <div className="p-2 flex flex-wrap flex-row justify-between items-center">
-          <div className="flex flex-wrap flex-row text-white cursor-pointer items-center gap-1">
-            <div className="flex flex-wrap items-center h-full">
-              <FiMessageCircle color="white" />
-            </div>
-            <div className="comments">
-              <span>{starting_comments}</span>
-            </div>
+        <div className="flex flex-col w-full py-3">
+          <div className="flex flex-row w-full">
+            <h2 className="flex flex-row items-center font-bold text-tweet">
+              {name}
+              {is_verified && (
+                <RiVerifiedBadgeFill
+                  className="ml-1"
+                  color="rgb(29, 155, 240)"
+                ></RiVerifiedBadgeFill>
+              )}
+            </h2>
+            <span className="text-tweet-feed-light-gray text-tweet ml-1">
+              @{userName}
+            </span>
           </div>
-          <div
-            className="flex flex-wrap flex-row text-white cursor-pointer items-center gap-1"
-            onClick={handleRetweet}
-          >
-            <div className="tf-Tweet-bodyContainer-options-btn">
-              <AiOutlineRetweet color={isRetweeted ? "green" : "white"} />
-            </div>
-            <div className="retweets">
-              <span>{retweets}</span>
-            </div>
+          <div className="text-white">
+            <p>{tweetText}</p>
           </div>
-          <div
-            className="tf-Tweet-bodyContainer-options-container"
-            onClick={() => handleLike(tweetId)}
-          >
-            <div className="tf-Tweet-bodyContainer-options-btn">
-              <FaRegHeart color={isLiked ? "red" : "white"} />
+          <div className="p-2 flex flex-wrap flex-row justify-between items-stretch">
+            <div className="flex flex-wrap flex-row text-white cursor-pointer items-stretch gap-1">
+              <div className="flex flex-wrap items-center h-full">
+                <FiMessageCircle color="white" />
+              </div>
+              <div className="comments">
+                <span>{starting_comments}</span>
+              </div>
             </div>
-            <div className="likes">
-              <span>{likes}</span>
+            <div
+              className="flex flex-wrap flex-row text-white cursor-pointer items-center gap-1"
+              onClick={handleRetweet}
+            >
+              <div className="tf-Tweet-bodyContainer-options-btn">
+                <AiOutlineRetweet color={isRetweeted ? "green" : "white"} />
+              </div>
+              <div className="retweets">
+                <span>{retweets}</span>
+              </div>
+            </div>
+            <div
+              className="tf-Tweet-bodyContainer-options-container"
+              onClick={() => handleLike(tweetId)}
+            >
+              <div className="tf-Tweet-bodyContainer-options-btn">
+                <FaRegHeart color={isLiked ? "red" : "white"} />
+              </div>
+              <div className="likes">
+                <span>{likes}</span>
+              </div>
             </div>
           </div>
         </div>

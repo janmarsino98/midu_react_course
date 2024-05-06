@@ -229,6 +229,11 @@ def unfollow_user(username, unfollow_username):
 # def add_field():
 #     users_db.update_many({}, {'$set':{'following':[], 'followed_by':[]}})
 #     return jsonify({'message': 'fields added successfully'})
+
+# @app.route("/add_field", methods=["PUT"])
+# def add_fields():
+#     users_db.update_many({}, {'$set':{'following':[], 'followed_by':[]}})
+#     return jsonify({'message': 'fields added successfully'})
         
         
 if __name__ == '__main__':

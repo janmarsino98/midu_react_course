@@ -27,7 +27,10 @@ const FollowBtn = ({ children, usernameToFollow }) => {
 
   return (
     <button
-      className={"followBtn" + (following ? " following" : "")}
+      className={
+        " px-3 rounded-3xl font-bold w-30" +
+        (following ? " bg-black text-white border border-white" : "bg-white")
+      }
       onClick={() => handleClick()}
       onPointerEnter={() => setHover(true)}
       onPointerLeave={() => setHover(false)}

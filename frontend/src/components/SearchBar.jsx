@@ -39,20 +39,20 @@ const SearchBar = () => {
   return (
     <>
       <div
-        className="searchBar-container"
+        className="flex flex-row items-center border border-transparent bg-searchbar-bg mb-2 rounded-3xl focus-within:border-blue-main relative "
         onFocus={() => setIsFocused(!isFocused)}
         onBlur={() => setIsFocused(!isFocused)}
       >
-        <div className="searchBar-iconContainer">
+        <div className="mx-3">
           <IoSearch color={isFocused ? "rgb(29,155,240)" : "white"} />
         </div>
         <input
           placeholder="Buscar"
           type="text"
-          className="searchBar-input"
+          className="bg-transparent p-3 decoration-none pl-0 text-white w-full h-11 text-tweet focus:outline-none"
           onChange={handleChange}
         />
-        <div className="searchBar-iconContainer">
+        <div className="px-3">
           {isFocused && (
             <IoMdCloseCircle
               size="20px"
@@ -60,22 +60,23 @@ const SearchBar = () => {
             ></IoMdCloseCircle>
           )}
         </div>
-      </div>
-      <div className="searchBarResults-Container">
-        {users &&
-          users.map((user) => {
-            return (
-              isFocused && (
-                <FollowCard
-                  key={user._id}
-                  name={user.name}
-                  username={user.username}
-                  avatar={user.avatar}
-                  is_verified={user.is_verified}
-                ></FollowCard>
-              )
-            );
-          })}
+
+        <div className="block absolute top-12 z-90 shadow-searchbar-results rounded-xl w-full ">
+          {users &&
+            users.map((user) => {
+              return (
+                isFocused && (
+                  <FollowCard
+                    key={user._id}
+                    name={user.name}
+                    username={user.username}
+                    avatar={user.avatar}
+                    is_verified={user.is_verified}
+                  ></FollowCard>
+                )
+              );
+            })}
+        </div>
       </div>
     </>
   );

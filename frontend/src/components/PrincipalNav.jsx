@@ -8,6 +8,7 @@ import { FaUserFriends } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaRegUser } from "react-icons/fa";
 import { CiCircleMore } from "react-icons/ci";
+import PrincipalNavItem from "./PrincipalNavItem";
 
 const PrincipalNav = () => {
   const [clickedChoice, setClickedChoice] = useState("home");
@@ -17,127 +18,79 @@ const PrincipalNav = () => {
   };
 
   return (
-    <nav className="pnav">
-      <a
-        onClick={() => handleClick("home")}
-        className={`pnav-item ${clickedChoice === "home" ? "selected" : ""}`}
-        /* href="/home" */
-      >
-        <div className="pnav-iconContainer">
-          <IoMdHome
-            className="text-icon-size"
-            size={"50"}
-            style={{ verticalAlign: "baseline" }}
-          />
-        </div>
-        <div className="flex flex-wrap items-center h-full text-tweet-message">
-          <span>Home</span>
-        </div>
-      </a>
-      <a
-        onClick={() => handleClick("explore")}
-        className={`pnav-item ${clickedChoice === "explore" ? "selected" : ""}`}
-        /* href="/explore" */
-      >
-        <div className="pnav-iconContainer">
-          <FaSearch />
-        </div>
-        <div className="flex flex-wrap items-center h-full text-tweet-message">
-          <span>Explore</span>
-        </div>
-      </a>
-      <a
-        onClick={() => handleClick("notifications")}
-        className={`pnav-item ${
-          clickedChoice === "notifications" ? "selected" : ""
-        }`}
-        /* href="/notifications" */
-      >
-        <div className="pnav-iconContainer">
-          <FaBell />
-        </div>
-        <div className="flex flex-wrap items-center h-full text-tweet-message">
-          <span>Notifications</span>
-        </div>
-      </a>
-      <a
-        onClick={() => handleClick("messages")}
-        className={`pnav-item ${
-          clickedChoice === "messages" ? "selected" : ""
-        }`}
-        /* href="/messages" */
-      >
-        <div className="pnav-iconContainer">
-          <CiMail />
-        </div>
-        <div className="flex flex-wrap items-center h-full text-tweet-message">
-          <span>Messages</span>
-        </div>
-      </a>
-      <a
-        onClick={() => handleClick("lists")}
-        className={`pnav-item ${clickedChoice === "lists" ? "selected" : ""}`}
-        /* href="/lists" */
-      >
-        <div className="pnav-iconContainer">
-          <RiFileListFill />
-        </div>
-        <div className="flex flex-wrap items-center h-full text-tweet-message">
-          <span>Lists</span>
-        </div>
-      </a>
-      <a
-        onClick={() => handleClick("communities")}
-        className={`pnav-item ${
-          clickedChoice === "communities" ? "selected" : ""
-        }`}
-        /* href="/communities" */
-      >
-        <div className="pnav-iconContainer">
-          <FaUserFriends />
-        </div>
-        <div className="flex flex-wrap items-center h-full text-tweet-message">
-          <span>Communities</span>
-        </div>
-      </a>
-      <a
-        onClick={() => handleClick("premium")}
-        className={`pnav-item ${clickedChoice === "premium" ? "selected" : ""}`}
-        /* href="/premium" */
-      >
-        <div className="pnav-iconContainer">
-          <FaXTwitter />
-        </div>
-        <div className="flex flex-wrap items-center h-full text-tweet-message">
-          <span>Premium</span>
-        </div>
-      </a>
-      <a
-        onClick={() => handleClick("profile")}
-        className={`pnav-item ${clickedChoice === "profile" ? "selected" : ""}`}
-        /* href="/profile" */
-      >
-        <div className="pnav-iconContainer">
-          <FaRegUser />
-        </div>
-        <div className="flex flex-wrap items-center h-full text-tweet-message">
-          <span>Profile</span>
-        </div>
-      </a>
-      <a
-        onClick={() => handleClick("more_options")}
-        className={`pnav-item ${
-          clickedChoice === "more_options" ? "selected" : ""
-        }`}
-        /* href="/more_options" */
-      >
-        <div className="pnav-iconContainer">
-          <CiCircleMore />
-        </div>
-        <div className="flex flex-wrap items-center h-full text-tweet-message">
-          <span>More options</span>
-        </div>
-      </a>
+    <nav className="flex flex-wrap flex-col justify-between mr-2 w-60">
+      <PrincipalNavItem
+        icon={IoMdHome}
+        label={"Home"}
+        isSelected={clickedChoice === "home"}
+        onClick={() => {
+          handleClick("home");
+        }}
+      ></PrincipalNavItem>
+      <PrincipalNavItem
+        icon={FaSearch}
+        label={"Explore"}
+        isSelected={clickedChoice === "explore"}
+        onClick={() => {
+          handleClick("explore");
+        }}
+      ></PrincipalNavItem>
+      <PrincipalNavItem
+        icon={FaBell}
+        label={"Notifications"}
+        isSelected={clickedChoice === "notifications"}
+        onClick={() => {
+          handleClick("notifications");
+        }}
+      ></PrincipalNavItem>
+      <PrincipalNavItem
+        icon={CiMail}
+        label={"Messages"}
+        isSelected={clickedChoice === "messages"}
+        onClick={() => {
+          handleClick("messages");
+        }}
+      ></PrincipalNavItem>
+      <PrincipalNavItem
+        icon={RiFileListFill}
+        label={"Lists"}
+        isSelected={clickedChoice === "lists"}
+        onClick={() => {
+          handleClick("lists");
+        }}
+      ></PrincipalNavItem>
+      <PrincipalNavItem
+        icon={FaUserFriends}
+        label={"Communities"}
+        isSelected={clickedChoice === "communities"}
+        onClick={() => {
+          handleClick("communities");
+        }}
+      ></PrincipalNavItem>
+      <PrincipalNavItem
+        icon={FaXTwitter}
+        label={"Premium"}
+        isSelected={clickedChoice === "premium"}
+        onClick={() => {
+          handleClick("premium");
+        }}
+      ></PrincipalNavItem>
+      <PrincipalNavItem
+        icon={FaRegUser}
+        label={"Profile"}
+        isSelected={clickedChoice === "profile"}
+        onClick={() => {
+          handleClick("profile");
+        }}
+      ></PrincipalNavItem>
+      <PrincipalNavItem
+        icon={CiCircleMore}
+        label={"More options"}
+        isSelected={clickedChoice === "more options"}
+        onClick={() => {
+          handleClick("more options");
+        }}
+      ></PrincipalNavItem>
     </nav>
   );
 };

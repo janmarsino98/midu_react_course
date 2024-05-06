@@ -41,8 +41,10 @@ const WhoToFollow = () => {
     fetchUserInfo();
   }, [currentUser]);
   return (
-    <div className="rounded-xl bg-custom-black flex flex-col flex-wrap w-full p-2 gap-2">
-      <h4>A quién seguir</h4>
+    <div className="rounded-xl border border-gray-main-borders bg-custom-black flex flex-col flex-wrap w-full gap-2 h-max">
+      <h4 className="text-white text-tweet-message px-4 py-3 font-bold">
+        A quién seguir
+      </h4>
       {userData &&
         userData
           .slice(0, showMore ? userData.length : 2)
@@ -60,7 +62,7 @@ const WhoToFollow = () => {
                 avatar={userdata.avatar}
                 is_verified={userdata.is_verified}
               >
-                <div className="flex h-full justify-end text-white items-end w-max">
+                <div className="flex h-full flex-col justify-end text-white items-center w-full">
                   <FollowBtn
                     usernameToFollow={userdata.username}
                     onClick={() => handleFollow(userdata.username)}
@@ -70,7 +72,7 @@ const WhoToFollow = () => {
             );
           })}
       <button
-        className="flex text-blue-main text-4 w-full h-full items-start justify-start p-4 rounded-bl-lg rounded-br-lg"
+        className="flex text-blue-main text-4 w-full hover:bg-card-hover-bg h-max items-start justify-start p-4 rounded-bl-lg rounded-br-lg"
         onClick={() => handleClick()}
       >
         {showMore ? "Mostrar menos" : "Mostrar más"}

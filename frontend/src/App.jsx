@@ -12,15 +12,15 @@ import "./index.css";
 function App() {
   return (
     <UserProvider>
-      <div className="app-container w-full">
-        <header className="hidden lg:flex flex-col items-end ml-60 w-full">
+      <div className="app-container w-full flex flex-row justify-center font-seoge box-border">
+        <header className="hidden lg:flex flex-col items-end w-max">
           <PrincipalNav></PrincipalNav>
         </header>
-        <main className="w-full">
+        <main className="w-full max-w-screen-sm">
           <CreateTweet></CreateTweet>
           <TweetFeed></TweetFeed>
         </main>
-        <div className="hidden lg:flex flex-col right-container w-full">
+        <div className="hidden lg:flex flex-col right-container w-max mt-1">
           <SearchBar></SearchBar>
           <CTAPremium></CTAPremium>
           <WhoToFollow usernames={["wiskys98", "user2"]}></WhoToFollow>
