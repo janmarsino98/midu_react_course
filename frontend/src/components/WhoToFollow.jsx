@@ -62,7 +62,7 @@ const WhoToFollow = () => {
                 avatar={userdata.avatar}
                 is_verified={userdata.is_verified}
               >
-                <div className="flex h-full flex-col justify-end text-white items-center w-full">
+                <div className="flex h-full flex-col justify-center text-white items-end w-full">
                   <FollowBtn
                     usernameToFollow={userdata.username}
                     onClick={() => handleFollow(userdata.username)}

@@ -20,7 +20,7 @@ export default {
         'light-gray': '#71767B',
         'custom-white': '#FFFFFF',
         'transparent-white': 'rgba(255, 255, 255, 0.2)',
-        'light-red': 'rgba(255, 0, 0, 0.339)',
+        'btn-red-border': 'rgba(255, 0, 0, 0.339)',
         'bright-blue': '#1D9BF0',
         'transparent-blue': 'rgba(29, 155, 240, 0.5)',
         'lighter-gray': 'rgba(87, 85, 85, 0.39)'
@@ -29,6 +29,7 @@ export default {
         'tweet-message': '20px',
         'icon-size': '30px',
         'tweet': '15px',
+        'btn': '14px',
       },
       boxShadow: {
         'searchbar-results': '0 0 15px rgba(255, 255, 255, 0.2)',

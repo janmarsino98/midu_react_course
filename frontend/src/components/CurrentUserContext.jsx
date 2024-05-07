@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 
 export const UserContext = createContext();
-const activeUser = "afordigital";
+const activeUser = "rasbt";
 export const UserProvider = ({ children }) => {
   //We will pass a currentUser and a method to update it to the children of the provider
   const [currentUser, setCurrentUser] = useState(null);

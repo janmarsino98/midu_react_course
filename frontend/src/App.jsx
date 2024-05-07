@@ -7,6 +7,7 @@ import useCurrentUser from "./hooks/useCurrentUser";
 import WhoToFollow from "./components/WhoToFollow";
 import SearchBar from "./components/SearchBar";
 import CTAPremium from "./components/CTAPremium";
+import SelectSection from "./components/SelectSection";
 import "./index.css";
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <PrincipalNav></PrincipalNav>
         </header>
         <main className="w-full max-w-screen-sm">
+          <SelectSection></SelectSection>
           <CreateTweet></CreateTweet>
           <TweetFeed></TweetFeed>
         </main>
