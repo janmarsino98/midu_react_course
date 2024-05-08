@@ -38,6 +38,7 @@ const SelectSection = () => {
           if (forYouSelected) {
             return;
           } else {
+            l;
             setForYouSelected(false);
           }
         }}
