@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "./CurrentUserContext";
+import BACK_ADRESS from "../../back_address";
 
 const FollowBtn = ({ children, usernameToFollow }) => {
   const { currentUser } = useContext(UserContext);
@@ -13,7 +14,7 @@ const FollowBtn = ({ children, usernameToFollow }) => {
     try {
       setIsLoading(true);
       const response = await fetch(
-        `http://localhost:5000/${currentUser.username}/${
+        `${BACK_ADRESS}/${currentUser.username}/${
           following ? "un" : ""
         }follow/${usernameToFollow}`,
         { method: "PUT" }

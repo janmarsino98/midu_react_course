@@ -6,9 +6,7 @@ function useCurrentUser(currentUser) {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:5000/user/${currentUser}`
-        );
+        const response = await fetch(`${BACK_ADRESS}/user/${currentUser}`);
         const data = await response.json();
         setUserInfo(data);
       } catch (error) {

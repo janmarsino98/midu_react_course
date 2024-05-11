@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { UserContext } from "./CurrentUserContext";
 import { useContext } from "react";
 import { GiConsoleController } from "react-icons/gi";
+import BACK_ADRESS from "../../back_address";
 
 const CTAPremium = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -10,7 +11,7 @@ const CTAPremium = () => {
   const handleClick = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/verify_user/${currentUser.username}`,
+        `${BACK_ADRESS}/verify_user/${currentUser.username}`,
         { method: "PUT" }
       );
       const data = await response.json();

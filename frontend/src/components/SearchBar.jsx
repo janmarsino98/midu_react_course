@@ -3,6 +3,7 @@ import { IoSearch } from "react-icons/io5";
 import FollowCard from "./FollowCard";
 import { MdDepartureBoard } from "react-icons/md";
 import { IoMdCloseCircle } from "react-icons/io";
+import BACK_ADRESS from "../../back_address";
 
 const SearchBar = () => {
   const [isFocused, setIsFocused] = useState(false);
@@ -27,7 +28,7 @@ const SearchBar = () => {
   const searchUsers = async (input) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/users_by_text?text=${input}`
+        `${BACK_ADRESS}/users_by_text?text=${input}`
       );
       const newUsers = await response.json();
       setUsers(newUsers);

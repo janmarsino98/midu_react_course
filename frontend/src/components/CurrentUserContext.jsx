@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import BACK_ADRESS from "../../back_address";
 
 export const UserContext = createContext();
 const activeUser = "rasbt";
@@ -8,9 +9,7 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async (userToFetch) => {
       try {
-        const response = await fetch(
-          `http://localhost:5000/user/${userToFetch}`
-        );
+        const response = await fetch(`${BACK_ADRESS}/user/${userToFetch}`);
         const newUser = await response.json();
         setCurrentUser(newUser);
       } catch (error) {

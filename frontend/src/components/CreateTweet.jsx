@@ -3,6 +3,7 @@ import axios from "axios";
 import { UserContext } from "./CurrentUserContext";
 import defaultAvatar from "../assets/default_user.jpg";
 import LoadingCreateTweet from "./loading/LoadingCreateTweet";
+import BACK_ADRESS from "../../back_address";
 
 const CreateTweet = ({ onTweetSubmit }) => {
   const [tweet, setTweet] = useState("");
@@ -21,7 +22,7 @@ const CreateTweet = ({ onTweetSubmit }) => {
 
         try {
           const response = await fetch(
-            `http://localhost:5000/user/${currentUser.username}`
+            `${BACK_ADRESS}/user/${currentUser.username}`
           );
           const data = await response.json();
           setUserAvatar(data["avatar"]);
@@ -44,7 +45,7 @@ const CreateTweet = ({ onTweetSubmit }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5000/tweet", {
+      .post(`${BACK_ADRESS}/tweet`, {
         message: tweet,
         username: currentUser.username,
       })

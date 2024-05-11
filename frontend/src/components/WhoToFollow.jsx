@@ -3,6 +3,7 @@ import FollowCard from "./FollowCard";
 import { UserContext } from "./CurrentUserContext";
 import FollowBtn from "./FollowBtn";
 import { PiArrowElbowDownLeftFill } from "react-icons/pi";
+import BACK_ADRESS from "../../back_address";
 
 const WhoToFollow = () => {
   const [userData, setUserData] = useState([]);
@@ -30,7 +31,7 @@ const WhoToFollow = () => {
       if (currentUser) {
         try {
           const response = await fetch(
-            `http://localhost:5000/random_users?currentUserUsername=${currentUser.username}&count=4`
+            `${BACK_ADRESS}/random_users?currentUserUsername=${currentUser.username}&count=4`
           );
           const users = await response.json();
           setUserData(users);

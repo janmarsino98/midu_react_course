@@ -4,6 +4,7 @@ import { AiOutlineRetweet } from "react-icons/ai";
 import { FaRegHeart } from "react-icons/fa";
 import { UserContext } from "./CurrentUserContext";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
+import BACK_ADRESS from "../../back_address";
 
 const Tweet = ({
   tweetId,
@@ -27,7 +28,7 @@ const Tweet = ({
     const fetchRetweetStatus = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/${currentUser.username}/tweet_retweet_status/${tweetId}`
+          `${BACK_ADRESS}/${currentUser.username}/tweet_retweet_status/${tweetId}`
         );
         const data = await response.json();
         setisRetweeted(data.retweeted_by_user);
@@ -45,7 +46,7 @@ const Tweet = ({
     const fetchLikeStatus = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/${currentUser.username}/tweet_like_status/${tweetId}`
+          `${BACK_ADRESS}/${currentUser.username}/tweet_like_status/${tweetId}`
         );
         const data = await response.json();
         setIsLiked(data.liked_by_user);
@@ -60,7 +61,7 @@ const Tweet = ({
     const fetchRetweetStatus = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/${currentUser.username}/tweet_retweet_status/${tweetId}`
+          `${BACK_ADRESS}/${currentUser.username}/tweet_retweet_status/${tweetId}`
         );
         const data = await response.json();
         setisRetweeted(data.retweeted_by_user);
@@ -80,7 +81,7 @@ const Tweet = ({
       setLikes(likes - 1);
       try {
         const response = await fetch(
-          `http://localhost:5000/${currentUser.username}/tweet_unlike/${tweetId}`,
+          `${BACK_ADRESS}/${currentUser.username}/tweet_unlike/${tweetId}`,
           {
             method: "PUT",
           }
@@ -93,7 +94,7 @@ const Tweet = ({
 
       try {
         const response = await fetch(
-          `http://localhost:5000/${currentUser.username}/tweet_like/${tweetId}`,
+          `${BACK_ADRESS}/${currentUser.username}/tweet_like/${tweetId}`,
           {
             method: "PUT",
           }
@@ -110,7 +111,7 @@ const Tweet = ({
       setRetweets(retweets - 1);
       try {
         const response = await fetch(
-          `http://localhost:5000/${currentUser.username}/tweet_unretweet/${tweetId}`,
+          `${BACK_ADRESS}/${currentUser.username}/tweet_unretweet/${tweetId}`,
           {
             method: "PUT",
           }
@@ -123,7 +124,7 @@ const Tweet = ({
 
       try {
         const response = await fetch(
-          `http://localhost:5000/${currentUser.username}/tweet_retweet/${tweetId}`,
+          `${BACK_ADRESS}/${currentUser.username}/tweet_retweet/${tweetId}`,
           {
             method: "PUT",
           }

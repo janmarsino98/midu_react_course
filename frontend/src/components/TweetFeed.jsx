@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import Tweet from "./Tweet";
 import { UserContext } from "./CurrentUserContext";
 import LoadingTweetFeed from "./loading/LoadingTweetFeed";
+import BACK_ADRESS from "../../back_address";
 
 const TweetFeed = ({ tweets }) => {
   const [lastTweets, setLastTweets] = useState(tweets);
@@ -14,7 +15,7 @@ const TweetFeed = ({ tweets }) => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/last_tweets");
+      const response = await fetch(`${BACK_ADRESS}/last_tweets`);
       const lastTweets = await response.json();
       //lastTweets is a list of objects (tweets).
       const usernames = [];
@@ -23,7 +24,7 @@ const TweetFeed = ({ tweets }) => {
       }
 
       const usersResponse = await fetch(
-        `http://localhost:5000/users?usernames=${usernames.join(",")}`
+        `${BACK_ADRESS}/users?usernames=${usernames.join(",")}`
       );
 
       const usersData = await usersResponse.json();
