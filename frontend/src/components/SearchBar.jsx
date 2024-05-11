@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { IoSearch } from "react-icons/io5";
-import FollowCard from "./FollowCard";
+import SearchFollowCard from "./SearchFollowCard";
 import { MdDepartureBoard } from "react-icons/md";
 import { IoMdCloseCircle } from "react-icons/io";
 import BACK_ADRESS from "../../back_address";
@@ -42,7 +42,7 @@ const SearchBar = () => {
       <div
         className="flex flex-row items-center border border-transparent bg-searchbar-bg mb-2 rounded-3xl focus-within:border-blue-main relative "
         onFocus={() => setIsFocused(!isFocused)}
-        onBlur={() => setIsFocused(!isFocused)}
+        // onBlur={() => setIsFocused(!isFocused)}
       >
         <div className="mx-3">
           <IoSearch color={isFocused ? "rgb(29,155,240)" : "white"} />
@@ -67,13 +67,13 @@ const SearchBar = () => {
             users.map((user) => {
               return (
                 isFocused && (
-                  <FollowCard
+                  <SearchFollowCard
                     key={user._id}
                     name={user.name}
                     username={user.username}
                     avatar={user.avatar}
                     is_verified={user.is_verified}
-                  ></FollowCard>
+                  ></SearchFollowCard>
                 )
               );
             })}

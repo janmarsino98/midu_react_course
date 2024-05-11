@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
-import FollowCard from "./FollowCard";
 import { UserContext } from "./CurrentUserContext";
 import FollowBtn from "./FollowBtn";
 import { PiArrowElbowDownLeftFill } from "react-icons/pi";
 import BACK_ADRESS from "../../back_address";
+import SearchFollowCard from "./SearchFollowCard";
 
 const WhoToFollow = () => {
   const [userData, setUserData] = useState([]);
@@ -57,7 +57,7 @@ const WhoToFollow = () => {
               currentUser.following &&
               currentUser.following.includes(userdata.username);
             return (
-              <FollowCard
+              <SearchFollowCard
                 key={index}
                 username={userdata.username}
                 name={userdata.name}
@@ -70,7 +70,7 @@ const WhoToFollow = () => {
                     onClick={() => handleFollow(userdata.username)}
                   ></FollowBtn>
                 </div>
-              </FollowCard>
+              </SearchFollowCard>
             );
           })}
       <button

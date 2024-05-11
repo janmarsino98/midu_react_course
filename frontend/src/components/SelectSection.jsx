@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import { useContext } from "react";
+import { SelectedSectionContext } from "./SelectedSectionContext";
 
 const SelectSection = () => {
-  const [forYouSelected, setForYouSelected] = useState(false);
+  const { forYouSelected, setForYouSelected } = useContext(
+    SelectedSectionContext
+  );
 
   return (
     <div className="flex flex-row w-full text-tweet h-max">
       <div
-        className="w-full flex flex-col items-center"
+        className="w-full flex flex-col items-center cursor-pointer hover:bg-foryou-hover"
         onClick={() => {
           if (forYouSelected) {
             return;
@@ -24,7 +27,7 @@ const SelectSection = () => {
                   : "text-tweet-feed-light-gray"
               }`}
             >
-              Para ti
+              For you
             </span>
             {forYouSelected && (
               <div className="w-full h-1 bg-blue-main rounded-3xl absolute bottom-0 self-auto left-0"></div>
@@ -33,12 +36,12 @@ const SelectSection = () => {
         </div>
       </div>
       <div
-        className="w-full flex flex-col items-center"
+        className="w-full flex flex-col items-center cursor-pointer hover:bg-foryou-hover"
         onClick={() => {
           if (forYouSelected) {
-            return;
-          } else {
             setForYouSelected(false);
+          } else {
+            return;
           }
         }}
       >
@@ -51,7 +54,7 @@ const SelectSection = () => {
                   : "text-tweet-feed-light-gray"
               }`}
             >
-              Siguiendo
+              Following
             </span>
             {!forYouSelected && (
               <div className="w-full h-1 bg-blue-main rounded-3xl absolute bottom-0 self-auto left-0"></div>

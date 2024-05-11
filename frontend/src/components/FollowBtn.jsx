@@ -29,10 +29,10 @@ const FollowBtn = ({ children, usernameToFollow }) => {
   return (
     <button
       className={
-        " px-3 hover:px-2 rounded-3xl font-bold  min-h-8 text-btn" +
+        "rounded-3xl font-bold  min-h-8 text-btn" +
         (following
           ? " w-40 bg-black text-white border border-white hover:border hover:border-btn-red-border hover:text-red-500"
-          : " bg-white text-black")
+          : " bg-white text-black px-8")
       }
       onClick={() => handleClick()}
       onPointerEnter={() => setHover(true)}

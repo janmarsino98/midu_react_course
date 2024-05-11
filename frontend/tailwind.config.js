@@ -23,7 +23,8 @@ export default {
         'btn-red-border': 'rgba(255, 0, 0, 0.339)',
         'bright-blue': '#1D9BF0',
         'transparent-blue': 'rgba(29, 155, 240, 0.5)',
-        'lighter-gray': 'rgba(87, 85, 85, 0.39)'
+        'lighter-gray': 'rgba(87, 85, 85, 0.39)',
+        'foryou-hover': 'rgba(231, 233, 234, 0.1)',
       },
       fontSize: {
         'tweet-message': '20px',

@@ -1,11 +1,8 @@
-import React, { useState } from "react";
 import { UserContext } from "./CurrentUserContext";
 import { useContext } from "react";
-import { GiConsoleController } from "react-icons/gi";
 import BACK_ADRESS from "../../back_address";
 
 const CTAPremium = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const { currentUser, setCurrentUser } = useContext(UserContext);
 
   const handleClick = async () => {
@@ -24,16 +21,18 @@ const CTAPremium = () => {
   return (
     currentUser &&
     !currentUser.is_verified && (
-      <div className="CTAContainer">
-        <h4>Verifica tu perfil</h4>
+      <div className="border border-gray-main-borders rounded-xl mb-2 text-white px-4">
+        <h4 className="text-tweet-message font-bold py-3">
+          Verifica tu perfil
+        </h4>
         <h1></h1>
         <p>
           Verifica tu perfil para desbloquear nuevas funciones y, si eres
           elegible, recibir un pago de cuota de ingresos por anuncios.
         </p>
-        <div className="CTAButtonContainer">
+        <div className="py-3">
           <button
-            className="CTAButton"
+            className="rounded-full px-4 py-2 font-bold bg-blue-main text-white "
             onClick={() => handleClick()}
             hidden={!currentUser || (currentUser && currentUser.is_verified)}
           >
