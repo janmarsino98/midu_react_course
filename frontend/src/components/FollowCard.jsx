@@ -4,7 +4,7 @@ const FollowCard = ({ name, username, avatar, is_verified, children }) => {
   return (
     <div className="flex flex-row w-full bg-black first:rounded-t-xl last:rounded-b-xl">
       <div className="flex flex-row w-full px-3 cursor-pointer py-4 hover:bg-card-hover-bg bg-black first:rounded-t-xl last:rounded-b-xl">
-        <div className="flex mr-1">
+        <div className="flex mr-1 w-20">
           <img
             className="rounded-full w-16"
             src={avatar}

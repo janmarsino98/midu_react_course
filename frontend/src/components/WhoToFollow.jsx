@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import FollowCard from "./FollowCard";
 import { UserContext } from "./CurrentUserContext";
 import FollowBtn from "./FollowBtn";
+import { PiArrowElbowDownLeftFill } from "react-icons/pi";
 
 const WhoToFollow = () => {
   const [userData, setUserData] = useState([]);
