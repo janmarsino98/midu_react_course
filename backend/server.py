@@ -99,13 +99,22 @@ def get_user(username):
         'unread_notifications': user['unread_notifications']
     })
     
+# @app.route("/delete_tweets", methods=["DELETE"])
+
+# def delete_tweets():
+#     tweets_db.delete_many({})
+#     return jsonify({'message': 'Correctly deleted all tweets'}), 200
+    
 @app.route("/<current_username>/tweet_like/<tweet_id>", methods=['PUT'])
 def like_tweet(tweet_id, current_username):
     tweet = tweets_db.find_one({'_id': ObjectId(tweet_id)})
     tweet_owner = users_db.find_one({'username':tweet['username']})
+    if current_username not in tweet["liked_by"]:
+        tweets_db.update_one({'_id': ObjectId(tweet_id)}, {'$push': {'liked_by': current_username}, '$set': {'likes': tweet['likes'] + 1}})
     for notification in tweet_owner["unread_notifications"]:
-        if notification["url"] == tweet_id and notification["type"] == "like":
-            notification["users"].append(current_username)
+        if (notification["url"] == tweet_id and notification["type"] == "like"):
+            if current_username in notification["users"]:
+                return jsonify({'message': 'Tweet owner was notified before about this same action'})
             users_db.update_one({
                 "username": tweet_owner["username"],
                 "unread_notifications": {
@@ -121,19 +130,18 @@ def like_tweet(tweet_id, current_username):
                     "$currentDate":{
                         "unread_notifications.$.last_update": True
                         }})
-        return jsonify({'message': 'Notification sent to ' + tweet_owner["username"]})
+            return jsonify({'message': current_username + ' has been added to notifications. Notification sent to ' + tweet_owner["username"]})
     
-    tweet_owner["unread_notifications"].append(
-        {
-            "type": "like",
-            "url": str(tweet["_id"]),
-            "users":[current_username],
-            "last_updated": datetime.utcnow()
-        }
-    )
+    new_notification = {
+        "type": "like",
+        "url": str(tweet["_id"]),
+        "users":[current_username],
+        "last_updated": datetime.utcnow()
+    }
     
-    users_db.update_one({"username": tweet_owner["username"]}, {"$set": {"unread_notifications": tweet_owner["unread_notifications"]}})
-    return jsonify({'message': 'New notification sent to ' + tweet_owner["username"]+ ". The user has a total of " + str(len(tweet_owner["unread_notifications"])) + " notifications now."})
+    
+    users_db.update_one({"username": tweet_owner["username"]}, {"$push": {"unread_notifications": new_notification}})
+    return jsonify({'message': 'New notification sent to ' + tweet_owner["username"]})
 
 
 @app.route("/<current_username>/tweet_unlike/<tweet_id>", methods=['PUT'])
@@ -294,7 +302,19 @@ def unpremium_all():
 def add_notifications():
     users_db.update_many({}, {"$set": {"unread_notifications": []}})
     return jsonify({"message": "Added the unread notifications parameter to each user"})
-    
+
+@app.route("/<current_username>/get_notifications", methods=["GET"])
+
+def get_user_notifications(current_username):
+    user = users_db.find_one({"username": current_username})
+    notifications = [{
+        "type": notification["type"],
+        "url": notification["url"],
+        "users": notification["users"],
+        }
+        for notification in user["unread_notifications"]
+        ]
+    return jsonify(notifications)
         
 if __name__ == '__main__':
     app.run(debug=True)

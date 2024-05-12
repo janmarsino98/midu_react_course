@@ -45,13 +45,12 @@ const WhoToFollow = () => {
   return (
     <div className="rounded-xl border border-gray-main-borders bg-custom-black flex flex-col flex-wrap w-full gap-2 h-max">
       <h4 className="text-white text-tweet-message px-4 py-3 font-bold">
-        A quién seguir
+        Suggested profiles
       </h4>
       {userData &&
         userData
           .slice(0, showMore ? userData.length : 2)
           .map((userdata, index) => {
-            console.log(currentUser.following);
             const isFollowing =
               currentUser &&
               currentUser.following &&
@@ -77,7 +76,7 @@ const WhoToFollow = () => {
         className="flex text-blue-main text-4 w-full hover:bg-card-hover-bg h-max items-start justify-start p-4 rounded-bl-lg rounded-br-lg"
         onClick={() => handleClick()}
       >
-        {showMore ? "Mostrar menos" : "Mostrar más"}
+        {showMore ? "Show less" : "Show more"}
       </button>
     </div>
   );

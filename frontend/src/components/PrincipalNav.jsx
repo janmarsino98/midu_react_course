@@ -13,6 +13,7 @@ import { UserContext } from "./CurrentUserContext";
 import { useNavigate } from "react-router-dom";
 
 const PrincipalNav = () => {
+  const navigate = useNavigate();
   const { currentUser } = useContext(UserContext);
   const [clickedChoice, setClickedChoice] = useState("home");
 
@@ -29,6 +30,7 @@ const PrincipalNav = () => {
           isSelected={clickedChoice === "home"}
           onClick={() => {
             handleClick("home");
+            navigate("/");
           }}
         ></PrincipalNavItem>
         <PrincipalNavItem
@@ -45,6 +47,7 @@ const PrincipalNav = () => {
           isSelected={clickedChoice === "notifications"}
           onClick={() => {
             handleClick("notifications");
+            navigate("/notifications");
           }}
           unread={
             currentUser.unread_notifications != 0 &&

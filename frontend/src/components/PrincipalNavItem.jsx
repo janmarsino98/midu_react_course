@@ -28,7 +28,6 @@ const PrincipalNavItem = ({
             <div className="text-white text-[10px] h-max w-max">{unread}</div>
           </div>
         )}
-        {console.log(unread)}
       </div>
       <div className="flex flex-wrap items-center h-full text-tweet-message ml-2">
         <span>{label}</span>

@@ -1,5 +1,0 @@
-{tipo: "like", url:"tweet", users:[]}
-
-users[0].username, users[1].username + users.length - 2 liked your tweet "tweet_url"
-
-3 users liked your tweet "tweet_url"
