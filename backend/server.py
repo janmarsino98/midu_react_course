@@ -30,6 +30,22 @@ def get_all_tweets():
         })
     return jsonify(tweets)
 
+@app.route("/user", methods=["POST"])
+def new_user():
+    data = request.json
+    user_exists = users_db.find_one({'username': data['username']})
+    if 'username' in data and 'name' in data and 'avatar' in data and not user_exists:
+        users_db.insert_one({
+            'username': data['username'],
+            'name': data['name'],
+            'avatar': data['avatar'],
+            'is_verified': False,
+            'followed_by': [],
+            'following': [],
+            'notifications': []
+        })
+        return jsonify({'messsage': 'User created correctly'})
+
 @app.route("/tweet/<tweet_id>", methods=['GET'])
 def get_tweet(tweet_id):
     tweet = tweets_db.find_one({'_id': ObjectId(tweet_id)})
@@ -96,7 +112,7 @@ def get_user(username):
         'is_verified' : user['is_verified'],
         'following' : user['following'],
         'followed_by': user['followed_by'],
-        'unread_notifications': user['unread_notifications']
+        'notifications': len(user['notifications'])
     })
     
 # @app.route("/delete_tweets", methods=["DELETE"])
@@ -111,24 +127,28 @@ def like_tweet(tweet_id, current_username):
     tweet_owner = users_db.find_one({'username':tweet['username']})
     if current_username not in tweet["liked_by"]:
         tweets_db.update_one({'_id': ObjectId(tweet_id)}, {'$push': {'liked_by': current_username}, '$set': {'likes': tweet['likes'] + 1}})
-    for notification in tweet_owner["unread_notifications"]:
+    
+    unread_notifications = [notification for notification in tweet_owner["notifications"] if not notification["read"]]
+    
+    for notification in unread_notifications:
         if (notification["url"] == tweet_id and notification["type"] == "like"):
             if current_username in notification["users"]:
                 return jsonify({'message': 'Tweet owner was notified before about this same action'})
             users_db.update_one({
                 "username": tweet_owner["username"],
-                "unread_notifications": {
+                "notifications": {
                     "$elemMatch": {
                     "url": tweet_id,
-                    "type": "like"
+                    "type": "like",
+                    "read": False
                     }
                 }
                 }, {
                     "$push":{
-                        "unread_notifications.$.users": current_username
+                        "notifications.$.users": current_username
                         }, 
                     "$currentDate":{
-                        "unread_notifications.$.last_update": True
+                        "notifications.$.last_update": True
                         }})
             return jsonify({'message': current_username + ' has been added to notifications. Notification sent to ' + tweet_owner["username"]})
     
@@ -136,11 +156,12 @@ def like_tweet(tweet_id, current_username):
         "type": "like",
         "url": str(tweet["_id"]),
         "users":[current_username],
-        "last_updated": datetime.utcnow()
+        "last_updated": datetime.utcnow(),
+        "read": False
     }
     
     
-    users_db.update_one({"username": tweet_owner["username"]}, {"$push": {"unread_notifications": new_notification}})
+    users_db.update_one({"username": tweet_owner["username"]}, {"$push": {"notifications": new_notification}})
     return jsonify({'message': 'New notification sent to ' + tweet_owner["username"]})
 
 
@@ -199,7 +220,7 @@ def get_users():
         results = users_db.find({'username':{'$in': usernames}})    
     else:
         results = users_db.find()
-    users_list = [{"_id": str(user['_id']), "username":user['username'], "avatar":user["avatar"], "name":user["name"], "is_verified": user["is_verified"], "unread_notifications": user["unread_notifications"]} for user in results]
+    users_list = [{"_id": str(user['_id']), "username":user['username'], "avatar":user["avatar"], "name":user["name"], "is_verified": user["is_verified"], "notifications": user["notifications"]} for user in results]
     return jsonify(users_list), 200
 
 
@@ -300,21 +321,48 @@ def unpremium_all():
 
 @app.route("/add_notifications", methods=["PUT"])
 def add_notifications():
-    users_db.update_many({}, {"$set": {"unread_notifications": []}})
+    users_db.update_many({}, {"$set": {"notifications": []}})
     return jsonify({"message": "Added the unread notifications parameter to each user"})
 
-@app.route("/<current_username>/get_notifications", methods=["GET"])
+@app.route("/<current_username>/get_unread_notifications", methods=["GET"])
 
-def get_user_notifications(current_username):
+def get_user_unread_notifications(current_username):
     user = users_db.find_one({"username": current_username})
     notifications = [{
         "type": notification["type"],
         "url": notification["url"],
         "users": notification["users"],
+        "read": notification["read"]
         }
-        for notification in user["unread_notifications"]
+        for notification in user["notifications" ] if not notification["read"]
         ]
     return jsonify(notifications)
+
+@app.route("/<username>/read_notifications", methods=["PUT"])
+def read_notifications(username):
+    users_db.update_many({"username": username}, {"$set": {"notifications.$[].read": True}})
+    return jsonify({"message": "all the notifications were read"})
+
+@app.route("/<username>/get_who_to_follow", methods=["GET"])
+def get_who_to_follow(username):
+    current_user = users_db.find_one({'username': username})
+    suggested_users = users_db.find({"username": {"$nin": {current_user["following"]}}}).limit(5)
+    final_suggested_users = [
+        {
+            'name': user['name'],
+            'username': user['username'],
+            'avatar': user['avatar'],
+            
+        }
+        for user in suggested_users
+    ]
+    return jsonify(final_suggested_users)
+
+# @app.route("/<parameter>/delete", methods=["PUT"])
+
+# def delete(parameter):
+#     users_db.update_many({},{"$unset": {parameter:1}}, True)
+#     return jsonify({"message": parameter + " was correctly removed from all documents"})
         
 if __name__ == '__main__':
     app.run(debug=True)

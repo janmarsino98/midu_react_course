@@ -11,6 +11,7 @@ import { CiCircleMore } from "react-icons/ci";
 import PrincipalNavItem from "./PrincipalNavItem";
 import { UserContext } from "./CurrentUserContext";
 import { useNavigate } from "react-router-dom";
+import BACK_ADRESS from "../../back_address";
 
 const PrincipalNav = () => {
   const navigate = useNavigate();
@@ -19,6 +20,17 @@ const PrincipalNav = () => {
 
   const handleClick = (choice) => {
     setClickedChoice(choice);
+  };
+
+  const readNotifications = async () => {
+    try {
+      const response = await fetch(
+        `${BACK_ADRESS}/${currentUser.username}/read_notifications`,
+        { method: "PUT" }
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -47,11 +59,15 @@ const PrincipalNav = () => {
           isSelected={clickedChoice === "notifications"}
           onClick={() => {
             handleClick("notifications");
+            readNotifications();
             navigate("/notifications");
           }}
           unread={
-            currentUser.unread_notifications != 0 &&
-            currentUser.unread_notifications.length
+            !currentUser.unread_notifications
+              ? ""
+              : currentUser.unread_notifications.length == 0
+              ? false
+              : currentUser.unread_notifications.length
           }
         ></PrincipalNavItem>
         <PrincipalNavItem
