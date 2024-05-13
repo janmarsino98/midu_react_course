@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import BACK_ADRESS from "../../back_address";
 
 export const UserContext = createContext();
-const activeUser = "wiskys98";
+const activeUser = "afordigital";
 export const UserProvider = ({ children }) => {
   //We will pass a currentUser and a method to update it to the children of the provider
   const [currentUser, setCurrentUser] = useState(null);

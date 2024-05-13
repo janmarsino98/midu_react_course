@@ -45,6 +45,11 @@ def new_user():
             'notifications': []
         })
         return jsonify({'messsage': 'User created correctly'})
+    
+@app.route("/<username>/is_verified")
+def is_verified(username):
+    is_verified = users_db.find_one({'username': username})['is_verified']
+    return jsonify(is_verified)
 
 @app.route("/tweet/<tweet_id>", methods=['GET'])
 def get_tweet(tweet_id):
@@ -93,9 +98,7 @@ def get_last_tweets():
             'username': doc['username'],
             'likes': doc['likes'],
             'retweets': doc['retweets'],
-            'message': doc['message'],
-            'liked_by': doc['liked_by'],     
-            'retweeted_by': doc['retweeted_by'],     
+            'message': doc['message']
         })
         
     return jsonify(recent_tweets)
@@ -174,19 +177,6 @@ def unlike_tweet(current_username, tweet_id):
     else:
         return jsonify({'message': 'Trying to unlike a tweet that the user has not liked'}), 400
     
-@app.route("/<current_username>/tweet_like_status/<tweet_id>", methods={'GET'})
-def like_status(current_username, tweet_id):
-    tweet = tweets_db.find_one({'_id': ObjectId(tweet_id)})
-    liked = current_username in tweet['liked_by']
-    return jsonify({'liked_by_user': liked})
-
-
-@app.route("/<current_username>/tweet_retweet_status/<tweet_id>", methods={'GET'})
-def retweet_status(current_username, tweet_id):
-    tweet = tweets_db.find_one({'_id': ObjectId(tweet_id)})
-    retweeted = current_username in tweet['retweeted_by']
-    return jsonify({'retweeted_by_user': retweeted})
-# API route to increase the retweet of a tweet and add the user to the list of retweeters
 
 @app.route("/<current_username>/tweet_retweet/<tweet_id>", methods=['PUT'])
 def retweet_tweet(tweet_id, current_username):
@@ -292,7 +282,11 @@ def unfollow_user(username, unfollow_username):
 # def add_fields():
 #     users_db.update_many({}, {'$set':{'following':[], 'followed_by':[]}})
 #     return jsonify({'message': 'fields added successfully'})
-        
+
+@app.route("/delete_all_tweets", methods=["DELETE"])
+def delete_all_tweets():
+    tweets_db.delete_many({})
+    return jsonify({'message': 'All tweets were deleted successfully'})        
 @app.route("/<current_user>/last_following_tweets", methods=["GET"])
 
 def get_last_following_tweets(current_user):
@@ -308,10 +302,22 @@ def get_last_following_tweets(current_user):
         "created_at": tweet["created_at"],
         "likes": tweet["likes"],
         "retweets": tweet["retweets"],
-        "liked_by": tweet["liked_by"],
-        "retweeted_by": tweet["retweeted_by"],
         } for tweet in last_tweets]
     return jsonify(list(treated_last_tweets))
+
+
+@app.route("/<username>/likes/<tweet_id>", methods=["GET"])
+def user_likes_tweet(username, tweet_id):
+    liked_by_user = username in tweets_db.find_one({"_id": ObjectId(tweet_id)})["liked_by"]
+    return jsonify(liked_by_user)
+
+@app.route("/<username>/retweeted/<tweet_id>", methods=["GET"])
+def user_retweeted_tweet(username, tweet_id):
+    retweeted_by_user = username in tweets_db.find_one({"_id": ObjectId(tweet_id)})["retweeted_by"]
+    return jsonify(retweeted_by_user)
+
+
+    
 
 @app.route("/unpremium_all", methods=["PUT"])
 
@@ -346,7 +352,7 @@ def read_notifications(username):
 @app.route("/<username>/get_who_to_follow", methods=["GET"])
 def get_who_to_follow(username):
     current_user = users_db.find_one({'username': username})
-    suggested_users = users_db.find({"username": {"$nin": {current_user["following"]}}}).limit(5)
+    suggested_users = users_db.find({"username": {"$nin": current_user["following"], "$ne": current_user["username"]}}).limit(5)
     final_suggested_users = [
         {
             'name': user['name'],

@@ -31,7 +31,7 @@ const WhoToFollow = () => {
       if (currentUser) {
         try {
           const response = await fetch(
-            `${BACK_ADRESS}/random_users?currentUserUsername=${currentUser.username}&count=4`
+            `${BACK_ADRESS}/${currentUser.username}/get_who_to_follow`
           );
           const users = await response.json();
           setUserData(users);

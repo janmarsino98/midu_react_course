@@ -20,15 +20,18 @@ const ForYouTweetFeed = () => {
     const endpoint = forYouSelected
       ? "last_tweets"
       : `${currentUser.username}/last_following_tweets`;
+
     try {
       const response = await fetch(`${BACK_ADRESS}/${endpoint}`);
 
       const lastForyouTweets = await response.json();
       //lastForyouTweets is a list of objects (tweets).
-      const usernames = [];
+      let usernames = new Set();
       for (let i = 0; i < lastForyouTweets.length; i++) {
-        usernames.push(lastForyouTweets[i].username);
+        usernames.add(lastForyouTweets[i].username);
       }
+
+      usernames = [...usernames];
 
       const usersResponse = await fetch(
         `${BACK_ADRESS}/users?usernames=${usernames.join(",")}`
@@ -96,7 +99,6 @@ const ForYouTweetFeed = () => {
       ? lastForyouTweets
       : lastFollowingTweets;
     return tweetsToDisplay.map((tweet) => {
-      const likedByCurrentUser = tweet.liked_by.includes(currentUser.username);
       return (
         <Tweet
           key={tweet._id}
@@ -104,11 +106,10 @@ const ForYouTweetFeed = () => {
           name={tweet.name}
           userName={tweet.username}
           tweetText={tweet.message}
-          starting_likes={tweet.likes ? tweet.likes : 0}
-          starting_retweets={tweet.retweets ? tweet.retweets : 0}
+          starting_likes={tweet.likes}
+          starting_retweets={tweet.retweets}
           starting_comments={0}
           userAvatar={tweet.avatar}
-          likedByCurrentUser={likedByCurrentUser}
           is_verified={tweet.is_verified}
         />
       );

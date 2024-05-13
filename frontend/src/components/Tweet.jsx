@@ -15,41 +15,22 @@ const Tweet = ({
   starting_likes,
   starting_retweets,
   starting_comments,
-  likedByCurrentUser,
   is_verified,
 }) => {
   const [isRetweeted, setisRetweeted] = useState(false);
-  const [isLiked, setIsLiked] = useState(likedByCurrentUser);
+  const [isLiked, setIsLiked] = useState(null);
   const [likes, setLikes] = useState(starting_likes);
   const [retweets, setRetweets] = useState(starting_retweets);
   const { currentUser } = useContext(UserContext);
 
   useEffect(() => {
-    const fetchRetweetStatus = async () => {
-      try {
-        const response = await fetch(
-          `${BACK_ADRESS}/${currentUser.username}/tweet_retweet_status/${tweetId}`
-        );
-        const data = await response.json();
-        setisRetweeted(data.retweeted_by_user);
-      } catch (error) {
-        console.error(
-          "Erorr while trying to get retweet status from a tweet :",
-          error
-        );
-      }
-    };
-    fetchRetweetStatus();
-  }, [currentUser, tweetId]);
-
-  useEffect(() => {
     const fetchLikeStatus = async () => {
       try {
         const response = await fetch(
-          `${BACK_ADRESS}/${currentUser.username}/tweet_like_status/${tweetId}`
+          `${BACK_ADRESS}/${currentUser.username}/likes/${tweetId}`
         );
         const data = await response.json();
-        setIsLiked(data.liked_by_user);
+        setIsLiked(data);
       } catch (error) {
         console.error("There was an error while fetching: ", error);
       }
@@ -61,10 +42,10 @@ const Tweet = ({
     const fetchRetweetStatus = async () => {
       try {
         const response = await fetch(
-          `${BACK_ADRESS}/${currentUser.username}/tweet_retweet_status/${tweetId}`
+          `${BACK_ADRESS}/${currentUser.username}/retweeted/${tweetId}`
         );
         const data = await response.json();
-        setisRetweeted(data.retweeted_by_user);
+        setisRetweeted(data);
       } catch (error) {
         console.error(
           "Erorr while trying to get retweet status from a tweet :",
@@ -80,7 +61,7 @@ const Tweet = ({
     if (isLiked) {
       setLikes(likes - 1);
       try {
-        const response = await fetch(
+        await fetch(
           `${BACK_ADRESS}/${currentUser.username}/tweet_unlike/${tweetId}`,
           {
             method: "PUT",
@@ -93,7 +74,7 @@ const Tweet = ({
       setLikes(likes + 1);
 
       try {
-        const response = await fetch(
+        await fetch(
           `${BACK_ADRESS}/${currentUser.username}/tweet_like/${tweetId}`,
           {
             method: "PUT",
@@ -110,7 +91,7 @@ const Tweet = ({
     if (isRetweeted) {
       setRetweets(retweets - 1);
       try {
-        const response = await fetch(
+        await fetch(
           `${BACK_ADRESS}/${currentUser.username}/tweet_unretweet/${tweetId}`,
           {
             method: "PUT",
@@ -123,7 +104,7 @@ const Tweet = ({
       setRetweets(retweets + 1);
 
       try {
-        const response = await fetch(
+        await fetch(
           `${BACK_ADRESS}/${currentUser.username}/tweet_retweet/${tweetId}`,
           {
             method: "PUT",
