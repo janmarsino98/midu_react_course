@@ -5,6 +5,7 @@ import os
 from flask_cors import CORS
 from datetime import datetime
 import random
+import re
 
 load_dotenv()
 
@@ -34,6 +35,21 @@ def get_all_tweets():
 def new_user():
     data = request.json
     user_exists = users_db.find_one({'username': data['username']})
+    if user_exists:
+        return jsonify({'message': 'The username you are trying to create already exists'})
+    username_pattern = "^[A-Za-z0-9_]+$"
+    name_pattern = "^[A-Za-z]+$"
+    
+    if len(data["username"]) > 10:
+        return jsonify({"message": 'The username is too long'})
+    elif not re.match(username_pattern, data["username"]):
+        return jsonify({'message': 'The username can only contain letters, numbers and "_"'})
+    elif len(data["name"]) > 10:
+        return jsonify({'message': 'The name is too long'})
+    elif not re.match(name_pattern, data["name"]):
+        return jsonify({'message': 'The name can only contain letters'})
+    
+    
     if 'username' in data and 'name' in data and 'avatar' in data and not user_exists:
         users_db.insert_one({
             'username': data['username'],

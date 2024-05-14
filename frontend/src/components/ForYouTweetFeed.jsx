@@ -4,6 +4,7 @@ import { UserContext } from "./CurrentUserContext";
 import LoadingTweetFeed from "./loading/LoadingTweetFeed";
 import BACK_ADRESS from "../../back_address";
 import { SelectedSectionContext } from "./SelectedSectionContext";
+import { getFromCache, saveInCache } from "../cache";
 
 const ForYouTweetFeed = () => {
   const [lastForyouTweets, setLastForyouTweets] = useState([]);
@@ -23,24 +24,36 @@ const ForYouTweetFeed = () => {
 
     try {
       const response = await fetch(`${BACK_ADRESS}/${endpoint}`);
-
       const lastForyouTweets = await response.json();
-      //lastForyouTweets is a list of objects (tweets).
+
       let usernames = new Set();
-      for (let i = 0; i < lastForyouTweets.length; i++) {
-        usernames.add(lastForyouTweets[i].username);
-      }
-
+      lastForyouTweets.forEach((tweet) => usernames.add(tweet.username));
       usernames = [...usernames];
+      console.log("Last Tweets: ", lastForyouTweets);
 
-      const usersResponse = await fetch(
-        `${BACK_ADRESS}/users?usernames=${usernames.join(",")}`
+      const usersData = await Promise.all(
+        usernames.map(async (username) => {
+          console.log("Fetching user ", username);
+          let userData = getFromCache(`user_${username}`);
+          if (!userData) {
+            const response = await fetch(
+              `${BACK_ADRESS}/users?username=${username}`
+            );
+            userData = await response.json();
+            saveInCache(`user_${username}`, userData);
+          }
+          return userData;
+        })
       );
 
-      const usersData = await usersResponse.json();
+      usersData.forEach((user) => console.log("User", user));
 
       const newLastTweets = lastForyouTweets.map((tweet) => {
+        console.log(tweet);
         const user = usersData.find((user) => user.username === tweet.username);
+        console.log("Found user: ", user);
+        console.log(usersData);
+        console.log("Tweet username: ", tweet.username);
         return {
           ...tweet,
           name: user.name,
@@ -57,42 +70,6 @@ const ForYouTweetFeed = () => {
     }
     setIsLoading(false);
   };
-
-  // const fetchLastFollowingTweets = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const response = await fetch(
-  //       `${BACK_ADRESS}/${currentUser.username}/last_following_tweets`
-  //     );
-  //     const lastFollowingTweets = await response.json();
-  //     //lastFollowingTweets is a list of objects (tweets).
-  //     const usernames = [];
-  //     for (let i = 0; i < lastFollowingTweets.length; i++) {
-  //       usernames.push(lastFollowingTweets[i].username);
-  //     }
-
-  //     const usersResponse = await fetch(
-  //       `${BACK_ADRESS}/users?usernames=${usernames.join(",")}`
-  //     );
-
-  //     const usersData = await usersResponse.json();
-
-  //     const newLastTweets = lastFollowingTweets.map((tweet) => {
-  //       const user = usersData.find((user) => user.username === tweet.username);
-  //       return {
-  //         ...tweet,
-  //         name: user.name,
-  //         avatar: user.avatar,
-  //         is_verified: user.is_verified,
-  //       };
-  //     });
-
-  //     setLastFollowingTweets(newLastTweets);
-  //   } catch (error) {
-  //     console.error("Error: ", error);
-  //   }
-  //   setIsLoading(false);
-  // };
 
   if (isLoading === false) {
     const tweetsToDisplay = forYouSelected

@@ -4,6 +4,7 @@ import { UserContext } from "./CurrentUserContext";
 import defaultAvatar from "../assets/default_user.jpg";
 import LoadingCreateTweet from "./loading/LoadingCreateTweet";
 import BACK_ADRESS from "../../back_address";
+import { getFromCache } from "../cache";
 
 const CreateTweet = ({ onTweetSubmit }) => {
   const [tweet, setTweet] = useState("");
@@ -15,27 +16,7 @@ const CreateTweet = ({ onTweetSubmit }) => {
   const { currentUser } = useContext(UserContext);
 
   useEffect(() => {
-    if (currentUser) {
-      const fetchAvatar = async () => {
-        console.log("Fetching Avatar...");
-        setIsLoading(true);
-
-        try {
-          const response = await fetch(
-            `${BACK_ADRESS}/user/${currentUser.username}`
-          );
-          const data = await response.json();
-          setUserAvatar(data["avatar"]);
-          setIsLoading(false);
-        } catch (error) {
-          console.error("There was an error : ", error);
-        }
-      };
-      fetchAvatar();
-    } else {
-      setUserAvatar(defaultAvatar);
-      setIsLoading(false);
-    }
+    currentUser ? setIsLoading(false) : setIsLoading(true);
   }, [currentUser]);
 
   const handleChange = (e) => {
@@ -68,7 +49,7 @@ const CreateTweet = ({ onTweetSubmit }) => {
           <div className="flex flex-wrap flex-col py-2 w-max mr-1">
             <img
               className="rounded-full w-16 flex flex-wrap"
-              src={isLoading ? defaultAvatar : userAvatar}
+              src={isLoading ? defaultAvatar : currentUser.avatar}
               alt="avatar"
             />
           </div>
