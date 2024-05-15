@@ -11,6 +11,7 @@ import { SelectedSectionProvider } from "./components/SelectedSectionContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css";
 import NotificationFeed from "./components/NotificationFeed";
+import { TweetsContextProvider } from "./components/TweetsToDisplayContext";
 
 function App() {
   return (
@@ -25,11 +26,13 @@ function App() {
               <Route
                 path="/"
                 element={
-                  <main className="w-full max-w-screen-sm">
-                    <SelectSection></SelectSection>
-                    <CreateTweet></CreateTweet>
-                    <ForYouTweetFeed></ForYouTweetFeed>
-                  </main>
+                  <TweetsContextProvider>
+                    <main className="w-full max-w-screen-sm">
+                      <SelectSection></SelectSection>
+                      <CreateTweet></CreateTweet>
+                      <ForYouTweetFeed></ForYouTweetFeed>
+                    </main>
+                  </TweetsContextProvider>
                 }
               />
               <Route

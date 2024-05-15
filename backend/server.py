@@ -86,21 +86,34 @@ def tweet():
     data = request.json
     
     if 'username' in data and 'message' in data:
+        if len(data["message"]) > 200:
+            return jsonify({"message": "The tweet is too long!"})
         
         user_data = users_db.find_one({'username': data['username']})
         
         if user_data:
-            tweets_db.insert_one({
+            user = users_db.find_one({'username': data['username']})
+            tweet = {
                 'username': data['username'],
-                'name': users_db.find_one({'username': data['username']})['name'],
                 'message': data['message'],
                 'created_at': datetime.utcnow(),
                 'likes': 0,
                 'retweets': 0,
                 'liked_by': [],
                 'retweeted_by': [],
-            })
-            return jsonify({'message':'Tweet created successfully'}), 201 
+            }
+            tweets_db.insert_one(tweet)
+            return jsonify({'message':'Tweet created successfully', 'tweet': {
+                '_id': str(tweet["_id"]),
+                'name': user["name"],
+                'username': tweet["username"],
+                'avatar': user["avatar"],
+                'message': tweet["message"],
+                'likes': tweet["likes"],
+                'retweets': tweet["retweets"],
+                'is_verified': user["is_verified"]
+                
+                }}), 201 
         else:
             return jsonify({'error':'Missing username or message in request'}), 400
 
@@ -129,8 +142,6 @@ def get_user(username):
         'username': user['username'],
         'avatar': user['avatar'],
         'is_verified' : user['is_verified'],
-        'following' : user['following'],
-        'followed_by': user['followed_by'],
         'notifications': len(user['notifications'])
     })
     
@@ -324,12 +335,22 @@ def get_last_following_tweets(current_user):
 
 @app.route("/<username>/likes/<tweet_id>", methods=["GET"])
 def user_likes_tweet(username, tweet_id):
-    liked_by_user = username in tweets_db.find_one({"_id": ObjectId(tweet_id)})["liked_by"]
+    tweet = tweets_db.find_one({"_id": ObjectId(tweet_id)})
+    if not tweet:
+        return jsonify({"message": "The tweet was not found!"})
+
+    liked_by_user = username in tweet["liked_by"]
     return jsonify(liked_by_user)
 
+    
+    
 @app.route("/<username>/retweeted/<tweet_id>", methods=["GET"])
 def user_retweeted_tweet(username, tweet_id):
-    retweeted_by_user = username in tweets_db.find_one({"_id": ObjectId(tweet_id)})["retweeted_by"]
+    
+    tweet = tweets_db.find_one({"_id": ObjectId(tweet_id)})
+    if not tweet:
+        return jsonify({"message": "The tweet was not found!"})
+    retweeted_by_user = username in tweet["retweeted_by"]
     return jsonify(retweeted_by_user)
 
 
@@ -379,6 +400,15 @@ def get_who_to_follow(username):
         for user in suggested_users
     ]
     return jsonify(final_suggested_users)
+
+@app.route("/<main_username>/follows/<to_follow_username>", methods=["GET"])
+
+def follows(main_username, to_follow_username):
+    current_user = users_db.find_one({"username": main_username})
+    if current_user:
+        return jsonify(to_follow_username in current_user["following"])
+    else:
+        return jsonify({"message": "The current username was not found in the users database."})
 
 # @app.route("/<parameter>/delete", methods=["PUT"])
 

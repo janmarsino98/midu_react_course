@@ -117,16 +117,16 @@ const Tweet = ({
   };
 
   return (
-    <article className="border border-gray-main-borders px-4">
+    <article className="border border-gray-main-borders px-4 h-max">
       <div className="text-white w-full flex flex-row ">
-        <div className="flex flex-wrap flex-col py-2 mr-2">
+        <div className="flex flex-col py-2 mr-2">
           <img
-            className="rounded-full w-16"
+            className="rounded-full w-12"
             src={userAvatar}
             alt={`${name} profile pic`}
           />
         </div>
-        <div className="flex flex-col w-full py-3">
+        <div className="flex flex-col w-full max-w-[540.875px] py-3">
           <div className="flex flex-row w-full">
             <h2 className="flex flex-row items-center font-bold text-tweet">
               {name}
@@ -141,7 +141,7 @@ const Tweet = ({
               @{userName}
             </span>
           </div>
-          <div className="text-white">
+          <div className="max-w-full break-words whitespace-normal">
             <p>{tweetText}</p>
           </div>
           <div className="p-2 flex flex-wrap flex-row justify-between items-stretch">

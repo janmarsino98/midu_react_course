@@ -2,9 +2,8 @@ import { createContext, useState, useEffect } from "react";
 import BACK_ADRESS from "../../back_address";
 
 export const UserContext = createContext();
-const activeUser = "afordigital";
+const activeUser = "pepito42";
 export const UserProvider = ({ children }) => {
-  //We will pass a currentUser and a method to update it to the children of the provider
   const [currentUser, setCurrentUser] = useState(null);
   useEffect(() => {
     const fetchUser = async (userToFetch) => {
@@ -42,7 +41,7 @@ export const UserProvider = ({ children }) => {
       };
       getUnreadNotifications();
     }
-  }, []);
+  }, [currentUser]);
 
   return (
     <UserContext.Provider value={{ currentUser, setCurrentUser }}>

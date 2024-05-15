@@ -1,26 +1,28 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import axios from "axios";
 import { UserContext } from "./CurrentUserContext";
 import defaultAvatar from "../assets/default_user.jpg";
 import LoadingCreateTweet from "./loading/LoadingCreateTweet";
 import BACK_ADRESS from "../../back_address";
 import { getFromCache } from "../cache";
+import { TweetsContext } from "./TweetsToDisplayContext";
 
-const CreateTweet = ({ onTweetSubmit }) => {
+const CreateTweet = () => {
   const [tweet, setTweet] = useState("");
-  const [userAvatar, setUserAvatar] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  // At this component we just deconstruct the first variable of the context object because we won't need to update it according to the component.
+  const [content, setContent] = useState(null);
+  const { forYouTweets, lastTweets, setForYouTweets, setLastTweets } =
+    useContext(TweetsContext);
 
   const { currentUser } = useContext(UserContext);
+  const contentRef = useRef(null);
 
   useEffect(() => {
     currentUser ? setIsLoading(false) : setIsLoading(true);
   }, [currentUser]);
 
-  const handleChange = (e) => {
-    setTweet(e.target.value);
+  const handleInput = (event) => {
+    setTweet(event.currentTarget.textContent);
   };
 
   const handleSubmit = (e) => {
@@ -31,10 +33,10 @@ const CreateTweet = ({ onTweetSubmit }) => {
         username: currentUser.username,
       })
       .then((response) => {
-        setTweet(""); // Clear the input after posting
-        if (response.data) {
-          // Assuming response.data contains the new tweet as it should be added to the state
-          onTweetSubmit(response.data);
+        setTweet("");
+        contentRef.current.textContent = "";
+        if (response.data.tweet) {
+          setForYouTweets((prevTweets) => [response.data.tweet, ...prevTweets]);
         }
       })
       .catch((error) => {
@@ -46,34 +48,37 @@ const CreateTweet = ({ onTweetSubmit }) => {
     return (
       <>
         <div className="flex flex-row p-2 border border-gray-main-borders">
-          <div className="flex flex-wrap flex-col py-2 w-max mr-1">
+          <div className="flex flex-wrap items-start align-top flex-col py-1 w-max mr-1">
             <img
-              className="rounded-full w-16 flex flex-wrap"
+              className="rounded-full w-12 flex flex-wrap"
               src={isLoading ? defaultAvatar : currentUser.avatar}
               alt="avatar"
             />
           </div>
           <div className="flex flex-wrap flex-col w-full">
-            <div className="h-max">
-              <form id="tweetForm" method="Post" onSubmit={handleSubmit}>
-                <textarea
-                  className=" bg-black resize-none text-white w-full border-none outline-none text-tweet-message h-max"
-                  value={tweet}
-                  onChange={handleChange}
-                  placeholder="Start tweeting..."
-                ></textarea>
-              </form>
+            <div className="h-max max-w-[560.344px] pl-2 flex flex-wrap w-full break-words whitespace-normal">
+              <span
+                contentEditable={true}
+                onInput={handleInput}
+                ref={contentRef}
+                role="textbox"
+                aria-multiline="true"
+                className=" bg-black resize-none text-white w-full border-none outline-none text-tweet-message h-max py-3"
+              ></span>
+            </div>
+            <div className=" border-b border-b-gray-main-borders text-blue-main font-bold">
+              <span className="pl-2">Public Tweet</span>
             </div>
             <div className="flex flex-wrap flex-row justify-between p-1">
               <div className="tf-body-others-icons"></div>
-              <div className="tf-body-others-button">
+              <div className="tf-body-others-button my-2">
                 <button
                   className={`rounded-full px-3 py-2 font-bold ${
-                    tweet == ""
+                    tweet == "" || tweet.length > 150
                       ? "bg-bg-disabled-button text-disabled-button"
                       : "bg-blue-main text-white "
                   }`}
-                  type="submit"
+                  onClick={handleSubmit}
                   form="tweetForm"
                   disabled={tweet === ""}
                 >
