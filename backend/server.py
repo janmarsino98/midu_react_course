@@ -1,21 +1,37 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from flask_pymongo import PyMongo, ObjectId
 from dotenv import load_dotenv
 import os
 from flask_cors import CORS
+from flask_session import Session
 from datetime import datetime
+from flask_bcrypt import Bcrypt
 import random
 import re
+import redis
 
 load_dotenv()
 
 app = Flask(__name__)
+bcrypt = Bcrypt(app)
 CORS(app)
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 app.config['MONGO_URI'] = os.getenv('MONGO_URI')
+
 mongo = PyMongo(app)
 tweets_db = mongo.db.tweets
 users_db = mongo.db.users
+app.config['SECRET_KEY'] = os.urandom(24)
+
+# Configuración de sesión
+app.config["SESSION_TYPE"] = "redis"
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_USE_SIGNER"] = True
+app.config["SESSION_REDIS"] = redis.from_url("redis://127.0.0.1:6379")
+
+server_session = Session(app)
+
+
 
 @app.route("/tweets", methods=['GET'])
 def get_all_tweets():
@@ -35,12 +51,18 @@ def get_all_tweets():
 def new_user():
     data = request.json
     user_exists = users_db.find_one({'username': data['username']})
+    email_exists = users_db.find_one({'email': data['email']})
     if user_exists:
         return jsonify({'message': 'The username you are trying to create already exists'})
+    
+    elif email_exists:
+        return jsonify({'message': 'The email you are trying to used has already been used'})
     username_pattern = "^[A-Za-z0-9_]+$"
     name_pattern = "^[A-Za-z]+$"
+    password_pattern = "^(?=.*[A-Z])(?=.*[^a-zA-Z0-9\s]).+$"
+    email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
     
-    if len(data["username"]) > 10:
+    if len(data["username"]) > 15:
         return jsonify({"message": 'The username is too long'})
     elif not re.match(username_pattern, data["username"]):
         return jsonify({'message': 'The username can only contain letters, numbers and "_"'})
@@ -48,19 +70,27 @@ def new_user():
         return jsonify({'message': 'The name is too long'})
     elif not re.match(name_pattern, data["name"]):
         return jsonify({'message': 'The name can only contain letters'})
+    elif len(data["password"]) < 10:
+        return jsonify({'message': 'Password must have at least 10 characters'})
+    elif not re.match(password_pattern, data["password"]):
+        return jsonify({"message": "Password must contain at least one capital letter and one symbol"})
+    elif not re.match(email_pattern, data["email"]):
+        return jsonify({"message":"Invalid email"})
     
-    
-    if 'username' in data and 'name' in data and 'avatar' in data and not user_exists:
+    default_avatar = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
+    if 'username' in data and 'name' in data and 'password' in data and 'email' in data:
         users_db.insert_one({
             'username': data['username'],
+            'email': data['email'],
             'name': data['name'],
-            'avatar': data['avatar'],
+            'avatar': default_avatar,
             'is_verified': False,
             'followed_by': [],
             'following': [],
-            'notifications': []
+            'notifications': [],
+            'password': bcrypt.generate_password_hash(data["password"])
         })
-        return jsonify({'messsage': 'User created correctly'})
+        return jsonify({'messsage': 'User created successfully'})
     
 @app.route("/<username>/is_verified")
 def is_verified(username):
@@ -80,6 +110,42 @@ def get_tweet(tweet_id):
         'liked_by': tweet['liked_by'],
         'retweeted_by': tweet['retweeted_by'],
     })
+    
+@app.route("/login", methods=['POST'])
+def login():
+    print("logging")
+    data = request.json
+    if "password" in data and ("username" in data or "email" in data):
+        if "username" in data:
+            user = users_db.find_one({"username": data["username"]})
+        else:
+            user = users_db.find_one({"email": data["email"]})
+        
+        if not user or not bcrypt.check_password_hash(user["password"], data["password"]):
+            return jsonify({'message': 'Invalid credentials'})
+        
+        session["user_id"] = str(user["_id"])
+        return jsonify({
+            "id": str(user["_id"]),
+            "email": user["email"],
+            "username": user["username"],
+            "avatar": user["avatar"]
+        })
+    else:
+        return jsonify({"message": "Missing data to login"})
+    
+@app.route("/@me", methods=["GET"])
+def current_user():
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({"message": "You are not logged in"})
+    user = users_db.find_one({"_id": ObjectId(user_id)})
+    return jsonify({
+        "id": str(user["_id"]),
+        "email": user["email"],
+        "username": user["username"],
+        "avatar": user["avatar"],
+    }) 
     
 @app.route("/tweet", methods=['POST'])
 def tweet():
@@ -135,7 +201,10 @@ def get_last_tweets():
 @app.route("/user/<username>", methods=['GET'])
 
 def get_user(username):
+    print(username)
     user = users_db.find_one({'username': username})
+    if not user:
+        return jsonify({'message': 'User not found in the users db'})
     return jsonify({
         '_id': str(ObjectId(user['_id'])),
         'name': user['name'],
@@ -415,6 +484,19 @@ def follows(main_username, to_follow_username):
 # def delete(parameter):
 #     users_db.update_many({},{"$unset": {parameter:1}}, True)
 #     return jsonify({"message": parameter + " was correctly removed from all documents"})
+
+@app.route("/tweets", methods=["DELETE"])
+
+def delete_tweets():
+    tweets_db.delete_many({})
+    return jsonify({'message': 'Removed all tweets successfuly'})
+
+
+@app.route("/users", methods=["DELETE"])
+
+def delete_users():
+    users_db.delete_many({})
+    return jsonify({'message': 'Removed all users successfuly'})
         
 if __name__ == '__main__':
     app.run(debug=True)

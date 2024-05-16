@@ -12,29 +12,20 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css";
 import NotificationFeed from "./components/NotificationFeed";
 import { TweetsContextProvider } from "./components/TweetsToDisplayContext";
+import LoginBox from "./components/LoginBox";
+import HeaderNav from "./components/HeaderNav";
+import MainPage from "./components/MainPage";
+import RightBar from "./components/RightBar";
 
 function App() {
   return (
     <UserProvider>
       <SelectedSectionProvider>
-        <Router>
-          <div className="app-container w-full flex flex-row justify-center font-seoge box-border">
-            <header className="hidden lg:flex flex-col items-end w-max">
-              <PrincipalNav></PrincipalNav>
-            </header>
+        <div className="app-container h-max w-full flex flex-row justify-center font-seoge box-border">
+          <Router>
             <Routes>
-              <Route
-                path="/"
-                element={
-                  <TweetsContextProvider>
-                    <main className="w-full max-w-screen-sm">
-                      <SelectSection></SelectSection>
-                      <CreateTweet></CreateTweet>
-                      <ForYouTweetFeed></ForYouTweetFeed>
-                    </main>
-                  </TweetsContextProvider>
-                }
-              />
+              <Route path="/" element={<MainPage></MainPage>} />
+              <Route path="/login" element={<LoginBox></LoginBox>} />
               <Route
                 path="/notifications"
                 element={
@@ -46,13 +37,9 @@ function App() {
                 }
               />
             </Routes>
-            <div className="hidden lg:flex flex-col right-container w-[350px] mt-1">
-              <SearchBar></SearchBar>
-              <CTAPremium></CTAPremium>
-              <WhoToFollow></WhoToFollow>
-            </div>
-          </div>
-        </Router>
+            <RightBar />
+          </Router>
+        </div>
       </SelectedSectionProvider>
     </UserProvider>
   );

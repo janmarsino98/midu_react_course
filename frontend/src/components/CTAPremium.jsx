@@ -27,14 +27,16 @@ const CTAPremium = () => {
   }, [currentUser]);
 
   const handleClick = async () => {
-    try {
-      const response = await fetch(
-        `${BACK_ADRESS}/verify_user/${currentUser.username}`,
-        { method: "PUT" }
-      );
-      setIsVerified(true);
-    } catch (error) {
-      console.error("Error: ", error);
+    if (currentUser) {
+      try {
+        const response = await fetch(
+          `${BACK_ADRESS}/verify_user/${currentUser.username}`,
+          { method: "PUT" }
+        );
+        setIsVerified(true);
+      } catch (error) {
+        console.error("Error: ", error);
+      }
     }
   };
   return (
@@ -42,20 +44,20 @@ const CTAPremium = () => {
     !isVerified && (
       <div className="border border-gray-main-borders rounded-xl mb-2 text-white px-4">
         <h4 className="text-tweet-message font-bold py-3">
-          Verifica tu perfil
+          Verify your profile
         </h4>
         <h1></h1>
         <p>
-          Verifica tu perfil para desbloquear nuevas funciones y, si eres
-          elegible, recibir un pago de cuota de ingresos por anuncios.
+          Verify your profile to unlock new functionalities and, if you are
+          elegible, recieve profits for the adds.
         </p>
         <div className="py-3">
           <button
-            className="rounded-full px-4 py-2 font-bold bg-blue-main text-white "
+            className="rounded-full px-5 py-2 font-bold bg-blue-main text-white "
             onClick={() => handleClick()}
             hidden={!currentUser || (currentUser && isVerified)}
           >
-            Verificar
+            Verify
           </button>
         </div>
       </div>

@@ -1,3 +1,2 @@
-const BACK_ADRESS = "https://dqwcrfmb-5000.uks1.devtunnels.ms";
-
+const BACK_ADRESS = "http://localhost:5000";
 export default BACK_ADRESS;

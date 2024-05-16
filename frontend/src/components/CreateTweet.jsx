@@ -6,6 +6,7 @@ import LoadingCreateTweet from "./loading/LoadingCreateTweet";
 import BACK_ADRESS from "../../back_address";
 import { getFromCache } from "../cache";
 import { TweetsContext } from "./TweetsToDisplayContext";
+import { BiWorld } from "react-icons/bi";
 
 const CreateTweet = () => {
   const [tweet, setTweet] = useState("");
@@ -47,16 +48,16 @@ const CreateTweet = () => {
   if (isLoading === false) {
     return (
       <>
-        <div className="flex flex-row p-2 border border-gray-main-borders">
+        <div className="flex flex-row py-2 px-4 border border-gray-main-borders">
           <div className="flex flex-wrap items-start align-top flex-col py-1 w-max mr-1">
             <img
-              className="rounded-full w-12 flex flex-wrap"
+              className="rounded-full w-14 flex flex-wrap"
               src={isLoading ? defaultAvatar : currentUser.avatar}
               alt="avatar"
             />
           </div>
           <div className="flex flex-wrap flex-col w-full">
-            <div className="h-max max-w-[560.344px] pl-2 flex flex-wrap w-full break-words whitespace-normal">
+            <div className="h-max max-w-[560.344px] pl-4 flex flex-wrap w-full break-words whitespace-normal">
               <span
                 contentEditable={true}
                 onInput={handleInput}
@@ -66,8 +67,11 @@ const CreateTweet = () => {
                 className=" bg-black resize-none text-white w-full border-none outline-none text-tweet-message h-max py-3"
               ></span>
             </div>
-            <div className=" border-b border-b-gray-main-borders text-blue-main font-bold">
-              <span className="pl-2">Public Tweet</span>
+            <div className="flex flex-row pb-3 pl-4 items-center border-b border-b-gray-main-borders text-blue-main font-bold">
+              <BiWorld></BiWorld>
+              <span className="pl-2 text-[14px]">
+                Anyone can reply to this tweet
+              </span>
             </div>
             <div className="flex flex-wrap flex-row justify-between p-1">
               <div className="tf-body-others-icons"></div>
@@ -82,7 +86,7 @@ const CreateTweet = () => {
                   form="tweetForm"
                   disabled={tweet === ""}
                 >
-                  <div className="h-max">Submit</div>
+                  <div className="h-max px-2">Submit</div>
                 </button>
               </div>
             </div>

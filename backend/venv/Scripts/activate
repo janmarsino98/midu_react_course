@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\janma\Desktop\Programacio\midu_react_course\backend\venv"
+VIRTUAL_ENV="C:\Users\janma\Desktop\Programacio\twitter_copy\backend\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
