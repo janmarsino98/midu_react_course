@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { useState } from "react";
 
 const Usercard = ({ name, userName, userNumber }) => {
   const [following, setIsFollowing] = useState(false);

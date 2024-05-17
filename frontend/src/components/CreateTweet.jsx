@@ -1,9 +1,8 @@
 import { useState, useContext, useEffect, useRef } from "react";
-import axios from "axios";
 import { UserContext } from "./CurrentUserContext";
 import defaultAvatar from "../assets/default_user.jpg";
 import LoadingCreateTweet from "./loading/LoadingCreateTweet";
-import BACK_ADRESS from "../../back_address";
+import axios from "../../back_address";
 import { getFromCache } from "../cache";
 import { TweetsContext } from "./TweetsToDisplayContext";
 import { BiWorld } from "react-icons/bi";
@@ -29,7 +28,7 @@ const CreateTweet = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`${BACK_ADRESS}/tweet`, {
+      .post(`/tweet`, {
         message: tweet,
         username: currentUser.username,
       })

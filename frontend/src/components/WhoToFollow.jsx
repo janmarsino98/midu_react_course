@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "./CurrentUserContext";
 import FollowBtn from "./FollowBtn";
 import { PiArrowElbowDownLeftFill } from "react-icons/pi";
-import BACK_ADRESS from "../../back_address";
+import axios from "../../back_address";
 import SearchFollowCard from "./SearchFollowCard";
 
 const WhoToFollow = () => {
@@ -30,10 +30,9 @@ const WhoToFollow = () => {
     const fetchUserInfo = async () => {
       if (currentUser) {
         try {
-          const response = await fetch(
-            `${BACK_ADRESS}/${currentUser.username}/get_who_to_follow`
-          );
-          const users = await response.json();
+          const users = await axios.get(
+            `/${currentUser.username}/get_who_to_follow`
+          ).data;
           setUserData(users);
         } catch (error) {
           console.error("There was an error while fetching user data: ", error);

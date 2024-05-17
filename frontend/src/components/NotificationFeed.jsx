@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "./CurrentUserContext";
 import { GiConsoleController } from "react-icons/gi";
-import BACK_ADRESS from "../../back_address";
+import axios from "../../back_address";
 import Notification from "./Notification";
 
 const NotificationFeed = () => {
@@ -12,13 +12,12 @@ const NotificationFeed = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `${BACK_ADRESS}/${currentUser.username}/get_unread_notifications`
+        const response = await axios.get(
+          `/${currentUser.username}/get_unread_notifications`
         );
-        const data = await response.json();
-        setUnreadNotifications(data);
+        setUnreadNotifications(response.data);
         if (notificationsToDisplay) {
-          setNotificationsToDisplay(data);
+          setNotificationsToDisplay(response.data);
         }
       } catch (error) {
         console.error(error);

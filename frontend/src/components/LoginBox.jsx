@@ -1,7 +1,6 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import BasicButton from "./BasicButton";
 import BasicButtonWhite from "./BasicButtonWhite";
-import BACK_ADRESS from "../../back_address";
 import { UserContext } from "./CurrentUserContext";
 
 const LoginBox = () => {

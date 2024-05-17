@@ -1,19 +1,11 @@
 import "./App.css";
-import CreateTweet from "./components/CreateTweet";
-import PrincipalNav from "./components/PrincipalNav";
-import ForYouTweetFeed from "./components/ForYouTweetFeed";
 import { UserProvider } from "./components/CurrentUserContext";
-import WhoToFollow from "./components/WhoToFollow";
-import SearchBar from "./components/SearchBar";
-import CTAPremium from "./components/CTAPremium";
 import SelectSection from "./components/SelectSection";
 import { SelectedSectionProvider } from "./components/SelectedSectionContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css";
 import NotificationFeed from "./components/NotificationFeed";
-import { TweetsContextProvider } from "./components/TweetsToDisplayContext";
 import LoginBox from "./components/LoginBox";
-import HeaderNav from "./components/HeaderNav";
 import MainPage from "./components/MainPage";
 import RightBar from "./components/RightBar";
 

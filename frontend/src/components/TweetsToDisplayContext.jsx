@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import BACK_ADRESS from "../../back_address";
+import axios from "../../back_address";
 import { SelectedSectionContext } from "./SelectedSectionContext";
 import { UserContext } from "./CurrentUserContext";
 import { getFromCache, saveInCache } from "../cache";
@@ -19,8 +19,7 @@ export const TweetsContextProvider = ({ children }) => {
           ? "last_tweets"
           : `${currentUser.username}/last_following_tweets`;
         try {
-          const response = await fetch(`${BACK_ADRESS}/${endpoint}`);
-          const lastTweets = await response.json();
+          const lastTweets = await axios.get(`/${endpoint}`).data;
           let usernames = new Set();
           lastTweets.forEach((tweet) => usernames.add(tweet.username));
           usernames = [...usernames];
@@ -29,8 +28,7 @@ export const TweetsContextProvider = ({ children }) => {
             usernames.map(async (username) => {
               let userData = getFromCache(`user_${username}`);
               if (!userData) {
-                const response = await fetch(`${BACK_ADRESS}/user/${username}`);
-                userData = await response.json();
+                const userData = await axios.get(`/user/${username}`).data;
                 saveInCache(`user_${username}`, userData);
               }
               return userData;

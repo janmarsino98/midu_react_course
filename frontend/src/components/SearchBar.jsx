@@ -3,7 +3,7 @@ import { IoSearch } from "react-icons/io5";
 import SearchFollowCard from "./SearchFollowCard";
 import { MdDepartureBoard } from "react-icons/md";
 import { IoMdCloseCircle } from "react-icons/io";
-import BACK_ADRESS from "../../back_address";
+import axios from "../../back_address";
 
 const SearchBar = () => {
   const [isFocused, setIsFocused] = useState(false);
@@ -27,11 +27,8 @@ const SearchBar = () => {
 
   const searchUsers = async (input) => {
     try {
-      const response = await fetch(
-        `${BACK_ADRESS}/users_by_text?text=${input}`
-      );
-      const newUsers = await response.json();
-      setUsers(newUsers);
+      const response = await axios.get(`/users_by_text?text=${input}`);
+      setUsers(response.data);
     } catch (error) {
       console.error("There was an error while fetching user by text: ", error);
     }

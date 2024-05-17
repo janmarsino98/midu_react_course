@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import HeaderNav from "./HeaderNav";
 import { TweetsContextProvider } from "./TweetsToDisplayContext";
 import SelectSection from "./SelectSection";
@@ -6,6 +6,7 @@ import CreateTweet from "./CreateTweet";
 import ForYouTweetFeed from "./ForYouTweetFeed";
 import LoginBox from "./LoginBox";
 import { UserContext } from "./CurrentUserContext";
+import CreateAccount from "./SignUp";
 
 const MainPage = () => {
   const { currentUser } = useContext(UserContext);
@@ -13,6 +14,7 @@ const MainPage = () => {
   return currentUser?.username ? (
     <div className="flex flex-row">
       <HeaderNav></HeaderNav>
+      <CreateAccount></CreateAccount>
       <TweetsContextProvider>
         <main className="w-full max-w-screen-sm">
           <SelectSection></SelectSection>

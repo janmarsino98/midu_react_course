@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from "react";
 import { UserContext } from "./CurrentUserContext";
-import BACK_ADRESS from "../../back_address";
+import axios from "../../back_address";
 
 const FollowBtn = ({ children, usernameToFollow }) => {
   const { currentUser } = useContext(UserContext);
@@ -12,11 +12,10 @@ const FollowBtn = ({ children, usernameToFollow }) => {
     const fetchFollowingState = async () => {
       if (currentUser) {
         try {
-          const response = await fetch(
-            `${BACK_ADRESS}/${currentUser.username}/follows/${usernameToFollow}`
+          const response = await axios.get(
+            `/${currentUser.username}/follows/${usernameToFollow}}`
           );
-          const data = await response.json();
-          setFollowing(data);
+          setFollowing(response.data);
         } catch (error) {
           console.error(error);
         }
@@ -28,11 +27,10 @@ const FollowBtn = ({ children, usernameToFollow }) => {
   const handleClick = async () => {
     try {
       setIsLoading(true);
-      await fetch(
-        `${BACK_ADRESS}/${currentUser.username}/${
+      await axios.put(
+        `/${currentUser.username}/${
           following ? "un" : ""
-        }follow/${usernameToFollow}`,
-        { method: "PUT" }
+        }follow/${usernameToFollow}`
       );
       setFollowing(!following);
     } catch (error) {

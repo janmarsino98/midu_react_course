@@ -1,44 +1,38 @@
 import { UserContext } from "./CurrentUserContext";
 import { useContext, useState, useEffect } from "react";
-import BACK_ADRESS from "../../back_address";
+import axios from "../../back_address";
 
 const CTAPremium = () => {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
   const [isVerified, setIsVerified] = useState(null);
 
   useEffect(() => {
     const fetchVerified = async () => {
       if (currentUser) {
         try {
-          const response = await fetch(
-            `${BACK_ADRESS}/${currentUser.username}/is_verified`
+          const response = await axios.get(
+            `/${currentUser.username}/is_verified`
           );
-          const data = await response.json();
-          setIsVerified(data);
+          setIsVerified(response.data);
         } catch (error) {
-          console.error(
-            "There was an error while fetching the verification status of the user: ",
-            error
-          );
+          console.error("Error: ", error);
         }
       }
     };
+
     fetchVerified();
   }, [currentUser]);
 
   const handleClick = async () => {
     if (currentUser) {
       try {
-        const response = await fetch(
-          `${BACK_ADRESS}/verify_user/${currentUser.username}`,
-          { method: "PUT" }
-        );
-        setIsVerified(true);
+        axios.put(`/verify_user/${currentUser.username}`);
       } catch (error) {
-        console.error("Error: ", error);
+        console.error("Error while verifying a user: ", error);
       }
     }
   };
+
   return (
     currentUser &&
     !isVerified && (

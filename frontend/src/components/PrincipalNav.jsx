@@ -11,7 +11,7 @@ import { CiCircleMore } from "react-icons/ci";
 import PrincipalNavItem from "./PrincipalNavItem";
 import { UserContext } from "./CurrentUserContext";
 import { useNavigate } from "react-router-dom";
-import BACK_ADRESS from "../../back_address";
+import axios from "../../back_address";
 
 const PrincipalNav = () => {
   const navigate = useNavigate();
@@ -24,10 +24,7 @@ const PrincipalNav = () => {
 
   const readNotifications = async () => {
     try {
-      const response = await fetch(
-        `${BACK_ADRESS}/${currentUser.username}/read_notifications`,
-        { method: "PUT" }
-      );
+      await axios.put(`/${currentUser.username}/read_notifications`);
     } catch (error) {
       console.error(error);
     }

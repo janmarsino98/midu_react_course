@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-import BACK_ADRESS from "../../back_address";
+import axios from "../../back_address";
 
 export const UserContext = createContext();
 
@@ -13,33 +13,27 @@ export const UserProvider = ({ children }) => {
         username: username,
         password: password,
       };
-      const response = await fetch(`${BACK_ADRESS}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(params),
-      });
-      const data = await response.json();
+      const response = await axios
+        .post("/login", params, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then(console.log("Logged in: "));
 
-      setCurrentUser(data);
+      setCurrentUser(response.data);
       setNeedsToUpdate(true);
-
-      console.log(data);
-      return data;
     } catch (error) {
       console.error("Error: ", error);
     }
+    console.log("Actual user: ", currentUser);
   };
 
   useEffect(() => {
     const fetchLoggedUser = async () => {
       try {
-        const response = await fetch(
-          `${BACK_ADRESS}/user/${currentUser.username}`
-        );
-        const data = await response.json();
-        setCurrentUser(data);
+        const response = await axios.get(`/user/${currentUser.username}`);
+        setCurrentUser(response.data);
         setNeedsToUpdate(false);
       } catch (error) {
         console.log("Error: ", error);

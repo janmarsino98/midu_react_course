@@ -9,6 +9,7 @@ from flask_bcrypt import Bcrypt
 import random
 import re
 import redis
+from datetime import timedelta
 
 load_dotenv()
 
@@ -28,6 +29,8 @@ app.config["SESSION_TYPE"] = "redis"
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_USE_SIGNER"] = True
 app.config["SESSION_REDIS"] = redis.from_url("redis://127.0.0.1:6379")
+
+app.permanent_session_lifetime = timedelta(days=5)
 
 server_session = Session(app)
 
@@ -113,6 +116,7 @@ def get_tweet(tweet_id):
     
 @app.route("/login", methods=['POST'])
 def login():
+    session.permanent = True
     print("logging")
     data = request.json
     if "password" in data and ("username" in data or "email" in data):
@@ -125,6 +129,7 @@ def login():
             return jsonify({'message': 'Invalid credentials'})
         
         session["user_id"] = str(user["_id"])
+        print(session)
         return jsonify({
             "id": str(user["_id"]),
             "email": user["email"],
@@ -133,6 +138,15 @@ def login():
         })
     else:
         return jsonify({"message": "Missing data to login"})
+    
+@app.route("/check_login", methods=["GET"])
+
+def check_login():
+    print(session)
+    if 'user_id' in session:
+        return jsonify({"logged": True})
+    else:
+        return jsonify({"logged": False})
     
 @app.route("/@me", methods=["GET"])
 def current_user():

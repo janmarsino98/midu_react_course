@@ -4,7 +4,7 @@ import { AiOutlineRetweet } from "react-icons/ai";
 import { FaRegHeart } from "react-icons/fa";
 import { UserContext } from "./CurrentUserContext";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
-import BACK_ADRESS from "../../back_address";
+import axios from "../../back_address";
 
 const Tweet = ({
   tweetId,
@@ -26,11 +26,10 @@ const Tweet = ({
   useEffect(() => {
     const fetchLikeStatus = async () => {
       try {
-        const response = await fetch(
-          `${BACK_ADRESS}/${currentUser.username}/likes/${tweetId}`
+        const response = await axios.get(
+          `/${currentUser.username}/likes/${tweetId}`
         );
-        const data = await response.json();
-        setIsLiked(data);
+        setIsLiked(response.data);
       } catch (error) {
         console.error("There was an error while fetching: ", error);
       }
@@ -42,10 +41,9 @@ const Tweet = ({
     const fetchRetweetStatus = async () => {
       try {
         const response = await fetch(
-          `${BACK_ADRESS}/${currentUser.username}/retweeted/${tweetId}`
+          `/${currentUser.username}/retweet/${tweetId}`
         );
-        const data = await response.json();
-        setisRetweeted(data);
+        setisRetweeted(response.data);
       } catch (error) {
         console.error(
           "Erorr while trying to get retweet status from a tweet :",
@@ -61,12 +59,7 @@ const Tweet = ({
     if (isLiked) {
       setLikes(likes - 1);
       try {
-        await fetch(
-          `${BACK_ADRESS}/${currentUser.username}/tweet_unlike/${tweetId}`,
-          {
-            method: "PUT",
-          }
-        );
+        await axios.put(`/${currentUser.username}/tweet_unlike/${tweetId}`);
       } catch (error) {
         console.error("Error: ", error);
       }
@@ -74,12 +67,7 @@ const Tweet = ({
       setLikes(likes + 1);
 
       try {
-        await fetch(
-          `${BACK_ADRESS}/${currentUser.username}/tweet_like/${tweetId}`,
-          {
-            method: "PUT",
-          }
-        );
+        await axios.put(`/${currentUser.username}/tweet_like}/${tweetId}}`);
       } catch (error) {
         console.error("Error: ", error);
       }
@@ -91,12 +79,7 @@ const Tweet = ({
     if (isRetweeted) {
       setRetweets(retweets - 1);
       try {
-        await fetch(
-          `${BACK_ADRESS}/${currentUser.username}/tweet_unretweet/${tweetId}`,
-          {
-            method: "PUT",
-          }
-        );
+        await axios.put(`/${currentUser.username}/tweet_unretweet/${tweetId}`);
       } catch (error) {
         console.error("There was an error while unretweeting a tweet: ", error);
       }
@@ -104,12 +87,7 @@ const Tweet = ({
       setRetweets(retweets + 1);
 
       try {
-        await fetch(
-          `${BACK_ADRESS}/${currentUser.username}/tweet_retweet/${tweetId}`,
-          {
-            method: "PUT",
-          }
-        );
+        await axios.put(`/${currentUser.username}/tweet_retweet/${tweetId}`);
       } catch (error) {
         console.error("Error while trying to retweet a tweet: ", error);
       }

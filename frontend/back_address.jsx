@@ -1,2 +1,6 @@
-const BACK_ADRESS = "http://localhost:5000";
-export default BACK_ADRESS;
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = "http://localhost:5000";
+
+export default axios;
