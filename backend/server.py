@@ -10,6 +10,7 @@ import random
 import re
 import redis
 from datetime import timedelta
+import regex_patterns
 
 load_dotenv()
 
@@ -53,47 +54,49 @@ def get_all_tweets():
 @app.route("/user", methods=["POST"])
 def new_user():
     data = request.json
+    
+    if "username" not in data or "name" not in data or "password" not in data or "email" not in "data":
+        return jsonify({'message': 'A user must have username, name, password and email to register.'})
+    
+    if data["useraname"] == "" or data["name"] == "" or data["password"] == "" or data["email"] == "":
+        return jsonify({'message': 'Username, name, password and email must be non-empty strings'})
+    
     user_exists = users_db.find_one({'username': data['username']})
     email_exists = users_db.find_one({'email': data['email']})
     if user_exists:
         return jsonify({'message': 'The username you are trying to create already exists'})
-    
     elif email_exists:
         return jsonify({'message': 'The email you are trying to used has already been used'})
-    username_pattern = "^[A-Za-z0-9_]+$"
-    name_pattern = "^[A-Za-z]+$"
-    password_pattern = "^(?=.*[A-Z])(?=.*[^a-zA-Z0-9\s]).+$"
-    email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+
     
-    if len(data["username"]) > 15:
-        return jsonify({"message": 'The username is too long'})
-    elif not re.match(username_pattern, data["username"]):
+    if len(data["username"]) >= 10:
+        return jsonify({"message": 'The username is too long. The maximum length is 10 characters'})
+    elif not re.match(regex_patterns.USERNAME_PATTERN, data["username"]):
         return jsonify({'message': 'The username can only contain letters, numbers and "_"'})
-    elif len(data["name"]) > 10:
-        return jsonify({'message': 'The name is too long'})
-    elif not re.match(name_pattern, data["name"]):
+    elif len(data["name"]) >= 10:
+        return jsonify({'message': 'The name is too long. The maximum length is 10 characters'})
+    elif not re.match(regex_patterns.NAME_PATTERN, data["name"]):
         return jsonify({'message': 'The name can only contain letters'})
-    elif len(data["password"]) < 10:
-        return jsonify({'message': 'Password must have at least 10 characters'})
-    elif not re.match(password_pattern, data["password"]):
+    elif len(data["password"]) < 8:
+        return jsonify({'message': 'Password must have at least 8 characters'})
+    elif not re.match(regex_patterns.PASSWORD_PATTERN, data["password"]):
         return jsonify({"message": "Password must contain at least one capital letter and one symbol"})
-    elif not re.match(email_pattern, data["email"]):
+    elif not re.match(regex_patterns.EMAIL_PATTERN, data["email"]):
         return jsonify({"message":"Invalid email"})
     
     default_avatar = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
-    if 'username' in data and 'name' in data and 'password' in data and 'email' in data:
-        users_db.insert_one({
-            'username': data['username'],
-            'email': data['email'],
-            'name': data['name'],
-            'avatar': default_avatar,
-            'is_verified': False,
-            'followed_by': [],
-            'following': [],
-            'notifications': [],
-            'password': bcrypt.generate_password_hash(data["password"])
-        })
-        return jsonify({'messsage': 'User created successfully'})
+    users_db.insert_one({
+        'username': data['username'],
+        'email': data['email'],
+        'name': data['name'],
+        'avatar': default_avatar,
+        'is_verified': False,
+        'followed_by': [],
+        'following': [],
+        'notifications': [],
+        'password': bcrypt.generate_password_hash(data["password"])
+    })
+    return jsonify({'messsage': 'User created successfully'})
     
 @app.route("/<username>/is_verified")
 def is_verified(username):
@@ -117,36 +120,41 @@ def get_tweet(tweet_id):
 @app.route("/login", methods=['POST'])
 def login():
     session.permanent = True
-    print("logging")
     data = request.json
-    if "password" in data and ("username" in data or "email" in data):
-        if "username" in data:
-            user = users_db.find_one({"username": data["username"]})
-        else:
-            user = users_db.find_one({"email": data["email"]})
+    
+    if "password" not in data or "identifier" not in data:
+        return jsonify({'message': 'Missing password or identifier parameter'})
+    
+    if data["password"] == "" or data["identifier"] == "":
+        return jsonify({'message': 'Missing password or username / email'})
+    
+    if re.match(regex_patterns.EMAIL_PATTERN, data["identifier"]):
+        identifier = "email"
+    else:
+        identifier = "username"
         
-        if not user or not bcrypt.check_password_hash(user["password"], data["password"]):
-            return jsonify({'message': 'Invalid credentials'})
-        
+    user = users_db.find_one({identifier: data["identifier"]})
+    
+    if not user or not bcrypt.check_password_hash(user["password"],bcrypt.generate_password_hash(data["password"])):
+        return jsonify({'message': 'Invalid credentials'})
+    
+    else:
         session["user_id"] = str(user["_id"])
-        print(session)
         return jsonify({
             "id": str(user["_id"]),
             "email": user["email"],
             "username": user["username"],
             "avatar": user["avatar"]
         })
-    else:
-        return jsonify({"message": "Missing data to login"})
     
 @app.route("/check_login", methods=["GET"])
 
 def check_login():
     print(session)
     if 'user_id' in session:
-        return jsonify({"logged": True})
+        return jsonify({"is_logged": True})
     else:
-        return jsonify({"logged": False})
+        return jsonify({"is_logged": False})
     
 @app.route("/@me", methods=["GET"])
 def current_user():

@@ -48,7 +48,7 @@ const LoginBox = () => {
           <span className=" text-gray-username">
             {"You don't have an account?"}
           </span>
-          <a href="" className="ml-2 text-blue-main hover:underline">
+          <a href="/register" className="ml-2 text-blue-main hover:underline">
             Sign up
           </a>
         </div>

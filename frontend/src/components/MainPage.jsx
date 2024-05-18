@@ -9,21 +9,13 @@ import { UserContext } from "./CurrentUserContext";
 import CreateAccount from "./SignUp";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import axios from "../../back_address";
+import { SessionContext } from "./SessionContext";
 
 const MainPage = () => {
   const { currentUser } = useContext(UserContext);
-  const [logged, setLogged] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get("/check_login");
-      setLogged(response.data);
-    };
-    fetchData();
-    console.log(logged);
-  }, []);
-
-  return currentUser?.username ? (
+  const { loggedIn, setLoggedIn } = useContext(SessionContext);
+  console.log("Logged: ", loggedIn);
+  return loggedIn ? (
     <div className="flex flex-row">
       <HeaderNav></HeaderNav>
       <CreateAccount></CreateAccount>
