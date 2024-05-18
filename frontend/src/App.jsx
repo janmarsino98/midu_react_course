@@ -9,13 +9,15 @@ import LoginBox from "./components/LoginBox";
 import MainPage from "./components/MainPage";
 import RightBar from "./components/RightBar";
 import { SessionProvider } from "./components/SessionContext";
+import FormInputField from "./components/FormInputField";
+import SignUp from "./components/SignUp";
 
 function App() {
   return (
     <SessionProvider>
       <UserProvider>
         <SelectedSectionProvider>
-          <div className="app-container h-max w-full flex flex-row justify-center font-seoge box-border">
+          <div className="app-container h-full w-full flex flex-row justify-center font-seoge box-border">
             <Router>
               <Routes>
                 <Route path="/" element={<MainPage></MainPage>} />
@@ -34,7 +36,13 @@ function App() {
                 />
                 <Route
                   path="/register"
-                  element={<div className="text-white">Register</div>}
+                  element={
+                    <div className="w-full h-full bg-slate-500 flex items-center justify-center">
+                      <div className="w-[500px] bg-black rounded-xl pb-3 px-6">
+                        <SignUp> </SignUp>
+                      </div>
+                    </div>
+                  }
                 />
               </Routes>
               <RightBar />
