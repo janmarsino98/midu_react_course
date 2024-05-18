@@ -19,32 +19,36 @@ export const TweetsContextProvider = ({ children }) => {
           ? "last_tweets"
           : `${currentUser.username}/last_following_tweets`;
         try {
-          const lastTweets = await axios.get(`/${endpoint}`).data;
+          const response = await axios.get(`/${endpoint}`);
+          const tweetsData = response.data;
           let usernames = new Set();
-          lastTweets.forEach((tweet) => usernames.add(tweet.username));
+          tweetsData.forEach((tweet) => usernames.add(tweet.username));
           usernames = [...usernames];
 
           const usersData = await Promise.all(
             usernames.map(async (username) => {
               let userData = getFromCache(`user_${username}`);
               if (!userData) {
-                const userData = await axios.get(`/user/${username}`).data;
+                const userResponse = await axios.get(`/user/${username}`);
+                userData = userResponse.data;
                 saveInCache(`user_${username}`, userData);
               }
               return userData;
             })
           );
 
-          const TweetsWithUserData = lastTweets.map((tweet) => {
+          const TweetsWithUserData = tweetsData.map((tweet) => {
             const userData = usersData.find(
-              (user) => user.username == tweet.username
+              (user) => user.username === tweet.username
             );
             return { ...userData, ...tweet };
           });
 
-          forYouSelected
-            ? setForYouTweets(TweetsWithUserData)
-            : setLastTweets(TweetsWithUserData);
+          if (forYouSelected) {
+            setForYouTweets(TweetsWithUserData);
+          } else {
+            setLastTweets(TweetsWithUserData);
+          }
         } catch (error) {
           console.error("Error while fetching: ", error);
         }
