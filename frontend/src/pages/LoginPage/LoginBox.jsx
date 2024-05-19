@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
-import BasicButton from "./BasicButton";
-import BasicButtonWhite from "./BasicButtonWhite";
-import { UserContext } from "./CurrentUserContext";
+import BasicButton from "../../components/Button/BasicButton";
+import BasicButtonWhite from "../../components/Button/BasicButtonWhite";
+import { UserContext } from "../../contexts/CurrentUserContext";
 
 const LoginBox = () => {
   const [username, setUsername] = useState("");
@@ -9,7 +9,7 @@ const LoginBox = () => {
   const { handleClick } = useContext(UserContext);
 
   return (
-    <div className="bg-black flex flex-col text-white  border border-red-500 h-max py-4">
+    <div className="bg-black flex flex-col text-white  border border-red-500 h-max py-4 sm:max-w-[500px]">
       <div className="mx-28 flex flex-col">
         <h2 className="font-bold text-[31px]">Sign in to X</h2>
         <div className="flex flex-row justify-evenly items-center">

@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "../../back_address";
-import { SelectedSectionContext } from "./SelectedSectionContext";
-import { UserContext } from "./CurrentUserContext";
+import { SelectedSectionContext } from "../contexts/SelectedSectionContext";
+import { UserContext } from "../contexts/CurrentUserContext";
 import { getFromCache, saveInCache } from "../cache";
 
 export const TweetsContext = createContext();

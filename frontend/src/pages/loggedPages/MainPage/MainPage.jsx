@@ -1,15 +1,15 @@
 import { useContext, useEffect, useState } from "react";
-import HeaderNav from "./HeaderNav";
-import { TweetsContextProvider } from "./TweetsToDisplayContext";
-import SelectSection from "./SelectSection";
-import CreateTweet from "./CreateTweet";
-import ForYouTweetFeed from "./ForYouTweetFeed";
-import LoginBox from "./LoginBox";
-import { UserContext } from "./CurrentUserContext";
-import CreateAccount from "./SignUp";
+import HeaderNav from "../../../components/Header/HeaderNav";
+import { TweetsContextProvider } from "../../../contexts/TweetsToDisplayContext";
+import SelectSection from "../../../components/SelectSection";
+import CreateTweet from "../../../components/Tweet/CreateTweet";
+import ForYouTweetFeed from "../../../components/ForYouTweetFeed";
+import LoginBox from "../../LoginPage/LoginBox";
+import { UserContext } from "../../../contexts/CurrentUserContext";
+import CreateAccount from "../../SignupPage/SignUp";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import axios from "../../back_address";
-import { SessionContext } from "./SessionContext";
+import axios from "../../../../back_address";
+import { SessionContext } from "../../../contexts/SessionContext";
 
 const MainPage = () => {
   const { currentUser } = useContext(UserContext);

@@ -7,6 +7,7 @@ const FormInputField = ({
   isFocused,
   handleBlur,
   field_type,
+  id,
 }) => {
   const [isCorrect, setIsCorrect] = useState(true);
   const [value, setValue] = useState("");
@@ -55,6 +56,7 @@ const FormInputField = ({
           onFocus={handleFocus}
           onBlur={handleBlur}
           type={field_type}
+          id={id}
         ></input>
       </div>
       {!isCorrect && (

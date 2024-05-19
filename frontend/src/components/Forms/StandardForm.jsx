@@ -1,8 +1,8 @@
 import { BsTwitterX } from "react-icons/bs";
 import FormInputField from "./FormInputField";
 import { useState } from "react";
-import BasicButton from "./BasicButton";
-import BasicButtonWhite from "./BasicButtonWhite";
+import BasicButton from "../Button/BasicButton";
+import BasicButtonWhite from "../Button/BasicButtonWhite";
 
 const StandardForm = ({ title, fields }) => {
   const [focused, setFocused] = useState("");
@@ -30,14 +30,18 @@ const StandardForm = ({ title, fields }) => {
       handleFocus={() => handleFocus(field.name)}
       handleBlur={handleBlur}
       field_type={field.type}
+      id={field.name}
     />
   );
   const renderButton = (button) => {
-    if (button.type == "BasicButton") {
-      return <BasicButton text={button.text}></BasicButton>;
-    } else if (button.type == "BasicButtonWhite") {
-      return <BasicButtonWhite text={button.text}></BasicButtonWhite>;
-    }
+    return (
+      <BasicButton
+        onClick={button.onClick}
+        text={button.text}
+        colorStyle={button.colorStyle}
+        type={button.type}
+      ></BasicButton>
+    );
   };
 
   return (
@@ -46,13 +50,15 @@ const StandardForm = ({ title, fields }) => {
         <BsTwitterX color="white" size={"20px"} />
       </div>
       <h2 className="text-white text-[31px] py-1 font-bold">{title}</h2>
-      <div>
-        {fields.map((field, index) => (
-          <div key={index} className="">
-            {renderField(field)}
-          </div>
-        ))}
-      </div>
+      <form>
+        <div>
+          {fields.map((field, index) => (
+            <div key={index} className="">
+              {renderField(field)}
+            </div>
+          ))}
+        </div>
+      </form>
     </div>
   );
 };

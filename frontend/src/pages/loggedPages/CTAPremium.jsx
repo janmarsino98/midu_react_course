@@ -1,6 +1,6 @@
-import { UserContext } from "./CurrentUserContext";
+import { UserContext } from "../../contexts/CurrentUserContext";
 import { useContext, useState, useEffect } from "react";
-import axios from "../../back_address";
+import axios from "../../../back_address";
 
 const CTAPremium = () => {
   const { currentUser } = useContext(UserContext);

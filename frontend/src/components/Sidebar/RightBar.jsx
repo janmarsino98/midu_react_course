@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import SearchBar from "./SearchBar";
-import CTAPremium from "./CTAPremium";
-import WhoToFollow from "./WhoToFollow";
-import { UserContext } from "./CurrentUserContext";
+import CTAPremium from "../../pages/loggedPages/CTAPremium";
+import WhoToFollow from "../../pages/loggedPages/WhoToFollow";
+import { UserContext } from "../../contexts/CurrentUserContext";
 
 const RightBar = () => {
   const { currentUser } = useContext(UserContext);

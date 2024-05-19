@@ -2,9 +2,9 @@ import { useState, useContext, useEffect } from "react";
 import { FiMessageCircle } from "react-icons/fi";
 import { AiOutlineRetweet } from "react-icons/ai";
 import { FaRegHeart } from "react-icons/fa";
-import { UserContext } from "./CurrentUserContext";
+import { UserContext } from "../../contexts/CurrentUserContext";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
-import axios from "../../back_address";
+import axios from "../../../back_address";
 
 const Tweet = ({
   tweetId,

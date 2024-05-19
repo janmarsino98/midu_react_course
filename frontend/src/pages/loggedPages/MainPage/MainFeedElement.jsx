@@ -1,5 +1,5 @@
 import LastTweets from "./TweetFeed";
-import CreateTweet from "./CreateTweet";
+import CreateTweet from "../../../components/Tweet/CreateTweet";
 import { useState, useEffect } from "react";
 
 // I write something --> I click submit --> UseEffect should fetch data once again and reload component

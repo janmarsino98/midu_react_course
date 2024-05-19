@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "./CurrentUserContext";
-import FollowBtn from "./FollowBtn";
+import { UserContext } from "../../contexts/CurrentUserContext";
+import FollowBtn from "../../components/User/FollowBtn";
 import { PiArrowElbowDownLeftFill } from "react-icons/pi";
-import axios from "../../back_address";
-import SearchFollowCard from "./SearchFollowCard";
+import axios from "../../../back_address";
+import SearchFollowCard from "../../components/Sidebar/SearchFollowCard";
 
 const WhoToFollow = () => {
   const [userData, setUserData] = useState([]);

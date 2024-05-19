@@ -1,10 +1,10 @@
 import { useState, useContext, useEffect, useRef } from "react";
-import { UserContext } from "./CurrentUserContext";
-import defaultAvatar from "../assets/default_user.jpg";
-import LoadingCreateTweet from "./loading/LoadingCreateTweet";
-import axios from "../../back_address";
-import { getFromCache } from "../cache";
-import { TweetsContext } from "./TweetsToDisplayContext";
+import { UserContext } from "../../contexts/CurrentUserContext";
+import defaultAvatar from "../../assets/default_user.jpg";
+import LoadingCreateTweet from "../loading/LoadingCreateTweet";
+import axios from "../../../back_address";
+import { getFromCache } from "../../cache";
+import { TweetsContext } from "../../contexts/TweetsToDisplayContext";
 import { BiWorld } from "react-icons/bi";
 
 const CreateTweet = () => {

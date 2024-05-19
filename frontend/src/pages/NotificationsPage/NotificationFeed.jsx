@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "./CurrentUserContext";
+import { UserContext } from "../../contexts/CurrentUserContext";
 import { GiConsoleController } from "react-icons/gi";
-import axios from "../../back_address";
+import axios from "../../../back_address";
 import Notification from "./Notification";
 
 const NotificationFeed = () => {

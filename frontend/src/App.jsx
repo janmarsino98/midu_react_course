@@ -1,16 +1,17 @@
 import "./App.css";
-import { UserProvider } from "./components/CurrentUserContext";
+import { UserProvider } from "./contexts/CurrentUserContext";
 import SelectSection from "./components/SelectSection";
-import { SelectedSectionProvider } from "./components/SelectedSectionContext";
+import { SelectedSectionProvider } from "./contexts/SelectedSectionContext";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css";
-import NotificationFeed from "./components/NotificationFeed";
-import LoginBox from "./components/LoginBox";
-import MainPage from "./components/MainPage";
-import RightBar from "./components/RightBar";
-import { SessionProvider } from "./components/SessionContext";
-import FormInputField from "./components/FormInputField";
-import SignUp from "./components/SignUp";
+import NotificationFeed from "./pages/NotificationsPage/NotificationFeed";
+import LoginBox from "./pages/LoginPage/LoginBox";
+import MainPage from "./pages/loggedPages/MainPage/MainPage";
+import RightBar from "./components/Sidebar/RightBar";
+import { SessionProvider } from "./contexts/SessionContext";
+import FormInputField from "./components/Forms/FormInputField";
+import SignUp from "./pages/SignupPage/SignUp";
+import LoginMain from "./pages/LoginPage/LoginMain";
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
             <Router>
               <Routes>
                 <Route path="/" element={<MainPage></MainPage>} />
-                <Route path="/login" element={<LoginBox></LoginBox>} />
+                <Route path="/login" element={<LoginMain></LoginMain>} />
                 <Route
                   path="/notifications"
                   element={

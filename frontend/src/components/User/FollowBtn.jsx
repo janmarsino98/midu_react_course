@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from "react";
-import { UserContext } from "./CurrentUserContext";
-import axios from "../../back_address";
+import { UserContext } from "../../contexts/CurrentUserContext";
+import axios from "../../../back_address";
 
 const FollowBtn = ({ children, usernameToFollow }) => {
   const { currentUser } = useContext(UserContext);

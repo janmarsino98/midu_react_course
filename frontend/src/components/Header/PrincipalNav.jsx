@@ -9,9 +9,9 @@ import { FaXTwitter } from "react-icons/fa6";
 import { FaRegUser } from "react-icons/fa";
 import { CiCircleMore } from "react-icons/ci";
 import PrincipalNavItem from "./PrincipalNavItem";
-import { UserContext } from "./CurrentUserContext";
+import { UserContext } from "../../contexts/CurrentUserContext";
 import { useNavigate } from "react-router-dom";
-import axios from "../../back_address";
+import axios from "../../../back_address";
 
 const PrincipalNav = () => {
   const navigate = useNavigate();

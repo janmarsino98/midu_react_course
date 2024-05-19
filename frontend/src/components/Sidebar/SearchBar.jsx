@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { IoSearch } from "react-icons/io5";
-import SearchFollowCard from "./SearchFollowCard";
+import SearchFollowCard from "../../components/Sidebar/SearchFollowCard";
 import { MdDepartureBoard } from "react-icons/md";
 import { IoMdCloseCircle } from "react-icons/io";
-import axios from "../../back_address";
+import axios from "../../../back_address";
 
 const SearchBar = () => {
   const [isFocused, setIsFocused] = useState(false);

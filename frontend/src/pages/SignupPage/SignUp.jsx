@@ -1,8 +1,11 @@
 import React from "react";
 import { BsTwitterX } from "react-icons/bs";
-import StandardForm from "./StandardForm";
+import StandardForm from "../../components/Forms/StandardForm";
 
 const SignUp = () => {
+  const handleClick = () => {
+    console.log("Button clicked");
+  };
   return (
     <StandardForm
       fields={[
@@ -34,11 +37,13 @@ const SignUp = () => {
           category: "button",
           text: "Continue",
           type: "BasicButton",
+          onClick: handleClick,
         },
         {
           category: "button",
           text: "Back",
           type: "BasicButtonWhite",
+          onClick: handleClick,
         },
       ]}
       title={"First form"}

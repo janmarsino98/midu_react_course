@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
-import Tweet from "./Tweet";
-import { SelectedSectionContext } from "./SelectedSectionContext";
-import { TweetsContext } from "./TweetsToDisplayContext";
+import Tweet from "../components/Tweet/Tweet";
+import { SelectedSectionContext } from "../contexts/SelectedSectionContext";
+import { TweetsContext } from "../contexts/TweetsToDisplayContext";
 
 const ForYouTweetFeed = () => {
   const { forYouSelected } = useContext(SelectedSectionContext);

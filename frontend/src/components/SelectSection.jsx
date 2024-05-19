@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { SelectedSectionContext } from "./SelectedSectionContext";
+import { SelectedSectionContext } from "../contexts/SelectedSectionContext";
 
 const SelectSection = () => {
   const { forYouSelected, setForYouSelected } = useContext(
