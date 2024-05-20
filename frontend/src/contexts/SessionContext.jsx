@@ -10,9 +10,8 @@ export const SessionProvider = ({ children }) => {
     const fetchLogged = async () => {
       try {
         const response = await axios.get("/check_login");
-        const data = await response.data.logged;
+        const data = response.data.is_logged;
         setLoggedIn(data);
-        console.log("DATA: ", data);
       } catch (error) {
         console.error("Error trying to check login: ", error);
       }

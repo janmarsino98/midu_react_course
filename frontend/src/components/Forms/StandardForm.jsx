@@ -44,7 +44,6 @@ const StandardForm = ({ title, fields, onSubmit }) => {
     e.preventDefault();
     if (isCorrect && isComplete) {
       onSubmit(inputValues);
-      console.log("Values", inputValues);
     }
   };
 
@@ -66,6 +65,7 @@ const StandardForm = ({ title, fields, onSubmit }) => {
     <FormInputField
       isFocused={focused == field.name}
       fieldName={field.name}
+      fieldLabel={field.label}
       regexPattern={field.pattern}
       handleFocus={() => handleFocus(field.name)}
       handleBlur={handleBlur}
@@ -85,7 +85,9 @@ const StandardForm = ({ title, fields, onSubmit }) => {
         text={button.text}
         colorStyle={button.colorStyle}
         type={button.type}
-        disabled={!isCorrect || !isComplete}
+        disabled={
+          button.disabled != null ? button.disabled : !isCorrect || !isComplete
+        }
       ></BasicButton>
     );
   };
@@ -95,7 +97,6 @@ const StandardForm = ({ title, fields, onSubmit }) => {
       ...prev,
       [name]: { value, isValid },
     }));
-    console.log(inputValues);
   };
 
   return (

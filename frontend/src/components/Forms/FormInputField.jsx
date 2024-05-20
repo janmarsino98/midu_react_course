@@ -5,6 +5,7 @@ const FormInputField = ({
   maxLength,
   minLength,
   fieldName,
+  fieldLabel,
   handleFocus,
   isFocused,
   handleBlur,
@@ -50,12 +51,12 @@ const FormInputField = ({
                 : "text-gray-username"
             } left-2 top-1 text-[12px]`}
           >
-            {fieldName}
+            {fieldLabel}
           </label>
         )}
         <input
           required={true}
-          placeholder={fieldName}
+          placeholder={fieldLabel}
           className={`bg-transparent border-none outline-none text-[15px]`}
           value={value}
           onChange={handleInputChange}
@@ -67,7 +68,7 @@ const FormInputField = ({
       </div>
       {!isCorrect && (
         <p className="text-[10px] text-red-500 p-1">
-          Please enter a valid {fieldName}
+          Please enter a valid {fieldLabel}
         </p>
       )}
     </div>

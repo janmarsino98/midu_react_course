@@ -7,13 +7,12 @@ const SignUp = () => {
   const handleSubmit = async (formValues) => {
     if (formValues) {
       try {
-        const response = await axios.post(`/user`, {
+        await axios.post(`/user`, {
           email: formValues.email?.value,
           username: formValues.username?.value,
           name: formValues.name?.value,
           password: formValues.password?.value,
         });
-        console.log(response);
       } catch (error) {
         console.error("There was an error while creating a new user: ", error);
       }
@@ -25,6 +24,7 @@ const SignUp = () => {
         {
           category: "input",
           name: "username",
+          label: "username",
           pattern: "^[A-Za-z0-9_]+$",
           type: "text",
           maxLength: 10,
@@ -32,6 +32,7 @@ const SignUp = () => {
         {
           category: "input",
           name: "name",
+          label: "name",
           pattern: /^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$/,
           type: "text",
           maxLength: 10,
@@ -39,12 +40,14 @@ const SignUp = () => {
         {
           category: "input",
           name: "email",
+          label: "email",
           pattern: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
           type: "email",
         },
         {
           category: "input",
           name: "password",
+          label: "password",
           pattern: "^(?=.*[A-Z])(?=.*[^a-zA-Z0-9s]).+$",
           type: "password",
           minLength: 8,

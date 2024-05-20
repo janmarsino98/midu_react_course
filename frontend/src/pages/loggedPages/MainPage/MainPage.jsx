@@ -18,7 +18,6 @@ const MainPage = () => {
   return loggedIn ? (
     <div className="flex flex-row">
       <HeaderNav></HeaderNav>
-      <CreateAccount></CreateAccount>
       <TweetsContextProvider>
         <main className="w-full max-w-screen-sm">
           <SelectSection></SelectSection>
@@ -28,7 +27,7 @@ const MainPage = () => {
       </TweetsContextProvider>
     </div>
   ) : (
-    <LoginBox />
+    <div className="bg-black text-white">Loading</div>
   );
 };
 

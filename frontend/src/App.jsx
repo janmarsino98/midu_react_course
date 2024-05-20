@@ -12,6 +12,7 @@ import { SessionProvider } from "./contexts/SessionContext";
 import FormInputField from "./components/Forms/FormInputField";
 import SignUp from "./pages/SignupPage/SignUp";
 import LoginMain from "./pages/LoginPage/LoginMain";
+import LoginForm from "./pages/LoginPage/LoginForm";
 
 function App() {
   return (
@@ -22,7 +23,16 @@ function App() {
             <Router>
               <Routes>
                 <Route path="/" element={<MainPage></MainPage>} />
-                <Route path="/login" element={<LoginMain></LoginMain>} />
+                <Route
+                  path="/login"
+                  element={
+                    <div className="w-full h-full bg-slate-500 flex items-center justify-center">
+                      <div className="w-[500px] bg-black rounded-xl pb-3 px-6">
+                        <LoginForm></LoginForm>
+                      </div>
+                    </div>
+                  }
+                />
                 <Route
                   path="/notifications"
                   element={

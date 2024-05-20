@@ -130,12 +130,13 @@ def login():
     
     if re.match(regex_patterns.EMAIL_PATTERN, data["identifier"]):
         identifier = "email"
-    else:
+    else:   
         identifier = "username"
         
     user = users_db.find_one({identifier: data["identifier"]})
+    print(identifier)
     
-    if not user or not bcrypt.check_password_hash(user["password"],bcrypt.generate_password_hash(data["password"])):
+    if not user or not bcrypt.check_password_hash(user["password"],data["password"]):
         return jsonify({'message': 'Invalid credentials'})
     
     else:
