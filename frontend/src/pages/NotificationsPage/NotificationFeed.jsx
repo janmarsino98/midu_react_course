@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../contexts/CurrentUserContext";
+import { SessionContext } from "../../contexts/SessionContext";
 import { GiConsoleController } from "react-icons/gi";
 import axios from "../../../back_address";
 import Notification from "./Notification";
@@ -7,7 +7,7 @@ import Notification from "./Notification";
 const NotificationFeed = () => {
   const [unreadNotifications, setUnreadNotifications] = useState([]);
   const [notificationsToDisplay, setNotificationsToDisplay] = useState([]);
-  const { currentUser } = useContext(UserContext);
+  const { currentUser } = useContext(SessionContext);
 
   useEffect(() => {
     const fetchData = async () => {

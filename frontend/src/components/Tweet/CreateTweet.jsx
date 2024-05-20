@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, useRef } from "react";
-import { UserContext } from "../../contexts/CurrentUserContext";
+import { SessionContext } from "../../contexts/SessionContext";
 import defaultAvatar from "../../assets/default_user.jpg";
 import LoadingCreateTweet from "../loading/LoadingCreateTweet";
 import axios from "../../../back_address";
@@ -14,7 +14,7 @@ const CreateTweet = () => {
   const { forYouTweets, lastTweets, setForYouTweets, setLastTweets } =
     useContext(TweetsContext);
 
-  const { currentUser } = useContext(UserContext);
+  const { currentUser } = useContext(SessionContext);
   const contentRef = useRef(null);
 
   useEffect(() => {

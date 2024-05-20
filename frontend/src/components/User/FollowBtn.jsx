@@ -1,9 +1,9 @@
 import React, { useEffect, useContext, useState } from "react";
-import { UserContext } from "../../contexts/CurrentUserContext";
+import { SessionContext } from "../../contexts/SessionContext";
 import axios from "../../../back_address";
 
 const FollowBtn = ({ children, usernameToFollow }) => {
-  const { currentUser } = useContext(UserContext);
+  const { currentUser } = useContext(SessionContext);
   const [following, setFollowing] = useState(null);
   const [hover, setHover] = useState(null);
   const [isLoading, setIsLoading] = useState(null);

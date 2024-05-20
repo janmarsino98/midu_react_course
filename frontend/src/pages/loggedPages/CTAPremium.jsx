@@ -1,9 +1,9 @@
-import { UserContext } from "../../contexts/CurrentUserContext";
+import { SessionContext } from "../../contexts/SessionContext";
 import { useContext, useState, useEffect } from "react";
 import axios from "../../../back_address";
 
 const CTAPremium = () => {
-  const { currentUser } = useContext(UserContext);
+  const { currentUser } = useContext(SessionContext);
   const [isVerified, setIsVerified] = useState(null);
 
   useEffect(() => {

@@ -1,33 +1,13 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import axios from "../../back_address";
+import { SessionContext } from "./SessionContext";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
+  const { activeSession } = useContext(SessionContext);
   const [currentUser, setCurrentUser] = useState(null);
   const [needsToUpdate, setNeedsToUpdate] = useState(false);
-
-  const handleClick = async ({ username, password }) => {
-    try {
-      const params = {
-        username: username,
-        password: password,
-      };
-      const response = await axios
-        .post("/login", params, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then(console.log("Logged in: "));
-
-      setCurrentUser(response.data);
-      setNeedsToUpdate(true);
-    } catch (error) {
-      console.error("Error: ", error);
-    }
-    console.log("Actual user: ", currentUser);
-  };
 
   useEffect(() => {
     const fetchLoggedUser = async () => {
@@ -45,7 +25,7 @@ export const UserProvider = ({ children }) => {
   }, [needsToUpdate]);
 
   return (
-    <UserContext.Provider value={{ currentUser, setCurrentUser, handleClick }}>
+    <UserContext.Provider value={{ currentUser, setCurrentUser }}>
       {children}
     </UserContext.Provider>
   );

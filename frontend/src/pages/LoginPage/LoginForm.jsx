@@ -76,6 +76,17 @@ const LoginForm = () => {
           type: "submit",
           colorStyle: "white",
         },
+        {
+          category: "div",
+          content: (
+            <div className="mt-3 text-gray-username">
+              Don't have an account yet?{" "}
+              <a href="/register" className="  text-blue-main hover:underline">
+                Register
+              </a>
+            </div>
+          ),
+        },
       ]}
       title={"Sign in to X"}
       onSubmit={handleFormSubmit}

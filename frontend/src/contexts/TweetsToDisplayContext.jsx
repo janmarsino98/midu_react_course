@@ -1,26 +1,28 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "../../back_address";
 import { SelectedSectionContext } from "../contexts/SelectedSectionContext";
-import { UserContext } from "../contexts/CurrentUserContext";
+import { SessionContext } from "../contexts/SessionContext";
 import { getFromCache, saveInCache } from "../cache";
 
 export const TweetsContext = createContext();
 
 export const TweetsContextProvider = ({ children }) => {
   const { forYouSelected } = useContext(SelectedSectionContext);
-  const { currentUser } = useContext(UserContext);
+  const { currentUser } = useContext(SessionContext);
   const [lastTweets, setLastTweets] = useState([]);
   const [forYouTweets, setForYouTweets] = useState([]);
 
   useEffect(() => {
     const fetchTweets = async () => {
       if (currentUser) {
+        console.log("Selected", forYouSelected);
         const endpoint = forYouSelected
           ? "last_tweets"
           : `${currentUser.username}/last_following_tweets`;
         try {
           const response = await axios.get(`/${endpoint}`);
           const tweetsData = response.data;
+          console.log("Data: ", tweetsData);
           let usernames = new Set();
           tweetsData.forEach((tweet) => usernames.add(tweet.username));
           usernames = [...usernames];

@@ -13,16 +13,27 @@ import FormInputField from "./components/Forms/FormInputField";
 import SignUp from "./pages/SignupPage/SignUp";
 import LoginMain from "./pages/LoginPage/LoginMain";
 import LoginForm from "./pages/LoginPage/LoginForm";
+import HeaderNav from "./components/Header/HeaderNav";
+import PrincipalNav from "./components/Header/PrincipalNav";
+import DisplayUser from "./components/DisplayUser";
 
 function App() {
   return (
-    <SessionProvider>
-      <UserProvider>
+    <>
+      <SessionProvider>
+        {/* <UserProvider> */}
         <SelectedSectionProvider>
           <div className="app-container h-full w-full flex flex-row justify-center font-seoge box-border">
             <Router>
               <Routes>
-                <Route path="/" element={<MainPage></MainPage>} />
+                <Route
+                  path="/"
+                  element={
+                    <div className="w-full">
+                      <MainPage></MainPage>
+                    </div>
+                  }
+                />
                 <Route
                   path="/login"
                   element={
@@ -56,12 +67,13 @@ function App() {
                   }
                 />
               </Routes>
-              <RightBar />
+              {/* <RightBar /> */}
             </Router>
           </div>
         </SelectedSectionProvider>
-      </UserProvider>
-    </SessionProvider>
+        {/* </UserProvider> */}
+      </SessionProvider>
+    </>
   );
 }
 

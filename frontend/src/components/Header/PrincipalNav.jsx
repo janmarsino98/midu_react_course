@@ -9,13 +9,13 @@ import { FaXTwitter } from "react-icons/fa6";
 import { FaRegUser } from "react-icons/fa";
 import { CiCircleMore } from "react-icons/ci";
 import PrincipalNavItem from "./PrincipalNavItem";
-import { UserContext } from "../../contexts/CurrentUserContext";
+import { SessionContext } from "../../contexts/SessionContext";
 import { useNavigate } from "react-router-dom";
 import axios from "../../../back_address";
 
 const PrincipalNav = () => {
   const navigate = useNavigate();
-  const { currentUser } = useContext(UserContext);
+  const { currentUser } = useContext(SessionContext);
   const [clickedChoice, setClickedChoice] = useState("home");
 
   const handleClick = (choice) => {

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../contexts/CurrentUserContext";
+import { SessionContext } from "../../contexts/SessionContext";
 import FollowBtn from "../../components/User/FollowBtn";
 import { PiArrowElbowDownLeftFill } from "react-icons/pi";
 import axios from "../../../back_address";
@@ -8,7 +8,7 @@ import SearchFollowCard from "../../components/Sidebar/SearchFollowCard";
 const WhoToFollow = () => {
   const [userData, setUserData] = useState([]);
   const [showMore, setShowMore] = useState(false);
-  const { currentUser } = useContext(UserContext);
+  const { currentUser } = useContext(SessionContext);
   const [following, setFollowing] = useState([]);
   const handleFollow = (username) => {
     setFollowing([...following, username]);
@@ -32,8 +32,8 @@ const WhoToFollow = () => {
         try {
           const users = await axios.get(
             `/${currentUser.username}/get_who_to_follow`
-          ).data;
-          setUserData(users);
+          );
+          setUserData(users.data);
         } catch (error) {
           console.error("There was an error while fetching user data: ", error);
         }
@@ -42,7 +42,7 @@ const WhoToFollow = () => {
     fetchUserInfo();
   }, [currentUser]);
   return (
-    <div className="rounded-xl border border-gray-main-borders bg-custom-black flex flex-col flex-wrap w-full gap-2 h-max">
+    <div className="rounded-xl border border-gray-main-borders bg-custom-black flex flex-col flex-wrap w-[300px] gap-2 h-max">
       <h4 className="text-white text-tweet-message px-4 py-3 font-bold">
         Suggested profiles
       </h4>

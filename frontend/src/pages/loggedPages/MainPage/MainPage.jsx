@@ -10,24 +10,35 @@ import CreateAccount from "../../SignupPage/SignUp";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import axios from "../../../../back_address";
 import { SessionContext } from "../../../contexts/SessionContext";
+import WhoToFollow from "../WhoToFollow";
+import RightBar from "../../../components/Sidebar/RightBar";
 
 const MainPage = () => {
-  const { currentUser } = useContext(UserContext);
-  const { loggedIn, setLoggedIn } = useContext(SessionContext);
-  console.log("Logged: ", loggedIn);
-  return loggedIn ? (
-    <div className="flex flex-row">
-      <HeaderNav></HeaderNav>
+  const { loggedIn, currentUser, loading } = useContext(SessionContext);
+
+  if (loading) {
+    return <div className="text-white">Loading</div>;
+  } else if (loggedIn === false) {
+    return <div className="text-white">There is no user logged</div>;
+  }
+  return (
+    <div className="flex flex-row w-full justify-center mx-0">
+      <div className="hidden sm:flex">
+        <HeaderNav></HeaderNav>
+      </div>
       <TweetsContextProvider>
-        <main className="w-full max-w-screen-sm">
-          <SelectSection></SelectSection>
-          <CreateTweet></CreateTweet>
-          <ForYouTweetFeed></ForYouTweetFeed>
+        <main className="sm:w-[500px]">
+          <div>
+            <SelectSection></SelectSection>
+          </div>
+          <div>
+            <CreateTweet></CreateTweet>
+            <ForYouTweetFeed></ForYouTweetFeed>
+          </div>
         </main>
+        <RightBar></RightBar>
       </TweetsContextProvider>
     </div>
-  ) : (
-    <div className="bg-black text-white">Loading</div>
   );
 };
 

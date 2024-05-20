@@ -72,7 +72,7 @@ const SignUp = () => {
           ),
         },
       ]}
-      title={"First form"}
+      title={"Join X"}
       onSubmit={handleSubmit}
     ></StandardForm>
   );

@@ -153,9 +153,18 @@ def login():
 def check_login():
     print(session)
     if 'user_id' in session:
-        return jsonify({"is_logged": True})
+        user = users_db.find_one({"_id": ObjectId(session["user_id"])})
+        return jsonify({
+            "is_logged":True,
+            "user":{
+            "_id": str(user["_id"]),
+            "name": user["name"],
+            "username": user["username"],
+            "avatar": user["avatar"],
+            }
+        })
     else:
-        return jsonify({"is_logged": False})
+        return jsonify({"is_logged": False, "user_id": None})
     
 @app.route("/@me", methods=["GET"])
 def current_user():
@@ -225,7 +234,7 @@ def get_last_tweets():
 
 def get_user(username):
     print(username)
-    user = users_db.find_one({'username': username})
+    user = users_db.find_one({'$or':[{'username': username}, {'_id': ObjectId(username)}]})
     if not user:
         return jsonify({'message': 'User not found in the users db'})
     return jsonify({
