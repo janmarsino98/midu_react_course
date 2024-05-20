@@ -54,11 +54,11 @@ def get_all_tweets():
 @app.route("/user", methods=["POST"])
 def new_user():
     data = request.json
-    
-    if "username" not in data or "name" not in data or "password" not in data or "email" not in "data":
+    print(data)
+    if "username" not in data or "name" not in data or "password" not in data or "email" not in data:
         return jsonify({'message': 'A user must have username, name, password and email to register.'})
     
-    if data["useraname"] == "" or data["name"] == "" or data["password"] == "" or data["email"] == "":
+    if data["username"] == "" or data["name"] == "" or data["password"] == "" or data["email"] == "":
         return jsonify({'message': 'Username, name, password and email must be non-empty strings'})
     
     user_exists = users_db.find_one({'username': data['username']})

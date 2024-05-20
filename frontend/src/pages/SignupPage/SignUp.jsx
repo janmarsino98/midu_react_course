@@ -1,52 +1,76 @@
 import React from "react";
 import { BsTwitterX } from "react-icons/bs";
 import StandardForm from "../../components/Forms/StandardForm";
+import axios from "../../../back_address";
 
 const SignUp = () => {
-  const handleClick = () => {
-    console.log("Button clicked");
+  const handleSubmit = async (formValues) => {
+    if (formValues) {
+      try {
+        const response = await axios.post(`/user`, {
+          email: formValues.email?.value,
+          username: formValues.username?.value,
+          name: formValues.name?.value,
+          password: formValues.password?.value,
+        });
+        console.log(response);
+      } catch (error) {
+        console.error("There was an error while creating a new user: ", error);
+      }
+    }
   };
   return (
     <StandardForm
       fields={[
         {
           category: "input",
-          name: "Username",
+          name: "username",
           pattern: "^[A-Za-z0-9_]+$",
           type: "text",
+          maxLength: 10,
         },
         {
           category: "input",
-          name: "Name",
+          name: "name",
           pattern: /^[A-Za-záéíóúÁÉÍÓÚ]+(\s[A-Za-záéíóúÁÉÍÓÚ]+)*$/,
           type: "text",
+          maxLength: 10,
         },
         {
           category: "input",
-          name: "Email",
+          name: "email",
           pattern: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
-          type: "text",
+          type: "email",
         },
         {
           category: "input",
-          name: "Password",
+          name: "password",
           pattern: "^(?=.*[A-Z])(?=.*[^a-zA-Z0-9s]).+$",
           type: "password",
+          minLength: 8,
         },
         {
           category: "button",
-          text: "Continue",
-          type: "BasicButton",
-          onClick: handleClick,
+          text: "Create account",
+          type: "submit",
+          colorStyle: "white",
         },
         {
-          category: "button",
-          text: "Back",
-          type: "BasicButtonWhite",
-          onClick: handleClick,
+          category: "div",
+          content: (
+            <div className="mt-2">
+              <div className=" text-gray-username">
+                Already have an account?{" "}
+                <a href="/login">
+                  <span className=" text-blue-main hover:underline">Login</span>
+                </a>
+              </div>
+            </div>
+          ),
         },
       ]}
       title={"First form"}
+      onSubmit={handleSubmit}
     ></StandardForm>
   );
 };

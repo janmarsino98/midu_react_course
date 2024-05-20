@@ -2,26 +2,31 @@ import { useState } from "react";
 
 const FormInputField = ({
   regexPattern,
+  maxLength,
+  minLength,
   fieldName,
   handleFocus,
   isFocused,
   handleBlur,
   field_type,
   id,
+  handleChange,
 }) => {
   const [isCorrect, setIsCorrect] = useState(true);
   const [value, setValue] = useState("");
 
   const re = new RegExp(regexPattern);
 
-  const handleChange = (e) => {
+  const handleInputChange = (e) => {
     const newValue = e.target.value;
     setValue(newValue);
-    if (!re.test(newValue) && newValue !== "") {
-      setIsCorrect(false);
-    } else {
-      setIsCorrect(true);
-    }
+    console.log(newValue.length, maxLength);
+    const valid =
+      re.test(newValue) &&
+      newValue.length <= maxLength &&
+      newValue.length >= minLength;
+    setIsCorrect(valid);
+    handleChange(newValue, valid);
   };
 
   return (
@@ -49,10 +54,11 @@ const FormInputField = ({
           </label>
         )}
         <input
+          required={true}
           placeholder={fieldName}
           className={`bg-transparent border-none outline-none text-[15px]`}
           value={value}
-          onChange={handleChange}
+          onChange={handleInputChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
           type={field_type}
