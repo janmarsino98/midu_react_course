@@ -12,6 +12,7 @@ import axios from "../../../../back_address";
 import { SessionContext } from "../../../contexts/SessionContext";
 import WhoToFollow from "../WhoToFollow";
 import RightBar from "../../../components/Sidebar/RightBar";
+import DisplayUser from "../../../components/DisplayUser";
 
 const MainPage = () => {
   const { loggedIn, currentUser, loading } = useContext(SessionContext);
@@ -23,11 +24,12 @@ const MainPage = () => {
   }
   return (
     <div className="flex flex-row w-full justify-center mx-0">
-      <div className="hidden sm:flex">
+      <div className="hidden sm:flex flex-col">
         <HeaderNav></HeaderNav>
+        <DisplayUser></DisplayUser>
       </div>
       <TweetsContextProvider>
-        <main className="sm:w-[500px]">
+        <main className="sm:w-[600px]">
           <div>
             <SelectSection></SelectSection>
           </div>

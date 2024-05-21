@@ -13,7 +13,7 @@ const FollowBtn = ({ children, usernameToFollow }) => {
       if (currentUser) {
         try {
           const response = await axios.get(
-            `/${currentUser.username}/follows/${usernameToFollow}}`
+            `/${currentUser.username}/follows/${usernameToFollow}`
           );
           setFollowing(response.data);
         } catch (error) {

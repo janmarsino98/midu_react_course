@@ -40,8 +40,8 @@ const Tweet = ({
   useEffect(() => {
     const fetchRetweetStatus = async () => {
       try {
-        const response = await fetch(
-          `/${currentUser.username}/retweet/${tweetId}`
+        const response = await axios.get(
+          `/${currentUser.username}/retweeted/${tweetId}`
         );
         setisRetweeted(response.data);
       } catch (error) {
@@ -67,7 +67,7 @@ const Tweet = ({
       setLikes(likes + 1);
 
       try {
-        await axios.put(`/${currentUser.username}/tweet_like}/${tweetId}}`);
+        await axios.put(`/${currentUser.username}/tweet_like/${tweetId}`);
       } catch (error) {
         console.error("Error: ", error);
       }

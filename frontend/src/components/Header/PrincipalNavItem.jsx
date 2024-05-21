@@ -10,8 +10,8 @@ const PrincipalNavItem = ({
   return (
     <a
       onClick={onClick}
-      className={`flex items-center flex-wrap cursor-pointer w-full h-max py-2 ${
-        isSelected ? "font-bold text-white" : "text-disabled-button "
+      className={`flex items-center flex-wrap cursor-pointer w-full text-white h-max py-2 ${
+        isSelected ? "font-bold " : " "
       }`}
     >
       <div className="text-white flex flex-wrap relative flex-row items-center p-1">

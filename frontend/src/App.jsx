@@ -16,6 +16,7 @@ import LoginForm from "./pages/LoginPage/LoginForm";
 import HeaderNav from "./components/Header/HeaderNav";
 import PrincipalNav from "./components/Header/PrincipalNav";
 import DisplayUser from "./components/DisplayUser";
+import NotificationsPage from "./pages/NotificationsPage/NotificationsPage";
 
 function App() {
   return (
@@ -46,15 +47,7 @@ function App() {
                 />
                 <Route
                   path="/notifications"
-                  element={
-                    <main className="w-full max-w-screen-sm">
-                      <h2 className="text-white font-bold p-2">
-                        Notifications
-                      </h2>
-                      <SelectSection></SelectSection>
-                      <NotificationFeed></NotificationFeed>
-                    </main>
-                  }
+                  element={<NotificationsPage></NotificationsPage>}
                 />
                 <Route
                   path="/register"

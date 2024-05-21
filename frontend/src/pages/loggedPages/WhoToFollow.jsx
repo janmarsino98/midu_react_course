@@ -42,7 +42,7 @@ const WhoToFollow = () => {
     fetchUserInfo();
   }, [currentUser]);
   return (
-    <div className="rounded-xl border border-gray-main-borders bg-custom-black flex flex-col flex-wrap w-[300px] gap-2 h-max">
+    <div className="rounded-xl border border-gray-main-borders bg-custom-black flex flex-col flex-wrap w-[300px] gap-2 h-max mt-2">
       <h4 className="text-white text-tweet-message px-4 py-3 font-bold">
         Suggested profiles
       </h4>
