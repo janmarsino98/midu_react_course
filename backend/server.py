@@ -233,8 +233,15 @@ def get_last_tweets():
 @app.route("/user/<username>", methods=['GET'])
 
 def get_user(username):
-    print(username)
-    user = users_db.find_one({'$or':[{'username': username}, {'_id': ObjectId(username)}]})
+    try:
+        id = ObjectId(username)
+    except:
+        id = None
+    print(f"id: {id}, user: {username}")
+    if id:
+        user = users_db.find_one({'_id': id})
+    else:
+        user = users_db.find_one({'username': username})
     if not user:
         return jsonify({'message': 'User not found in the users db'})
     return jsonify({

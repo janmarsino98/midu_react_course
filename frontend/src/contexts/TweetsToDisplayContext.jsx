@@ -34,6 +34,7 @@ export const TweetsContextProvider = ({ children }) => {
                 const userResponse = await axios.get(`/user/${username}`);
                 userData = userResponse.data;
                 saveInCache(`user_${username}`, userData);
+                console.log("New user", userData)
               }
               return userData;
             })
@@ -45,6 +46,8 @@ export const TweetsContextProvider = ({ children }) => {
             );
             return { ...userData, ...tweet };
           });
+
+          console.log(TweetsWithUserData)
 
           if (forYouSelected) {
             setForYouTweets(TweetsWithUserData);
