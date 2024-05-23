@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import StandardForm from "../../components/Forms/StandardForm";
 import axios from "../../../back_address";
+import { Navigate } from "react-router-dom";
+import {SessionContext} from "../../contexts/SessionContext"
+
+
 
 const LoginForm = () => {
+
+  
+  const {currentUser, setCurrentUser} = useContext(SessionContext)
+  const [redirect, setRedirect] = useState(false);
+  useEffect(() => {
+    if (currentUser) {
+      setRedirect(true)
+    }
+  }, [currentUser])
+  
   const handleGoogleLog = () => {
     console.log("Loggin in with Google...");
   };
@@ -18,17 +32,24 @@ const LoginForm = () => {
         password: formValues.password.value,
       });
       console.log(response);
+      if (response.data && response.data.user) {
+        setCurrentUser(response.data.user)
+      }
     } catch (error) {
       console.error("Error trying to log in: ", error);
     }
   };
+
+  if (redirect || currentUser) {
+    return <Navigate to="/"/>
+  }
 
   return (
     <StandardForm
       fields={[
         {
           category: "button",
-          text: "Login with Gooogle",
+          text: "Login with Google",
           type: "",
           colorStyle: "white",
           disabled: false,
