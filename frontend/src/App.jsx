@@ -17,7 +17,7 @@ import HeaderNav from "./components/Header/HeaderNav";
 import PrincipalNav from "./components/Header/PrincipalNav";
 import DisplayUser from "./components/DisplayUser";
 import NotificationsPage from "./pages/NotificationsPage/NotificationsPage";
-import UserProfile from "./pages/UserProfile";
+import UserProfile from "./pages/profilePage/UserProfile  ";
 
 function App() {
   return (

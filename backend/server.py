@@ -11,6 +11,7 @@ import re
 import redis
 from datetime import timedelta
 import regex_patterns
+from gridfs import GridFS
 
 load_dotenv()
 
@@ -20,9 +21,12 @@ CORS(app)
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 app.config['MONGO_URI'] = os.getenv('MONGO_URI')
 
+
 mongo = PyMongo(app)
 tweets_db = mongo.db.tweets
 users_db = mongo.db.users
+fs = GridFS(mongo.db)
+
 app.config['SECRET_KEY'] = os.urandom(24)
 
 # Configuración de sesión
@@ -97,6 +101,30 @@ def new_user():
         'password': bcrypt.generate_password_hash(data["password"])
     })
     return jsonify({'messsage': 'User created successfully'})
+
+@app.route("/upload", methods=["POST"])
+
+def upload_file():
+    if "file" not in request.files:
+        return jsonify({'message': 'No file in request.'})
+    
+    file = request.files["file"] 
+    if file.filename == '':
+        return jsonify({'message': 'No file selected'})
+    
+    file_id = fs.put(file, filename=file.filename)
+    user_id = request.form['user_id']
+    
+    mongo.db.users.update_one({'_id': ObjectId(user_id)}, {'$set': {'image_id': file_id}})
+    
+    return jsonify({"file_id": str(file_id)})
+
+@app.route("/delete_file", methods=["DELETE"])
+def delete_file():
+    file_id = request.form["file_id"]
+    fs.delete(file_id=ObjectId(file_id))
+    return jsonify({'message': 'Image deleted correctly'})
+    
     
 @app.route("/<username>/is_verified")
 def is_verified(username):
