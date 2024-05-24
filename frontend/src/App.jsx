@@ -17,6 +17,7 @@ import HeaderNav from "./components/Header/HeaderNav";
 import PrincipalNav from "./components/Header/PrincipalNav";
 import DisplayUser from "./components/DisplayUser";
 import NotificationsPage from "./pages/NotificationsPage/NotificationsPage";
+import UserProfile from "./pages/UserProfile";
 
 function App() {
   return (
@@ -58,6 +59,10 @@ function App() {
                       </div>
                     </div>
                   }
+                />
+                <Route
+                path="/user/:id"
+                element={<UserProfile></UserProfile>}
                 />
               </Routes>
               {/* <RightBar /> */}

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import StandardForm from "../../components/Forms/StandardForm";
 import axios from "../../../back_address";
 import { Navigate } from "react-router-dom";
@@ -101,7 +101,7 @@ const LoginForm = () => {
           category: "div",
           content: (
             <div className="mt-3 text-gray-username">
-              Don't have an account yet?{" "}
+              {"Don't have an account yet?"}{" "}
               <a href="/register" className="  text-blue-main hover:underline">
                 Register
               </a>

@@ -250,7 +250,8 @@ def get_user(username):
         'username': user['username'],
         'avatar': user['avatar'],
         'is_verified' : user['is_verified'],
-        'notifications': len(user['notifications'])
+        'notifications': len(user['notifications']),
+        'email': user['email']
     })
     
 # @app.route("/delete_tweets", methods=["DELETE"])

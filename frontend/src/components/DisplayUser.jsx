@@ -14,7 +14,7 @@ const DisplayUser = () => {
   }
 
   return (
-    <div className="text-white flex flex-row w-full p-3 mt-4 hover:bg-lighter-gray items-center   rounded-full">
+    <div className="text-white cursor-pointer flex flex-row w-full p-3 mt-4 hover:bg-lighter-gray items-center   rounded-full">
       <div>
         <img
           className="rounded-full max-w-10"
