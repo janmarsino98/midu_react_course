@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, send_file, session
 from flask_pymongo import PyMongo, ObjectId
 from dotenv import load_dotenv
 import os
@@ -12,6 +12,7 @@ import redis
 from datetime import timedelta
 import regex_patterns
 from gridfs import GridFS
+import io
 
 load_dotenv()
 
@@ -115,7 +116,7 @@ def upload_file():
     file_id = fs.put(file, filename=file.filename)
     user_id = request.form['user_id']
     
-    mongo.db.users.update_one({'_id': ObjectId(user_id)}, {'$set': {'image_id': file_id}})
+    mongo.db.users.update_one({'_id': ObjectId(user_id)}, {'$set': {'avatar': file_id}})
     
     return jsonify({"file_id": str(file_id)})
 
@@ -169,11 +170,12 @@ def login():
     
     else:
         session["user_id"] = str(user["_id"])
+        file = fs.get(ObjectId(user["avatar"]))
         return jsonify({
             "id": str(user["_id"]),
             "email": user["email"],
             "username": user["username"],
-            "avatar": user["avatar"]
+            "avatar": send_file(io.BytesIO(file.read()), download_name=file.filename, mimetype=file.content_type)
         })
     
 @app.route("/check_login", methods=["GET"])
@@ -182,13 +184,14 @@ def check_login():
     print(session)
     if 'user_id' in session:
         user = users_db.find_one({"_id": ObjectId(session["user_id"])})
+        file = fs.get(ObjectId(user["avatar"]))
         return jsonify({
             "is_logged":True,
             "user":{
             "_id": str(user["_id"]),
             "name": user["name"],
             "username": user["username"],
-            "avatar": user["avatar"],
+            "avatar": send_file(io.BytesIO(file.read()), download_name=file.filename, mimetype=file.content_type),
             }
         })
     else:
@@ -200,11 +203,12 @@ def current_user():
     if not user_id:
         return jsonify({"message": "You are not logged in"})
     user = users_db.find_one({"_id": ObjectId(user_id)})
+    file = fs.get(ObjectId(user["avatar"]))
     return jsonify({
         "id": str(user["_id"]),
         "email": user["email"],
         "username": user["username"],
-        "avatar": user["avatar"],
+        "avatar": send_file(io.BytesIO(file.read()), download_name=file.filename, mimetype=file.content_type),
     }) 
     
 @app.route("/tweet", methods=['POST'])
@@ -272,11 +276,12 @@ def get_user(username):
         user = users_db.find_one({'username': username})
     if not user:
         return jsonify({'message': 'User not found in the users db'})
+    file = fs.get(ObjectId(user["avatar"]))
     return jsonify({
         '_id': str(ObjectId(user['_id'])),
         'name': user['name'],
         'username': user['username'],
-        'avatar': user['avatar'],
+        'avatar': send_file(io.BytesIO(file.read()), download_name=file.filename, mimetype=file.content_type),
         'is_verified' : user['is_verified'],
         'notifications': len(user['notifications']),
         'email': user['email']
