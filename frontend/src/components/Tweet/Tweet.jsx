@@ -100,7 +100,7 @@ const Tweet = ({
         <div className="flex flex-col py-2 mr-2">
           <img
             className="rounded-full w-12"
-            src={userAvatar}
+            src={currentUser.avatar}
             alt={`${name} profile pic`}
           />
         </div>

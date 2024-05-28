@@ -21,6 +21,7 @@ bcrypt = Bcrypt(app)
 CORS(app)
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 app.config['MONGO_URI'] = os.getenv('MONGO_URI')
+BACK_ADDRESS = os.getenv('BACK_ADDRESS')
 
 
 mongo = PyMongo(app)
@@ -89,7 +90,7 @@ def new_user():
     elif not re.match(regex_patterns.EMAIL_PATTERN, data["email"]):
         return jsonify({"message":"Invalid email"})
     
-    default_avatar = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
+    default_avatar = 'z6654d58365ab5519e7049df6'
     users_db.insert_one({
         'username': data['username'],
         'email': data['email'],
@@ -114,9 +115,9 @@ def upload_file():
         return jsonify({'message': 'No file selected'})
     
     file_id = fs.put(file, filename=file.filename)
-    user_id = request.form['user_id']
+    # user_id = request.form['user_id']
     
-    mongo.db.users.update_one({'_id': ObjectId(user_id)}, {'$set': {'avatar': file_id}})
+    # mongo.db.users.update_one({'_id': ObjectId(user_id)}, {'$set': {'avatar': file_id}})
     
     return jsonify({"file_id": str(file_id)})
 
@@ -125,6 +126,23 @@ def delete_file():
     file_id = request.form["file_id"]
     fs.delete(file_id=ObjectId(file_id))
     return jsonify({'message': 'Image deleted correctly'})
+
+@app.route("/avatar/<user_id>", methods=['GET'])
+def get_avatar(user_id):
+    user = users_db.find_one({"_id": ObjectId(user_id)})
+    if not user or not user.get("avatar"):
+        return jsonify({"message": "Avatar not found"}), 404
+
+    try:
+        file = fs.get(ObjectId(user["avatar"]))
+        return send_file(io.BytesIO(file.read()), download_name=file.filename, mimetype=file.content_type)
+    except Exception as e:
+        return jsonify({"message": "Error retrieving avatar"}), 500
+    
+@app.route("/img/<img_id>", methods=["GET"])
+def get_img(img_id):
+    file = fs.get(ObjectId(img_id))
+    return send_file(io.BytesIO(file.read()), download_name=file.filename, mimetype=file.content_type)
     
     
 @app.route("/<username>/is_verified")
@@ -151,32 +169,32 @@ def login():
     session.permanent = True
     data = request.json
     
-    if "password" not in data or "identifier" not in data:
-        return jsonify({'message': 'Missing password or identifier parameter'})
+    if not data or "password" not in data or "identifier" not in data:
+        return jsonify({'message': 'Missing password or identifier parameter'}), 400
     
-    if data["password"] == "" or data["identifier"] == "":
-        return jsonify({'message': 'Missing password or username / email'})
+    if data["password"].strip() == "" or data["identifier"].strip() == "":
+        return jsonify({'message': 'Missing password or username / email'}), 400
     
-    if re.match(regex_patterns.EMAIL_PATTERN, data["identifier"]):
-        identifier = "email"
-    else:   
-        identifier = "username"
-        
+    identifier = "email" if re.match(regex_patterns.EMAIL_PATTERN, data["identifier"]) else "username"
     user = users_db.find_one({identifier: data["identifier"]})
-    print(identifier)
     
-    if not user or not bcrypt.check_password_hash(user["password"],data["password"]):
-        return jsonify({'message': 'Invalid credentials'})
+    if not user or not bcrypt.check_password_hash(user["password"], data["password"]):
+        return jsonify({'message': 'Invalid credentials'}), 401
     
-    else:
-        session["user_id"] = str(user["_id"])
+    session["user_id"] = str(user["_id"])
+    
+    try:
         file = fs.get(ObjectId(user["avatar"]))
-        return jsonify({
-            "id": str(user["_id"]),
-            "email": user["email"],
-            "username": user["username"],
-            "avatar": send_file(io.BytesIO(file.read()), download_name=file.filename, mimetype=file.content_type)
-        })
+        avatar_url = f"{BACK_ADDRESS}/avatar/{user['_id']}"
+    except Exception as e:
+        avatar_url = None
+    
+    return jsonify({
+        "id": str(user["_id"]),
+        "email": user["email"],
+        "username": user["username"],
+        "avatar": avatar_url if avatar_url else 'No avatar available'
+    })
     
 @app.route("/check_login", methods=["GET"])
 
@@ -185,13 +203,14 @@ def check_login():
     if 'user_id' in session:
         user = users_db.find_one({"_id": ObjectId(session["user_id"])})
         file = fs.get(ObjectId(user["avatar"]))
+        avatar_url = f"{BACK_ADDRESS}/avatar/{user['_id']}"
         return jsonify({
             "is_logged":True,
             "user":{
             "_id": str(user["_id"]),
             "name": user["name"],
             "username": user["username"],
-            "avatar": send_file(io.BytesIO(file.read()), download_name=file.filename, mimetype=file.content_type),
+            "avatar": avatar_url,
             }
         })
     else:
@@ -277,11 +296,12 @@ def get_user(username):
     if not user:
         return jsonify({'message': 'User not found in the users db'})
     file = fs.get(ObjectId(user["avatar"]))
+    avatar_url = f"{BACK_ADDRESS}/avatar/{user['_id']}"
     return jsonify({
         '_id': str(ObjectId(user['_id'])),
         'name': user['name'],
         'username': user['username'],
-        'avatar': send_file(io.BytesIO(file.read()), download_name=file.filename, mimetype=file.content_type),
+        'avatar': avatar_url,
         'is_verified' : user['is_verified'],
         'notifications': len(user['notifications']),
         'email': user['email']
