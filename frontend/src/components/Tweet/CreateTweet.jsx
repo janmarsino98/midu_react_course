@@ -10,9 +10,7 @@ import { BiWorld } from "react-icons/bi";
 const CreateTweet = () => {
   const [tweet, setTweet] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [content, setContent] = useState(null);
-  const { forYouTweets, lastTweets, setForYouTweets, setLastTweets } =
-    useContext(TweetsContext);
+  const { setForYouTweets } = useContext(TweetsContext);
 
   const { currentUser } = useContext(SessionContext);
   const contentRef = useRef(null);

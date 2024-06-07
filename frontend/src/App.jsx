@@ -18,6 +18,7 @@ import PrincipalNav from "./components/Header/PrincipalNav";
 import DisplayUser from "./components/DisplayUser";
 import NotificationsPage from "./pages/NotificationsPage/NotificationsPage";
 import UserProfile from "./pages/profilePage/UserProfile";
+import PublicProfilePage from "./pages/profilePage/PublicProfilePage";
 
 function App() {
   return (
@@ -60,9 +61,10 @@ function App() {
                     </div>
                   }
                 />
+                <Route path="/user/:id" element={<UserProfile></UserProfile>} />
                 <Route
-                path="/user/:id"
-                element={<UserProfile></UserProfile>}
+                  path="/profile/:id"
+                  element={<PublicProfilePage></PublicProfilePage>}
                 />
               </Routes>
               {/* <RightBar /> */}

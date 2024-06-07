@@ -24,7 +24,7 @@ const MainPage = () => {
   }
   return (
     <div className="flex flex-row w-full justify-center mx-0">
-      <div className="hidden sm:flex flex-col">
+      <div className="hidden sm:flex flex-col mr-2">
         <HeaderNav></HeaderNav>
         <DisplayUser></DisplayUser>
       </div>

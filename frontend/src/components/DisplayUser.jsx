@@ -1,9 +1,14 @@
 import React, { useContext } from "react";
 import { SessionContext } from "../contexts/SessionContext";
 import { MdMoreHoriz } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const DisplayUser = () => {
   const { currentUser, loggedIn, loading } = useContext(SessionContext);
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/user/${currentUser._id}`);
+  };
 
   if (loading) {
     return <div className="text-white">Loading</div>;
@@ -14,7 +19,10 @@ const DisplayUser = () => {
   }
 
   return (
-    <div className="text-white cursor-pointer flex flex-row w-full p-3 mt-4 hover:bg-lighter-gray items-center   rounded-full">
+    <div
+      onClick={handleClick}
+      className="text-white cursor-pointer flex flex-row w-full p-3 mt-4 hover:bg-lighter-gray items-center rounded-full"
+    >
       <div>
         <img
           className="rounded-full max-w-10"

@@ -90,7 +90,7 @@ def new_user():
     elif not re.match(regex_patterns.EMAIL_PATTERN, data["email"]):
         return jsonify({"message":"Invalid email"})
     
-    default_avatar = 'z6654d58365ab5519e7049df6'
+    default_avatar = '6654d58365ab5519e7049df6'
     users_db.insert_one({
         'username': data['username'],
         'email': data['email'],
@@ -115,9 +115,15 @@ def upload_file():
         return jsonify({'message': 'No file selected'})
     
     file_id = fs.put(file, filename=file.filename)
-    # user_id = request.form['user_id']
+    user_id = request.form['user_id']
+    user_to_update = users_db.find_one({
+        '_id': ObjectId(user_id)
+    })
     
-    # mongo.db.users.update_one({'_id': ObjectId(user_id)}, {'$set': {'avatar': file_id}})
+    user_avatar = user_to_update["avatar"]
+    if user_avatar != "6654d58365ab5519e7049df6":
+        fs.delete(ObjectId(user_avatar))
+    users_db.update_one({'_id': ObjectId(user_id)}, {'$set': {'avatar': file_id}})
     
     return jsonify({"file_id": str(file_id)})
 
@@ -129,8 +135,8 @@ def delete_file():
 
 @app.route("/avatar/<user_id>", methods=['GET'])
 def get_avatar(user_id):
-    user = users_db.find_one({"_id": ObjectId(user_id)})
-    if not user or not user.get("avatar"):
+    user = users_db.find_one({"_id": ObjectId(user_id)})  
+    if not user or not user["avatar"]:
         return jsonify({"message": "Avatar not found"}), 404
 
     try:
@@ -233,7 +239,6 @@ def current_user():
 @app.route("/tweet", methods=['POST'])
 def tweet():
     data = request.json
-    
     if 'username' in data and 'message' in data:
         if len(data["message"]) > 200:
             return jsonify({"message": "The tweet is too long!"})
@@ -256,7 +261,7 @@ def tweet():
                 '_id': str(tweet["_id"]),
                 'name': user["name"],
                 'username': tweet["username"],
-                'avatar': user["avatar"],
+                'avatar': str(user["avatar"]),
                 'message': tweet["message"],
                 'likes': tweet["likes"],
                 'retweets': tweet["retweets"],
@@ -552,15 +557,14 @@ def read_notifications(username):
 def get_who_to_follow(username):
     current_user = users_db.find_one({'username': username})
     suggested_users = users_db.find({"username": {"$nin": current_user["following"], "$ne": current_user["username"]}}).limit(5)
-    final_suggested_users = [
-        {
-            'name': user['name'],
-            'username': user['username'],
-            'avatar': user['avatar'],
-            
-        }
-        for user in suggested_users
-    ]
+    final_suggested_users = []
+    for user in suggested_users:
+        avatar_url = f"{BACK_ADDRESS}/avatar/{user['_id']}"
+        final_suggested_users.append({
+            "name": user["name"],
+            "username": user["username"],
+            "avatar": avatar_url
+        })
     return jsonify(final_suggested_users)
 
 @app.route("/<main_username>/follows/<to_follow_username>", methods=["GET"])
