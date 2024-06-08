@@ -13,6 +13,8 @@ from datetime import timedelta
 import regex_patterns
 from gridfs import GridFS
 import io
+from datetime import datetime
+
 
 load_dotenv()
 
@@ -100,7 +102,8 @@ def new_user():
         'followed_by': [],
         'following': [],
         'notifications': [],
-        'password': bcrypt.generate_password_hash(data["password"])
+        'password': bcrypt.generate_password_hash(data["password"]),
+        'created_at': datetime.utcnow()
     })
     return jsonify({'messsage': 'User created successfully'})
 
@@ -115,15 +118,6 @@ def upload_file():
         return jsonify({'message': 'No file selected'})
     
     file_id = fs.put(file, filename=file.filename)
-    user_id = request.form['user_id']
-    user_to_update = users_db.find_one({
-        '_id': ObjectId(user_id)
-    })
-    
-    user_avatar = user_to_update["avatar"]
-    if user_avatar != "6654d58365ab5519e7049df6":
-        fs.delete(ObjectId(user_avatar))
-    users_db.update_one({'_id': ObjectId(user_id)}, {'$set': {'avatar': file_id}})
     
     return jsonify({"file_id": str(file_id)})
 
@@ -311,6 +305,45 @@ def get_user(username):
         'notifications': len(user['notifications']),
         'email': user['email']
     })
+    
+@app.route("/user_stats/<username>")
+
+def get_user_stats(username):
+    try:
+        id = ObjectId(username)
+    except:
+        id = None
+        
+    if id:
+        user = users_db.find_one({'_id': id})
+        
+    else:
+        user = users_db.find_one({'username': username})
+        
+    if not user:
+        return jsonify({'message': 'user was not found in the database'})
+    
+    else:
+        date = datetime.fromisoformat(str(user["created_at"]).replace("Z", "+00:00"))
+        month_name = date.strftime('%B')
+        day_number = str(date.day)
+        if day_number[-1] == "1":
+            day_name = f"{day_number}st"
+        
+        elif day_number[-1] == "2":
+            day_name = f"{day_number}nd"
+        elif day_number[-1] == "3":
+            day_name = f"{day_number}rd"
+        else:
+            day_name = f"{day_number}th"
+            
+        
+        return jsonify({
+            'followers': len(user["followed_by"]), 
+            'following': len(user["following"]),
+            'joined_month': month_name,
+            'joined_day':day_name
+            })
     
 # @app.route("/delete_tweets", methods=["DELETE"])
 

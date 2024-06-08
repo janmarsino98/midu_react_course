@@ -37,6 +37,9 @@ export default {
       },
       fontFamily: {
         'seoge': ['segoe ui']
+      },
+      screens: {
+        'main': '200px',
       }
     },
   },

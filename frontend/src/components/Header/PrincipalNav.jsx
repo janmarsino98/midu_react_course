@@ -32,7 +32,7 @@ const PrincipalNav = () => {
 
   return (
     currentUser && (
-      <nav className="flex flex-wrap flex-col justify-between mr-2 w-60">
+      <nav className="flex flex-wrap flex-col justify-between mr-2 w-max pr-4 ">
         <PrincipalNavItem
           icon={IoMdHome}
           label={"Home"}
@@ -104,7 +104,7 @@ const PrincipalNav = () => {
           label={"Profile"}
           isSelected={clickedChoice === "profile"}
           onClick={() => {
-            handleClick("profile");
+            navigate(`/profile/${currentUser._id}`);
           }}
         ></PrincipalNavItem>
         <PrincipalNavItem

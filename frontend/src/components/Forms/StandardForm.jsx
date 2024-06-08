@@ -88,6 +88,7 @@ const StandardForm = ({ title, fields, onSubmit }) => {
         disabled={
           button.disabled != null ? button.disabled : !isCorrect || !isComplete
         }
+        formatting={button.formatting}
       ></BasicButton>
     );
   };
