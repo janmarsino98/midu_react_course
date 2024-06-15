@@ -1,5 +1,6 @@
 import React from "react";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
+
 const SearchFollowCard = ({
   name,
   username,

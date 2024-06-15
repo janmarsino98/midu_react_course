@@ -450,10 +450,10 @@ def search_text():
             { "username" : {"$regex": text_to_search, "$options":"i"} },
         ]
             })
-        users_list = [{"_id": str(user['_id']), "username":user['username'], "avatar":user["avatar"], "name":user["name"], "is_verified": user["is_verified"]} for user in results]
+        users_list = [{"_id": str(user['_id']), "username":user['username'], "avatar" : f"{BACK_ADDRESS}/avatar/{user['_id']}", "name":user["name"], "is_verified": user["is_verified"]} for user in results]
     else:
         users_list = None
-        
+    print(users_list)
     return jsonify(users_list), 200
     
 @app.route("/verify_user/<username>", methods=['PUT'])
