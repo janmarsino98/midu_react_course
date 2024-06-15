@@ -5,12 +5,9 @@ import SelectSection from "../../components/SelectSection";
 
 const NotificationsPage = () => {
   return (
-    <div>
-      <main className="w-full max-w-screen-sm flex flex-row">
-        <div className="hidden sm:flex">
-          <HeaderNav></HeaderNav>
-        </div>
-        <div className="flex flex-col">
+    <div className="w-full">
+      <main className="w-full flex flex-row">
+        <div className="flex flex-col w-full">
           <h2 className="text-white font-bold p-2">Notifications</h2>
           <SelectSection></SelectSection>
           <NotificationFeed></NotificationFeed>

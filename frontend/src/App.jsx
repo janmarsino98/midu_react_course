@@ -17,7 +17,10 @@ import HeaderNav from "./components/Header/HeaderNav";
 import PrincipalNav from "./components/Header/PrincipalNav";
 import DisplayUser from "./components/DisplayUser";
 import NotificationsPage from "./pages/NotificationsPage/NotificationsPage";
-import UserProfile from "./pages/UserProfile";
+import UserProfile from "./pages/profilePage/UserProfile";
+import PublicProfilePage from "./pages/profilePage/PublicProfilePage";
+import PublicProfile from "./pages/profilePage/PublicProfile";
+import LoggedLayout from "./components/LoggedLayout";
 
 function App() {
   return (
@@ -28,14 +31,24 @@ function App() {
           <div className="app-container h-full w-full flex flex-row justify-center font-seoge box-border">
             <Router>
               <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <div className="w-full">
-                      <MainPage></MainPage>
-                    </div>
-                  }
-                />
+                <Route element={<LoggedLayout></LoggedLayout>}>
+                  <Route
+                    path="/"
+                    element={
+                      <div className="w-full flex">
+                        <MainPage></MainPage>
+                      </div>
+                    }
+                  />
+                  <Route
+                    path="/profile/:id"
+                    element={<PublicProfilePage></PublicProfilePage>}
+                  />
+                  <Route
+                    path="/notifications"
+                    element={<NotificationsPage></NotificationsPage>}
+                  />
+                </Route>
                 <Route
                   path="/login"
                   element={
@@ -46,10 +59,7 @@ function App() {
                     </div>
                   }
                 />
-                <Route
-                  path="/notifications"
-                  element={<NotificationsPage></NotificationsPage>}
-                />
+
                 <Route
                   path="/register"
                   element={
@@ -60,10 +70,7 @@ function App() {
                     </div>
                   }
                 />
-                <Route
-                path="/user/:id"
-                element={<UserProfile></UserProfile>}
-                />
+                <Route path="/user/:id" element={<UserProfile></UserProfile>} />
               </Routes>
               {/* <RightBar /> */}
             </Router>

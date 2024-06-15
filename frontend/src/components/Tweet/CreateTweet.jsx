@@ -10,9 +10,7 @@ import { BiWorld } from "react-icons/bi";
 const CreateTweet = () => {
   const [tweet, setTweet] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [content, setContent] = useState(null);
-  const { forYouTweets, lastTweets, setForYouTweets, setLastTweets } =
-    useContext(TweetsContext);
+  const { setForYouTweets } = useContext(TweetsContext);
 
   const { currentUser } = useContext(SessionContext);
   const contentRef = useRef(null);
@@ -47,8 +45,8 @@ const CreateTweet = () => {
   if (isLoading === false) {
     return (
       <>
-        <div className="flex flex-row py-2 px-4 border border-gray-main-borders">
-          <div className="flex flex-wrap items-start align-top flex-col py-1 w-max mr-1">
+        <div className="flex flex-row py-2 px-4 w-full border resize-none border-gray-main-borders">
+          <div className="flex flex-wrap items-start min-w-[50px] align-top flex-col py-1 w-max mr-1">
             <img
               className="rounded-full w-14 flex flex-wrap"
               src={isLoading ? defaultAvatar : currentUser.avatar}
@@ -56,14 +54,14 @@ const CreateTweet = () => {
             />
           </div>
           <div className="flex flex-wrap flex-col w-full">
-            <div className="h-max max-w-[560.344px] pl-4 flex flex-wrap w-full break-words whitespace-normal">
+            <div className="h-max max-w-[560.344px] pl-4 flex flex-wrap w-full break-words whitespace-pre-wrap">
               <span
                 contentEditable={true}
                 onInput={handleInput}
                 ref={contentRef}
                 role="textbox"
                 aria-multiline="true"
-                className=" bg-black resize-none text-white w-full border-none outline-none text-tweet-message h-max py-3"
+                className=" bg-black resize-none text-white break-words max-w-full border-none outline-none text-tweet-message h-max py-3"
               ></span>
             </div>
             <div className="flex flex-row pb-3 pl-4 items-center border-b border-b-gray-main-borders text-blue-main font-bold">

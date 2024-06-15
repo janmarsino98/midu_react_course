@@ -57,6 +57,7 @@ const SignUp = () => {
           text: "Create account",
           type: "submit",
           colorStyle: "white",
+          formatting: "mt-4",
         },
         {
           category: "div",

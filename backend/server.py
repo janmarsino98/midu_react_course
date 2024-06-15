@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, send_file, session
 from flask_pymongo import PyMongo, ObjectId
 from dotenv import load_dotenv
 import os
@@ -11,6 +11,10 @@ import re
 import redis
 from datetime import timedelta
 import regex_patterns
+from gridfs import GridFS
+import io
+from datetime import datetime
+
 
 load_dotenv()
 
@@ -19,10 +23,14 @@ bcrypt = Bcrypt(app)
 CORS(app)
 CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 app.config['MONGO_URI'] = os.getenv('MONGO_URI')
+BACK_ADDRESS = os.getenv('BACK_ADDRESS')
+
 
 mongo = PyMongo(app)
 tweets_db = mongo.db.tweets
 users_db = mongo.db.users
+fs = GridFS(mongo.db)
+
 app.config['SECRET_KEY'] = os.urandom(24)
 
 # Configuración de sesión
@@ -84,7 +92,7 @@ def new_user():
     elif not re.match(regex_patterns.EMAIL_PATTERN, data["email"]):
         return jsonify({"message":"Invalid email"})
     
-    default_avatar = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
+    default_avatar = '6654d58365ab5519e7049df6'
     users_db.insert_one({
         'username': data['username'],
         'email': data['email'],
@@ -94,9 +102,48 @@ def new_user():
         'followed_by': [],
         'following': [],
         'notifications': [],
-        'password': bcrypt.generate_password_hash(data["password"])
+        'password': bcrypt.generate_password_hash(data["password"]),
+        'created_at': datetime.utcnow()
     })
     return jsonify({'messsage': 'User created successfully'})
+
+@app.route("/upload", methods=["POST"])
+
+def upload_file():
+    if "file" not in request.files:
+        return jsonify({'message': 'No file in request.'})
+    
+    file = request.files["file"] 
+    if file.filename == '':
+        return jsonify({'message': 'No file selected'})
+    
+    file_id = fs.put(file, filename=file.filename)
+    
+    return jsonify({"file_id": str(file_id)})
+
+@app.route("/delete_file", methods=["DELETE"])
+def delete_file():
+    file_id = request.form["file_id"]
+    fs.delete(file_id=ObjectId(file_id))
+    return jsonify({'message': 'Image deleted correctly'})
+
+@app.route("/avatar/<user_id>", methods=['GET'])
+def get_avatar(user_id):
+    user = users_db.find_one({"_id": ObjectId(user_id)})  
+    if not user or not user["avatar"]:
+        return jsonify({"message": "Avatar not found"}), 404
+
+    try:
+        file = fs.get(ObjectId(user["avatar"]))
+        return send_file(io.BytesIO(file.read()), download_name=file.filename, mimetype=file.content_type)
+    except Exception as e:
+        return jsonify({"message": "Error retrieving avatar"}), 500
+    
+@app.route("/img/<img_id>", methods=["GET"])
+def get_img(img_id):
+    file = fs.get(ObjectId(img_id))
+    return send_file(io.BytesIO(file.read()), download_name=file.filename, mimetype=file.content_type)
+    
     
 @app.route("/<username>/is_verified")
 def is_verified(username):
@@ -122,31 +169,32 @@ def login():
     session.permanent = True
     data = request.json
     
-    if "password" not in data or "identifier" not in data:
-        return jsonify({'message': 'Missing password or identifier parameter'})
+    if not data or "password" not in data or "identifier" not in data:
+        return jsonify({'message': 'Missing password or identifier parameter'}), 400
     
-    if data["password"] == "" or data["identifier"] == "":
-        return jsonify({'message': 'Missing password or username / email'})
+    if data["password"].strip() == "" or data["identifier"].strip() == "":
+        return jsonify({'message': 'Missing password or username / email'}), 400
     
-    if re.match(regex_patterns.EMAIL_PATTERN, data["identifier"]):
-        identifier = "email"
-    else:   
-        identifier = "username"
-        
+    identifier = "email" if re.match(regex_patterns.EMAIL_PATTERN, data["identifier"]) else "username"
     user = users_db.find_one({identifier: data["identifier"]})
-    print(identifier)
     
-    if not user or not bcrypt.check_password_hash(user["password"],data["password"]):
-        return jsonify({'message': 'Invalid credentials'})
+    if not user or not bcrypt.check_password_hash(user["password"], data["password"]):
+        return jsonify({'message': 'Invalid credentials'}), 401
     
-    else:
-        session["user_id"] = str(user["_id"])
-        return jsonify({
-            "id": str(user["_id"]),
-            "email": user["email"],
-            "username": user["username"],
-            "avatar": user["avatar"]
-        })
+    session["user_id"] = str(user["_id"])
+    
+    try:
+        file = fs.get(ObjectId(user["avatar"]))
+        avatar_url = f"{BACK_ADDRESS}/avatar/{user['_id']}"
+    except Exception as e:
+        avatar_url = None
+    
+    return jsonify({
+        "id": str(user["_id"]),
+        "email": user["email"],
+        "username": user["username"],
+        "avatar": avatar_url if avatar_url else 'No avatar available'
+    })
     
 @app.route("/check_login", methods=["GET"])
 
@@ -154,13 +202,15 @@ def check_login():
     print(session)
     if 'user_id' in session:
         user = users_db.find_one({"_id": ObjectId(session["user_id"])})
+        file = fs.get(ObjectId(user["avatar"]))
+        avatar_url = f"{BACK_ADDRESS}/avatar/{user['_id']}"
         return jsonify({
             "is_logged":True,
             "user":{
             "_id": str(user["_id"]),
             "name": user["name"],
             "username": user["username"],
-            "avatar": user["avatar"],
+            "avatar": avatar_url,
             }
         })
     else:
@@ -172,17 +222,17 @@ def current_user():
     if not user_id:
         return jsonify({"message": "You are not logged in"})
     user = users_db.find_one({"_id": ObjectId(user_id)})
+    file = fs.get(ObjectId(user["avatar"]))
     return jsonify({
         "id": str(user["_id"]),
         "email": user["email"],
         "username": user["username"],
-        "avatar": user["avatar"],
+        "avatar": send_file(io.BytesIO(file.read()), download_name=file.filename, mimetype=file.content_type),
     }) 
     
 @app.route("/tweet", methods=['POST'])
 def tweet():
     data = request.json
-    
     if 'username' in data and 'message' in data:
         if len(data["message"]) > 200:
             return jsonify({"message": "The tweet is too long!"})
@@ -205,7 +255,7 @@ def tweet():
                 '_id': str(tweet["_id"]),
                 'name': user["name"],
                 'username': tweet["username"],
-                'avatar': user["avatar"],
+                'avatar': str(user["avatar"]),
                 'message': tweet["message"],
                 'likes': tweet["likes"],
                 'retweets': tweet["retweets"],
@@ -244,15 +294,56 @@ def get_user(username):
         user = users_db.find_one({'username': username})
     if not user:
         return jsonify({'message': 'User not found in the users db'})
+    file = fs.get(ObjectId(user["avatar"]))
+    avatar_url = f"{BACK_ADDRESS}/avatar/{user['_id']}"
     return jsonify({
         '_id': str(ObjectId(user['_id'])),
         'name': user['name'],
         'username': user['username'],
-        'avatar': user['avatar'],
+        'avatar': avatar_url,
         'is_verified' : user['is_verified'],
         'notifications': len(user['notifications']),
         'email': user['email']
     })
+    
+@app.route("/user_stats/<username>")
+
+def get_user_stats(username):
+    try:
+        id = ObjectId(username)
+    except:
+        id = None
+        
+    if id:
+        user = users_db.find_one({'_id': id})
+        
+    else:
+        user = users_db.find_one({'username': username})
+        
+    if not user:
+        return jsonify({'message': 'user was not found in the database'})
+    
+    else:
+        date = datetime.fromisoformat(str(user["created_at"]).replace("Z", "+00:00"))
+        month_name = date.strftime('%B')
+        day_number = str(date.day)
+        if day_number[-1] == "1":
+            day_name = f"{day_number}st"
+        
+        elif day_number[-1] == "2":
+            day_name = f"{day_number}nd"
+        elif day_number[-1] == "3":
+            day_name = f"{day_number}rd"
+        else:
+            day_name = f"{day_number}th"
+            
+        
+        return jsonify({
+            'followers': len(user["followed_by"]), 
+            'following': len(user["following"]),
+            'joined_month': month_name,
+            'joined_day':day_name
+            })
     
 # @app.route("/delete_tweets", methods=["DELETE"])
 
@@ -359,10 +450,10 @@ def search_text():
             { "username" : {"$regex": text_to_search, "$options":"i"} },
         ]
             })
-        users_list = [{"_id": str(user['_id']), "username":user['username'], "avatar":user["avatar"], "name":user["name"], "is_verified": user["is_verified"]} for user in results]
+        users_list = [{"_id": str(user['_id']), "username":user['username'], "avatar" : f"{BACK_ADDRESS}/avatar/{user['_id']}", "name":user["name"], "is_verified": user["is_verified"]} for user in results]
     else:
         users_list = None
-        
+    print(users_list)
     return jsonify(users_list), 200
     
 @app.route("/verify_user/<username>", methods=['PUT'])
@@ -499,15 +590,14 @@ def read_notifications(username):
 def get_who_to_follow(username):
     current_user = users_db.find_one({'username': username})
     suggested_users = users_db.find({"username": {"$nin": current_user["following"], "$ne": current_user["username"]}}).limit(5)
-    final_suggested_users = [
-        {
-            'name': user['name'],
-            'username': user['username'],
-            'avatar': user['avatar'],
-            
-        }
-        for user in suggested_users
-    ]
+    final_suggested_users = []
+    for user in suggested_users:
+        avatar_url = f"{BACK_ADDRESS}/avatar/{user['_id']}"
+        final_suggested_users.append({
+            "name": user["name"],
+            "username": user["username"],
+            "avatar": avatar_url
+        })
     return jsonify(final_suggested_users)
 
 @app.route("/<main_username>/follows/<to_follow_username>", methods=["GET"])

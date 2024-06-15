@@ -2,21 +2,17 @@ import { useContext, useEffect, useState } from "react";
 import StandardForm from "../../components/Forms/StandardForm";
 import axios from "../../../back_address";
 import { Navigate } from "react-router-dom";
-import {SessionContext} from "../../contexts/SessionContext"
-
-
+import { SessionContext } from "../../contexts/SessionContext";
 
 const LoginForm = () => {
-
-  
-  const {currentUser, setCurrentUser} = useContext(SessionContext)
+  const { currentUser, setCurrentUser } = useContext(SessionContext);
   const [redirect, setRedirect] = useState(false);
   useEffect(() => {
     if (currentUser) {
-      setRedirect(true)
+      setRedirect(true);
     }
-  }, [currentUser])
-  
+  }, [currentUser]);
+
   const handleGoogleLog = () => {
     console.log("Loggin in with Google...");
   };
@@ -33,7 +29,7 @@ const LoginForm = () => {
       });
       console.log(response);
       if (response.data && response.data.user) {
-        setCurrentUser(response.data.user)
+        setCurrentUser(response.data.user);
       }
     } catch (error) {
       console.error("Error trying to log in: ", error);
@@ -41,7 +37,7 @@ const LoginForm = () => {
   };
 
   if (redirect || currentUser) {
-    return <Navigate to="/"/>
+    return <Navigate to="/" />;
   }
 
   return (
@@ -54,6 +50,7 @@ const LoginForm = () => {
           colorStyle: "white",
           disabled: false,
           onClick: handleGoogleLog,
+          formatting: "mt-4",
         },
         {
           category: "button",
@@ -62,6 +59,7 @@ const LoginForm = () => {
           colorStyle: "white",
           disabled: false,
           onClick: handleAppleLog,
+          formatting: "mt-4",
         },
         {
           category: "div",
@@ -96,6 +94,7 @@ const LoginForm = () => {
           text: "Login",
           type: "submit",
           colorStyle: "white",
+          formatting: "mt-4",
         },
         {
           category: "div",

@@ -9,6 +9,7 @@ const ForYouTweetFeed = () => {
 
   const tweetsToDisplay = forYouSelected ? forYouTweets : lastTweets;
   return tweetsToDisplay.map((tweet) => {
+    console.log(tweet);
     return (
       <Tweet
         key={tweet._id}
